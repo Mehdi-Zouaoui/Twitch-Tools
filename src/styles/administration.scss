@@ -3,38 +3,13 @@
     margin: auto;
     display: flex;
     background-color: white;
-    width: 95%;
+    width: 100%;
     border-radius: 10px;
     justify-content: space-around;
-    .sideNav {
-      height: 90vh;
-      width: 15%;
-      margin: 20px;
-      border-radius: 10px;
-      background-color: #231f20;
-      text-align: center;
-        h3{
-            color:  white;
-        }
-      .list {
-        padding: 0;
-        list-style: none;
-        display: flex;
-        flex-direction: column;
-        justify-content: space-evenly;
-        color: white;
-        font-size: 1.4em;
-        height: 80%;
-
-   
-      }
-      .logOut{
-          color: #9e9e9e;
-          font-size: 20px;
-      }
-    }
+    height: 95vh;
+ 
     .mainContent {
-      width: 90%;
+      width: 100%;
       padding: 2em;
       .profileCard {
         border-radius: 10px;
