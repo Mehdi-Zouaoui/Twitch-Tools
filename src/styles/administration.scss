@@ -1,0 +1,65 @@
+
+  main {
+    margin: auto;
+    display: flex;
+    background-color: white;
+    width: 95%;
+    border-radius: 10px;
+    justify-content: space-around;
+    .sideNav {
+      height: 90vh;
+      width: 15%;
+      margin: 20px;
+      border-radius: 10px;
+      background-color: #231f20;
+      text-align: center;
+        h3{
+            color:  white;
+        }
+      .list {
+        padding: 0;
+        list-style: none;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-evenly;
+        color: white;
+        font-size: 1.4em;
+        height: 80%;
+
+   
+      }
+      .logOut{
+          color: #9e9e9e;
+          font-size: 20px;
+      }
+    }
+    .mainContent {
+      width: 90%;
+      padding: 2em;
+      .profileCard {
+        border-radius: 10px;
+        background-color: #7ebdc2;
+        color: white;
+        width: 60%;
+        padding: 0 8%;
+        height: 10em;
+        display: flex;
+        justify-content: space-between;
+      .details{
+
+      }
+      .icon{
+          font-size: 10em;
+      }
+      }
+      .toolsContainer {
+        .tools {
+          display: flex;
+          flex-wrap: wrap;
+          width: 70%;
+          justify-content: space-between;
+        }
+      }
+    }
+  }
+
