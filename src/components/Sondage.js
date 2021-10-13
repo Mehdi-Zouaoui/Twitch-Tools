@@ -5,6 +5,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrash } from "@fortawesome/free-solid-svg-icons";
 
 const Sondage = () => {
+  const [formField, setFormFields] = useState([]);
   const {
     register,
     handleSubmit,
@@ -19,7 +20,11 @@ const Sondage = () => {
     }
   );
 
-  const onSubmit = (data) => console.log(data);
+  const onSubmit = (data) => {
+    console.log("data", data);
+    setFormFields(data);
+  };
+
 
   return (
     <div className="container">
@@ -35,7 +40,7 @@ const Sondage = () => {
           Ajouter un réponse
         </button>
 
-        <form className="toolForm">
+        <form className="toolForm" onSubmit={handleSubmit(onSubmit)}>
           <ul className="formInputs">
             {fields.map((item, index) => (
               <li key={item.id}>
@@ -64,15 +69,21 @@ const Sondage = () => {
       </div>
       <div className="previewContainer">
         <h5>Preview</h5>
-        <div className="display">
-          <h3>Title</h3>
-          <div className="preview">
-            <div>{register.title}</div>
-            <div>Test</div>
-            <div>Test</div>
-            <div>Test</div>
+        {fields.length ? (
+          <div className="display">
+            <h3>Title</h3>
+            <div className="preview">
+              {fields.map((item, index) => (
+                <div className="previewContent">
+                  <div className="previewIndex">{index + 1}.</div>
+                  <div>{item.name}</div>
+                </div>
+              ))}
+            </div>
           </div>
-        </div>
+        ) : (
+          <div>Ajouter une question pour voir le preview</div>
+        )}
       </div>
     </div>
   );

@@ -94,15 +94,18 @@ $dark: #231f20;
         width: 100%;
         justify-content: space-around;
 
-        div {
-          width: 45%;
-          height: 4em;
+        .previewContent {
+          width: 75%;
+          height: 1.5em;
           background-color: white;
           border-radius: 3px;
           margin: 1em 0;
           display: flex;
           align-items: center;
-          justify-content: center;
+          justify-content: flex-start;
+          .previewIndex{
+            margin: 0 1.5em;
+          }
         }
       }
     }
