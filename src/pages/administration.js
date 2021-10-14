@@ -1,26 +1,25 @@
 import Card from "../components/Card";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { useUser } from "@auth0/nextjs-auth0";
 
 import { faUser } from "@fortawesome/free-regular-svg-icons";
 const Administration = () => {
+  const { user } = useUser();
+
   return (
     <div className="container">
       <main>
-    
         <div className="mainContent">
           <div className="profileCard">
             <div className="details">
-              <h2>Bonjour User !</h2>
+              <h2>Bonjour {user.name} !</h2>
               <p>Bievenue sur votre espace Twitch Tools</p>
             </div>
             <div className="icon">
               <FontAwesomeIcon icon={faUser} />
             </div>
           </div>
-            <div className="content">
-
-            
-            </div>
+          <div className="content"></div>
           <div className="toolsContainer">
             <h3>Créer un Tool</h3>
             <div className="tools">

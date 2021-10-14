@@ -3,9 +3,15 @@ import { useForm, useFieldArray, Controller } from "react-hook-form";
 import { useState, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrash } from "@fortawesome/free-solid-svg-icons";
+import { useUser } from "@auth0/nextjs-auth0";
+import axios from "axios";
+
 
 const Sondage = () => {
   const [formField, setFormFields] = useState([]);
+  const { user} = useUser();
+  const url = "http://localhost:3000";
+
   const {
     register,
     handleSubmit,
@@ -15,16 +21,23 @@ const Sondage = () => {
   const { fields, append, prepend, remove, swap, move, insert } = useFieldArray(
     {
       control, // control props comes from useForm (optional:
-      name: "field", // unique name for your Field Array
+      name: "fields", // unique name for your Field Array
       // keyName: "id", default to "id", you can change the key name
     }
   );
 
   const onSubmit = (data) => {
-    console.log("data", data);
-    setFormFields(data);
+    data.author = user.sub
+    console.log('data' , data)
+    axios
+    .post(url + "/api/sondage", data)
+    .then((res) => {
+      console.log("back", res);
+    })
+    .catch((err) => {
+      console.log("err", err);
+    });
   };
-
 
   return (
     <div className="container">
@@ -41,6 +54,8 @@ const Sondage = () => {
         </button>
 
         <form className="toolForm" onSubmit={handleSubmit(onSubmit)}>
+          <label htmlFor="title"> Titre : </label>
+          <input className="field" {...register("title")} name="title"/>
           <ul className="formInputs">
             {fields.map((item, index) => (
               <li key={item.id}>
@@ -49,7 +64,7 @@ const Sondage = () => {
                   <div className="fieldContainer">
                     <input
                       className="field"
-                      {...register(`field.${index}.name`)}
+                      {...register(`fields.${index}.name`)}
                     />
                     <button
                       type="button"
