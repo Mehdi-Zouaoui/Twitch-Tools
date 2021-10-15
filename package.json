@@ -22,7 +22,9 @@
     "react": "17.0.2",
     "react-dom": "17.0.2",
     "react-hook-form": "^7.17.2",
-    "sass": "^1.42.1"
+    "sass": "^1.42.1",
+    "tmi.js": "^1.8.5",
+    "twitch": "^4.6.7"
   },
   "devDependencies": {
     "eslint": "8.0.0",
