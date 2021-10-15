@@ -3,19 +3,29 @@ import {
   faDatabase,
   faEnvelope,
   faChartBar,
-  faSignOutAlt, 
-  faUser
+  faSignOutAlt,
+  faUser,
 } from "@fortawesome/free-solid-svg-icons";
+import Link from "next/link";
+
 const Sidebar = () => {
   return (
     <div className="sideNav">
       <h3>Twitch Tools</h3>
       <ul className="list">
         <li>
-          <FontAwesomeIcon icon={faUser} />
+          <Link href="/administration">
+            <a>
+              <FontAwesomeIcon icon={faUser} />
+            </a>
+          </Link>
         </li>
         <li>
-          <FontAwesomeIcon icon={faDatabase} />
+          <Link href="/userTools">
+            <a>
+              <FontAwesomeIcon icon={faDatabase} />
+            </a>
+          </Link>
         </li>
         <li>
           <FontAwesomeIcon icon={faChartBar} />
@@ -25,7 +35,9 @@ const Sidebar = () => {
         </li>
       </ul>
       <div className="logOut">
-        <FontAwesomeIcon icon={faSignOutAlt} />
+        <a href="/api/auth/logout" className="logout">
+          <FontAwesomeIcon icon={faSignOutAlt} />
+        </a>
       </div>
     </div>
   );

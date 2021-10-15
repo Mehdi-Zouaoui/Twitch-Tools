@@ -10,7 +10,7 @@ const Header = () => {
     return (
       <div className="header">
         <img src={user.picture} alt={user.name} />
-       
+     
       </div>
     );
   }

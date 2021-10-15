@@ -1,4 +1,4 @@
-$red: #c6538c;
+$red: #18539C;
 $dark: #231f20;
 
 html,
@@ -11,7 +11,7 @@ body {
   width: 100vw;
   display: flex;
   align-items: center;
-  background-color: #ce4257;
+  background-color: $red;
 }
 #__next {
   width: 100%;

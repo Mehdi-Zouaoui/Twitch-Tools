@@ -7,4 +7,4 @@ const SondageSchema = new Schema({
   author: String,
 });
 
-module.exports = mongoose.model("sondages", SondageSchema);
+module.exports =  mongoose.models.Sondages || mongoose.model("Sondages", SondageSchema);

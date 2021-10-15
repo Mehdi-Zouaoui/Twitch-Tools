@@ -4,34 +4,37 @@ import { useUser } from "@auth0/nextjs-auth0";
 
 import { faUser } from "@fortawesome/free-regular-svg-icons";
 const Administration = () => {
-  const { user } = useUser();
+  const { user, error, isLoading } = useUser();
 
+  if (isLoading) return <div>Loading...</div>;
   return (
-    <div className="container">
-      <main>
-        <div className="mainContent">
-          <div className="profileCard">
-            <div className="details">
-              <h2>Bonjour {user.name} !</h2>
-              <p>Bievenue sur votre espace Twitch Tools</p>
+    user && (
+      <div className="container">
+        <main>
+          <div className="mainContent">
+            <div className="profileCard">
+              <div className="details">
+                <h2>Bonjour {user.name} !</h2>
+                <p>Bievenue sur votre espace Twitch Tools</p>
+              </div>
+              <div className="icon">
+                <FontAwesomeIcon icon={faUser} />
+              </div>
             </div>
-            <div className="icon">
-              <FontAwesomeIcon icon={faUser} />
+            <div className="content"></div>
+            <div className="toolsContainer">
+              <h3>Créer un Tool</h3>
+              <div className="tools">
+                <Card title="Sondage" color="#e8ac65" />
+                <Card title="Quizz" color="#e8ac65" />
+                <Card title="Coin Flip" color="#e8ac65" />
+                <Card title="Dice Roll" color="#e8ac65" />
+              </div>
             </div>
           </div>
-          <div className="content"></div>
-          <div className="toolsContainer">
-            <h3>Créer un Tool</h3>
-            <div className="tools">
-              <Card title="Sondage" color="#e8ac65" />
-              <Card title="Quizz" color="#e8ac65" />
-              <Card title="Coin Flip" color="#e8ac65" />
-              <Card title="Dice Roll" color="#e8ac65" />
-            </div>
-          </div>
-        </div>
-      </main>
-    </div>
+        </main>
+      </div>
+    )
   );
 };
 
