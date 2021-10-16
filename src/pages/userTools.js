@@ -9,13 +9,12 @@ const userTools = ({ sondages }) => {
   const [connected, setConnected] = useState(false);
 
   const client = new tmi.Client({
-    options: { debug: true },
-
-    connection: {
-      reconnect: false,
-      secure: true,
+    identity: {
+      username: 'TwoolsBot',
+      password: 'oauth:9xzeu9mexq3949592op21ku83rpixz'
     },
-    channels: ["zerator"],
+    options: { debug: true },
+    channels: ["moooz_"],
   });
 
   client.on("connected", () => {
@@ -23,26 +22,30 @@ const userTools = ({ sondages }) => {
   });
 
   client.on("disconnected", () => {
-    console.log("The bot is Online!");
+    console.log("The bot is Offline!");
   });
 
   client.on("message", (channel, tags, message, self) => {
     // "Alca: Hello, World!"
+    if (self || !message.startsWith("!")) return;
+    const args = message.slice(1).split(" ");
+    const command = args.shift().toLowerCase();
+    if (command === "disconnect") {
+      console.log("Saw !disconnect command in chat");
+      client.disconnect();
+    }
     console.log(client.readyState());
     console.log(`${tags["display-name"]}: ${message}`);
   });
 
   const handleTwitchConnect = async () => {
-    console.log(client);
     if (connected) {
-      await client.disconnect();
+      client.say("moooz_", "!disconnect");
       setConnected(false);
-
-      console.log(client.readyState());
     } else {
       await client.connect();
+      client.say("moooz_", "connected");
       setConnected(true);
-      console.log(client.readyState());
     }
   };
 
