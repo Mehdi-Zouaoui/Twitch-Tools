@@ -10,8 +10,8 @@ const userTools = ({ sondages }) => {
 
   const client = new tmi.Client({
     identity: {
-      username: 'TwoolsBot',
-      password: 'oauth:9xzeu9mexq3949592op21ku83rpixz'
+      username: "TwoolsBot",
+      password: "oauth:9xzeu9mexq3949592op21ku83rpixz",
     },
     options: { debug: true },
     channels: ["moooz_"],
@@ -51,23 +51,33 @@ const userTools = ({ sondages }) => {
 
   if (isLoading) return <div>Loading...</div>;
   return (
-    <div className="ICI">
-      <div>Bonjour</div>
-      {sondages.map((item, index) => {
-        if (user.sub === item.author) {
-          return (
-            <div key={index}>
-              <div>{item.title}</div>
-              {item.fields.map((field, index) => {
-                return <div key={index}> {field.name} </div>;
-              })}
-              <button onClick={() => handleTwitchConnect()}>
-                {connected ? "STOP" : "START"}
-              </button>
-            </div>
-          );
-        }
-      })}
+    <div className="container">
+      <nav>
+        <ul className="toolsNavigation">
+          <li>Counter</li>
+          <li>Chrono</li>
+          <li>Random Number</li>
+          <li>Sondage</li>
+        </ul>
+      </nav>
+      <div className="ICI">
+        <div>Bonjour</div>
+        {sondages.map((item, index) => {
+          if (user.sub === item.author) {
+            return (
+              <div key={index}>
+                <div>{item.title}</div>
+                {item.fields.map((field, index) => {
+                  return <div key={index}> {field.name} </div>;
+                })}
+                <button onClick={() => handleTwitchConnect()}>
+                  {connected ? "STOP" : "START"}
+                </button>
+              </div>
+            );
+          }
+        })}
+      </div>
     </div>
   );
 };

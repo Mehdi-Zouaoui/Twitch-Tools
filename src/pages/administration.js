@@ -30,10 +30,9 @@ const Administration = () => {
             <div className="toolsContainer">
               <h3>Créer un Tool</h3>
               <div className="tools">
-                <Card title="Sondage" color="#e8ac65" />
-                <Card title="Quizz" color="#e8ac65" />
-                <Card title="Coin Flip" color="#e8ac65" />
-                <Card title="Dice Roll" color="#e8ac65" />
+                <Card title="Interactiv tools " color="#e8ac65" />
+                <Card title="Display tools" color="#e8ac65" />
+             
               </div>
             </div>
          
