@@ -7,7 +7,7 @@ const tmi = require("tmi.js");
 const userTools = ({ sondages }) => {
   const { user, error, isLoading } = useUser();
   const [connected, setConnected] = useState(false);
-
+  const [currentTool , setCurrentTool] =  useState(0)
   const client = new tmi.Client({
     identity: {
       username: "TwoolsBot",
@@ -38,6 +38,7 @@ const userTools = ({ sondages }) => {
     console.log(`${tags["display-name"]}: ${message}`);
   });
 
+
   const handleTwitchConnect = async () => {
     if (connected) {
       client.say("moooz_", "!disconnect");
@@ -49,18 +50,22 @@ const userTools = ({ sondages }) => {
     }
   };
 
+ 
   if (isLoading) return <div>Loading...</div>;
   return (
     <div className="container">
       <nav>
         <ul className="toolsNavigation">
-          <li>Counter</li>
-          <li>Chrono</li>
-          <li>Random Number</li>
-          <li>Sondage</li>
+          <li onClick={ () => setCurrentTool(1)}>Counter</li>
+          <li onClick={ () => setCurrentTool(2)}>Random</li>
+          <li onClick={ () => setCurrentTool(3)}>Sondage</li>
+          
         </ul>
       </nav>
-      <div className="ICI">
+      <div className="displayedTool">
+          
+      </div>
+      {/* <div className="ICI">
         <div>Bonjour</div>
         {sondages.map((item, index) => {
           if (user.sub === item.author) {
@@ -77,7 +82,7 @@ const userTools = ({ sondages }) => {
             );
           }
         })}
-      </div>
+      </div> */}
     </div>
   );
 };
