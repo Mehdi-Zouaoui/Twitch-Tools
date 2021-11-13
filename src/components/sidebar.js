@@ -21,7 +21,7 @@ const Sidebar = () => {
           </Link>
         </li>
         <li>
-          <Link href="/userTools">
+          <Link href="/tools">
             <a>
               <FontAwesomeIcon icon={faDatabase} />
             </a>
