@@ -7,7 +7,11 @@ import { ApiClient } from "twitch";
 import axios from "axios";
 const tmi = require("tmi.js");
 
-const userTools = ({ sondages }) => {
+
+
+const userTools = ({ sondages , countersData }) => {
+ 
+
   const { user, error, isLoading } = useUser();
   const [connected, setConnected] = useState(false);
   const [currentTool, setCurrentTool] = useState(0);
@@ -72,7 +76,7 @@ const userTools = ({ sondages }) => {
               
                 <Card title="Créer un counter" color="#e8ac65" />
                 <h3>Mes counters</h3>
-                <Counter/>
+                <Counter countersData = {countersData}/>
               </div>
             </div>
           )}
@@ -109,10 +113,14 @@ export default userTools;
 export const getStaticProps = async () => {
   const res = await fetch("http://localhost:3000/api/sondage");
   const data = await res.json();
+  const counters = await fetch("http://localhost:3000/api/counter");
+  const countersJSON = await counters.json();
+  console.log('counters data' , countersJSON)
 
   return {
     props: {
       sondages: data,
+      countersData: countersJSON,
     },
   };
 };

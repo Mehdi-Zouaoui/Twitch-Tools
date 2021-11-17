@@ -23,7 +23,7 @@ const Counter = ({countersData}) => {
   console.log('con' , countersData)
   const [formTitle, setFormTitle] = useState("");
   const [formColor, setFormColor] = useState("#3b96c3");
-  const { user, error, isLoading } = useUser();
+  // const { user, error, isLoading } = useUser();
   const url = "http://localhost:3000";
   const {
     register,
@@ -33,7 +33,7 @@ const Counter = ({countersData}) => {
   } = useForm();
 
   const onSubmit = (data) => {
-    data.author = user.sub;
+    // data.author = user.sub;
     console.log("data", data);
     axios
       .post(url + "/api/counter", data)
@@ -50,11 +50,13 @@ const Counter = ({countersData}) => {
       
       <div className="counterFormContainer">
         <h3 className="counterTitle">Counter</h3>
-        {/* {countersData.map((item, index) => {
-            return <div className="counterDisplay" key={index}>
+        <div>
+        {countersData.map((item, index) => (
+           <div className="counterDisplay" key={index}>
               {item.title}
-            </div>;
-          })} */}
+            </div>
+        ))}
+        </div>
 
         <form className="counterForm" onSubmit={handleSubmit(onSubmit)}>
           <div className="counterInputContainer">
