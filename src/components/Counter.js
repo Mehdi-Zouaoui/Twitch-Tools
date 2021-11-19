@@ -5,6 +5,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrash } from "@fortawesome/free-solid-svg-icons";
 import { useUser } from "@auth0/nextjs-auth0";
 import axios from "axios";
+import CounterDisplay from "./display/CounterDisplay";
 
 export const getStaticProps = async () => {
   const counters = await fetch("http://localhost:3000/api/counter");
@@ -23,6 +24,8 @@ const Counter = ({countersData}) => {
   console.log('con' , countersData)
   const [formTitle, setFormTitle] = useState("");
   const [formColor, setFormColor] = useState("#3b96c3");
+
+ 
   // const { user, error, isLoading } = useUser();
   const url = "http://localhost:3000";
   const {
@@ -52,9 +55,8 @@ const Counter = ({countersData}) => {
         <h3 className="counterTitle">Counter</h3>
         <div>
         {countersData.map((item, index) => (
-           <div className="counterDisplay" key={index}>
-              {item.title}
-            </div>
+          <CounterDisplay data={item} key={index} />
+          
         ))}
         </div>
 
