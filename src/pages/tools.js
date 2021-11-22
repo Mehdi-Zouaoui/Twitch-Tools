@@ -21,7 +21,7 @@ const userTools = ({ sondages , countersData }) => {
       password: "oauth:9xzeu9mexq3949592op21ku83rpixz",
     },
     options: { debug: true },
-    channels: ["moooz_"],
+    channels: ["kamet0"],
   });
 
   client.on("connected", () => {
@@ -29,7 +29,7 @@ const userTools = ({ sondages , countersData }) => {
   });
 
   client.on("disconnected", () => {
-    console.log("The bot is Offline!");
+    console.log(" DISCONNECTED The bot is Offline!");
   });
 
   client.on("message", (channel, tags, message, self) => {
@@ -37,7 +37,7 @@ const userTools = ({ sondages , countersData }) => {
     if (self || !message.startsWith("!")) return;
     const args = message.slice(1).split(" ");
     const command = args.shift().toLowerCase();
-    if (command === "disconnect") {
+    if (command === "disconnect" || !connected) {
       console.log("Saw !disconnect command in chat");
       client.disconnect();
     }
@@ -47,11 +47,11 @@ const userTools = ({ sondages , countersData }) => {
 
   const handleTwitchConnect = async () => {
     if (connected) {
-      client.say("moooz_", "!disconnect");
       setConnected(false);
+      client.say("TwoolsBot", "disconnected");
     } else {
       await client.connect();
-      client.say("moooz_", "connected");
+      client.say("TwoolsBot", "connected");
       setConnected(true);
     }
   };
@@ -67,6 +67,7 @@ const userTools = ({ sondages , countersData }) => {
             <li onClick={() => setCurrentTool(2)}>Random</li>
             <li onClick={() => setCurrentTool(3)}>Sondage</li>
           </ul>
+           <button onClick = {() => handleTwitchConnect()}>Appuyer pour vous connecter au chat twitch</button>
         </nav>
         <div className="displayedTool">
           {currentTool === 1 && (
