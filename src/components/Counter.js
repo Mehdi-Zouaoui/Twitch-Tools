@@ -21,6 +21,11 @@ export const getStaticProps = async () => {
 const Counter = ({ countersData }) => {
   const [formTitle, setFormTitle] = useState("");
   const [formColor, setFormColor] = useState("#3b96c3");
+  const [formUpdate, setFormUpdate] = useState({
+    counterData: {},
+    update: false,
+  });
+  const [formCreation, setFormCreation] = useState(false);
 
   // const { user, error, isLoading } = useUser();
   const url = "http://localhost:3000";
@@ -48,49 +53,60 @@ const Counter = ({ countersData }) => {
     <div className="counterComponent">
       <div className="counterData">
         {countersData.map((item, index) => (
-          <CounterDisplay data={item} key={index} />
+          <CounterDisplay data={item} key={index} update={setFormUpdate} />
         ))}
       </div>
-      <div className="counterCreation">
-        <div className="counterFormContainer">
-          <h3 className="counterTitle">Counter</h3>
-          <form className="counterForm" onSubmit={handleSubmit(onSubmit)}>
-            <div className="counterInputContainer">
+      {formUpdate.update && (
+        <div className="counterCreation">
+          <div className="counterFormContainer">
+            <h3 className="counterTitle">
+              Modifier {formUpdate.counterData.title}
+            </h3>
+            <form className="counterForm" onSubmit={handleSubmit(onSubmit)}>
+              <div className="counterInputContainer">
+                <input
+                  className="counterFormTitle"
+                  onChange={(e) => setFormTitle(e.target.value)}
+                  {...register("title")}
+                  placeholder={formUpdate.counterData.title}
+                  name="title"
+                />
+                <input
+                  type="color"
+                  id="color"
+                  name="color"
+                  {...register("color")}
+                  className="counterFormColor"
+                  value={formUpdate.counterData.color}
+                  onChange={(e) =>
+                    setFormUpdate((prevState) => ({
+                      counterData: {
+                        ...prevState.counterData,
+                        color: e.target.value,
+                      },
+                    }))
+                  }
+                />
+              </div>{" "}
               <input
-                className="counterFormTitle"
-                onChange={(e) => setFormTitle(e.target.value)}
-                {...register("title")}
-                placeholder="Rentrer un titre"
-                name="title"
+                type="submit"
+                className="counterSubmit"
+                value="Enregistrer"
               />
-              <input
-                type="color"
-                id="color"
-                name="color"
-                {...register("color")}
-                className="counterFormColor"
-                value={formColor}
-                onChange={(e) => setFormColor(e.target.value)}
-              />
-            </div>{" "}
-            <input
-              type="submit"
-              className="counterSubmit"
-              value="Enregistrer"
-            />
-          </form>
-        </div>
-        <div className="counterPreviewContainer">
-          <h5>Preview</h5>
-          <div className="counterPreview">
-            <h3>{formTitle}</h3>
-            <div className="count" style={{ backgroundColor: formColor }}>
-              {" "}
-              0
+            </form>
+          </div>
+          <div className="counterPreviewContainer">
+            <h5>Preview</h5>
+            <div className="counterPreview">
+              <h3>{formTitle}</h3>
+              <div className="count" style={{ backgroundColor: formColor }}>
+                {" "}
+                0
+              </div>
             </div>
           </div>
         </div>
-      </div>
+      )}
     </div>
   );
 };

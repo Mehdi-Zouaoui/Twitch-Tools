@@ -24,6 +24,7 @@ const counter = async (req, res) => {
       } else res.status(200).json(counters);
     });
   }
+
 };
 export default counter;
 
