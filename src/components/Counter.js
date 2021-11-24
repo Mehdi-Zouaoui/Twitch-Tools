@@ -20,7 +20,7 @@ export const getStaticProps = async () => {
 
 const Counter = ({ countersData }) => {
   const [formTitle, setFormTitle] = useState("");
-  const [formColor, setFormColor] = useState("#3b96c3");
+  const [formColor, setFormColor] = useState("#eb5e28");
   const [formUpdate, setFormUpdate] = useState({
     counterData: {},
     update: false,
@@ -90,20 +90,43 @@ const Counter = ({ countersData }) => {
               </div>{" "}
               <input
                 type="submit"
+                style={{ backgroundColor: formUpdate.counterData.color }}
                 className="counterSubmit"
                 value="Enregistrer"
               />
             </form>
           </div>
-          <div className="counterPreviewContainer">
-            <h5>Preview</h5>
-            <div className="counterPreview">
-              <h3>{formTitle}</h3>
-              <div className="count" style={{ backgroundColor: formColor }}>
-                {" "}
-                0
-              </div>
-            </div>
+        </div>
+      )}
+      {!formUpdate.update && (
+        <div className="counterCreation">
+          <div className="counterFormContainer">
+            <h3 className="counterTitle">Créer</h3>
+            <form className="counterForm" onSubmit={handleSubmit(onSubmit)}>
+              <div className="counterInputContainer">
+                <input
+                  className="counterFormTitle"
+                  onChange={(e) => setFormTitle(e.target.value)}
+                  {...register("title")}
+                  placeholder="Rentrer un titre"
+                  name="title"
+                />
+                <input
+                  type="color"
+                  id="color"
+                  name="color"
+                  {...register("color")}
+                  className="counterFormColor"
+                  value={formColor}
+                  onChange={(e) => setFormColor(e.target.value)}
+                />
+              </div>{" "}
+              <input
+                type="submit"
+                className="counterSubmit"
+                value="Enregistrer"
+              />
+            </form>
           </div>
         </div>
       )}

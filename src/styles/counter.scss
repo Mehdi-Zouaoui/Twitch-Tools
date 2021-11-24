@@ -11,18 +11,26 @@
     h1{
         width: 40%
     }
+    .counterColor{
+        width: 35px;
+        height: 35px;
+        border-radius: 50%;
+    }
+    .counterStream{
+        border: none;
+        border-radius: 50%;
+        width: 35px;
+        height: 35px;
+        background-color: white;
+    }
     .counterButtonContainer{
         width: 30%;
         display: flex;
         justify-content: space-around; 
         height: 100%;
         padding:5px 0px;
-        .counterStream{
-            border: none;
-            border-radius: 5px;
-            width: 70px;
-            background-color: white;
-        }
+        
+       
         .counterOperationContainer{
             display: flex;
             flex-direction: column;
@@ -36,6 +44,16 @@
                 background-color: white;
                
               
+            }
+        }
+        .counterCrud{
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            .options{
+                font-size: 35px;
+             text-align: center;
+             padding-bottom: 10px;
             }
         }
     }

@@ -2,16 +2,13 @@ import { useState, useEffect } from "react";
 import { useUser } from "@auth0/nextjs-auth0";
 import Card from "../components/Card";
 import Counter from "../components/Counter";
-
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCoins , faClock , faCalculator} from "@fortawesome/free-solid-svg-icons";
 import { ApiClient } from "twitch";
 import axios from "axios";
 const tmi = require("tmi.js");
 
-
-
-const userTools = ({ sondages , countersData }) => {
- 
-
+const userTools = ({ sondages, countersData }) => {
   const { user, error, isLoading } = useUser();
   const [connected, setConnected] = useState(false);
   const [currentTool, setCurrentTool] = useState(0);
@@ -61,30 +58,58 @@ const userTools = ({ sondages , countersData }) => {
     <div className="container">
       <main>
         <div className="userTools">
-        <nav className="toolsNavigation">
-          <ul className="toolsList">
-            <li onClick={() => setCurrentTool(1)}>Counter</li>
-            <li onClick={() => setCurrentTool(2)}>Random</li>
-            <li onClick={() => setCurrentTool(3)}>Sondage</li>
-          </ul>
-           <button onClick = {() => handleTwitchConnect()}>Appuyer pour vous connecter au chat twitch</button>
-        </nav>
-        <div className="displayedTool">
-          {currentTool === 1 && (
-            <div className="counter">
-              <h3>Counter</h3>
-              <div>
+          <nav className="toolsNavigation">
+            <ul className="toolsList">
+              <li onClick={() => setCurrentTool(1)}>Counter</li>
+              <li onClick={() => setCurrentTool(2)}>Random</li>
+              <li onClick={() => setCurrentTool(3)}>Sondage</li>
+            </ul>
+          
+          </nav>
+          <div className="displayedTool">
+            {currentTool === 1 && (
+              <div className="counter">
+                
+                <div className="cardContainer">
+                  <div>
+
+                  <h1> Vos créations </h1>
+                  <p>Outils crées : 100</p>
+                  </div>
+                
+                  <div className="displayTools">
+                    <div className="counterCard">
+                    <div><FontAwesomeIcon icon={faCalculator} /></div>
+                      <h3>Counter</h3>
+                      <p>Crées : 10</p>
+                    </div>
+                    <div className="timerCard">
+                    <div><FontAwesomeIcon icon={faClock} /></div>
+                      <h3>Timers</h3>
+                      <p>Crées : 10</p>
+                    </div>
+                    <div className="coinFlipCard">
+                      <div><FontAwesomeIcon icon={faCoins} /></div>
+                      <h3>Pile ou Face</h3>
+                      <p>Crées : 10</p>
+                    </div>
+                  </div>
+                  </div>
+                  {/* <Card title="Créer un counter" color="#e8ac65" /> */}
+
+                  <h3>Mes counters</h3>
+                  <Counter countersData={countersData} />
               
-                <Card title="Créer un counter" color="#e8ac65" />
-                <h3>Mes counters</h3>
-                <Counter countersData = {countersData}/>
               </div>
-            </div>
-          )}
-          {currentTool === 2 && <div>Random</div>}
-          {currentTool === 3 && <div>Sondage</div>}
-        </div>
-        {/* <div className="ICI">
+            )}
+            {currentTool === 2 && <div>Random</div>}
+            {currentTool === 3 && <div>Sondage
+              <button onClick={() => handleTwitchConnect()}>
+              Appuyer pour vous connecter au chat twitch
+            </button>
+              </div>}
+          </div>
+          {/* <div className="ICI">
         <div>Bonjour</div>
         {sondages.map((item, index) => {
           if (user.sub === item.author) {
@@ -102,9 +127,8 @@ const userTools = ({ sondages , countersData }) => {
           }
         })}
       </div> */}
-      </div>
+        </div>
       </main>
-      
     </div>
   );
 };
@@ -116,7 +140,7 @@ export const getStaticProps = async () => {
   const data = await res.json();
   const counters = await fetch("http://localhost:3000/api/counter");
   const countersJSON = await counters.json();
-  console.log('counters data' , countersJSON)
+  console.log("counters data", countersJSON);
 
   return {
     props: {
