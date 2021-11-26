@@ -6,18 +6,16 @@ import { faStopwatch, faEyeDropper } from "@fortawesome/free-solid-svg-icons";
 import axios from "axios";
 
 export const getStaticProps = async () => {
-    const timers = await fetch("http://localhost:3000/api/timer");
-    const timersJSON = await timers.json();
-    return {
-      props: {
-        timersData: timersJSON,
-      },
-    };
+  const timers = await fetch("http://localhost:3000/api/timer");
+  const timersJSON = await timers.json();
+  return {
+    props: {
+      timersData: timersJSON,
+    },
   };
+};
 
-
-const Timer = ({timersData}) => {
-    
+const Timer = ({ timersData }) => {
   const [formColor, setFormColor] = useState("#eb5e28");
   const [formTitle, setFormTitle] = useState("");
   const [type, setType] = useState(false);
@@ -46,18 +44,19 @@ const Timer = ({timersData}) => {
   };
 
   return (
-    <div className="counterComponent">
+    <div className="timerComponent">
+      <div className="timersContainer">
         {timersData.map((item, index) => (
-               <TimerDisplay data ={item}  key={index}/>
+          <TimerDisplay data={item} key={index} />
         ))}
-   
-      <div className="counterCreation">
-        <div className="counterFormContainer">
-          <h3 className="counterTitle">Créer</h3>
-          <form className="counterForm" onSubmit={handleSubmit(onSubmit)}>
-            <div className="counterInputContainer">
+      </div>
+      <div className="timerCreation">
+        <div className="timerFormContainer">
+          <h3 className="timerTitle">Créer</h3>
+          <form className="timerForm" onSubmit={handleSubmit(onSubmit)}>
+            <div className="timerInputContainer">
               <input
-                className="counterFormTitle"
+                className="timerFormTitle"
                 onChange={(e) => setFormTitle(e.target.value)}
                 {...register("title")}
                 placeholder="Rentrer un titre"
@@ -68,7 +67,7 @@ const Timer = ({timersData}) => {
                 id="color"
                 name="color"
                 {...register("color")}
-                className="counterFormColor"
+                className="timerFormColor"
                 value={formColor}
                 onChange={(e) => setFormColor(e.target.value)}
               />
