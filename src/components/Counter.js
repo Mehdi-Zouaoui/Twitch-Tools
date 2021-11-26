@@ -7,16 +7,7 @@ import { useUser } from "@auth0/nextjs-auth0";
 import axios from "axios";
 import CounterDisplay from "./display/CounterDisplay";
 
-export const getStaticProps = async () => {
-  const counters = await fetch("http://localhost:3000/api/counter");
-  const countersJSON = await counters.json();
 
-  return {
-    props: {
-      countersData: countersJSON,
-    },
-  };
-};
 
 const Counter = ({ countersData }) => {
   const [formTitle, setFormTitle] = useState("");

@@ -2,14 +2,21 @@ import { useState, useEffect } from "react";
 import { useUser } from "@auth0/nextjs-auth0";
 import Card from "../components/Card";
 import Counter from "../components/Counter";
+import CoinFlip from "../components/CoinFlip";
+import Timer from '../components/Timer'
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCoins , faClock , faCalculator} from "@fortawesome/free-solid-svg-icons";
+import {
+  faCoins,
+  faClock,
+  faCalculator,
+} from "@fortawesome/free-solid-svg-icons";
 import { ApiClient } from "twitch";
 import axios from "axios";
 const tmi = require("tmi.js");
 
-const userTools = ({ sondages, countersData }) => {
+const userTools = ({ sondages, countersData , timersData }) => {
   const { user, error, isLoading } = useUser();
+  const [displayedTool, setDisplayedTool] = useState(1);
   const [connected, setConnected] = useState(false);
   const [currentTool, setCurrentTool] = useState(0);
   const client = new tmi.Client({
@@ -64,50 +71,70 @@ const userTools = ({ sondages, countersData }) => {
               <li onClick={() => setCurrentTool(2)}>Random</li>
               <li onClick={() => setCurrentTool(3)}>Sondage</li>
             </ul>
-          
           </nav>
           <div className="displayedTool">
             {currentTool === 1 && (
               <div className="counter">
-                
                 <div className="cardContainer">
                   <div>
-
-                  <h1> Vos créations </h1>
-                  <p>Outils crées : 100</p>
+                    <h1> Vos créations </h1>
+                    <p>Outils crées : 100</p>
                   </div>
-                
+
                   <div className="displayTools">
-                    <div className="counterCard">
-                    <div><FontAwesomeIcon icon={faCalculator} /></div>
+                    <div className="counterCard" onClick={() => setDisplayedTool(1)}>
+                      <div>
+                        <FontAwesomeIcon icon={faCalculator} />
+                      </div>
                       <h3>Counter</h3>
                       <p>Crées : 10</p>
                     </div>
-                    <div className="timerCard">
-                    <div><FontAwesomeIcon icon={faClock} /></div>
+                    <div className="timerCard" onClick={() => setDisplayedTool(2)}>
+                      <div>
+                        <FontAwesomeIcon icon={faClock} />
+                      </div>
                       <h3>Timers</h3>
                       <p>Crées : 10</p>
                     </div>
-                    <div className="coinFlipCard">
-                      <div><FontAwesomeIcon icon={faCoins} /></div>
+                    <div className="coinFlipCard" onClick={() => setDisplayedTool(3)}>
+                      <div>
+                        <FontAwesomeIcon icon={faCoins} />
+                      </div>
                       <h3>Pile ou Face</h3>
                       <p>Crées : 10</p>
                     </div>
                   </div>
+                </div>
+                {/* <Card title="Créer un counter" color="#e8ac65" /> */}
+                {displayedTool === 1 && (
+                  <div>
+                    <h3>Mes counters</h3>
+                    <Counter countersData={countersData} />
                   </div>
-                  {/* <Card title="Créer un counter" color="#e8ac65" /> */}
-
-                  <h3>Mes counters</h3>
-                  <Counter countersData={countersData} />
-              
+                )}
+                {displayedTool === 2 && (
+                  <div>
+                    <h3>Mes timers</h3>
+                    <Timer timersData  ={timersData}/>
+                  </div>
+                )}
+                {displayedTool === 3 && (
+                  <div>
+                    <h3>Mes coin flip</h3>
+                    <CoinFlip/>
+                  </div>
+                )}
               </div>
             )}
             {currentTool === 2 && <div>Random</div>}
-            {currentTool === 3 && <div>Sondage
-              <button onClick={() => handleTwitchConnect()}>
-              Appuyer pour vous connecter au chat twitch
-            </button>
-              </div>}
+            {currentTool === 3 && (
+              <div>
+                Sondage
+                <button onClick={() => handleTwitchConnect()}>
+                  Appuyer pour vous connecter au chat twitch
+                </button>
+              </div>
+            )}
           </div>
           {/* <div className="ICI">
         <div>Bonjour</div>
@@ -140,12 +167,14 @@ export const getStaticProps = async () => {
   const data = await res.json();
   const counters = await fetch("http://localhost:3000/api/counter");
   const countersJSON = await counters.json();
-  console.log("counters data", countersJSON);
+  const timers = await fetch("http://localhost:3000/api/timer");
+  const timersJSON = await timers.json();
 
   return {
     props: {
       sondages: data,
       countersData: countersJSON,
+      timersData: timersJSON
     },
   };
 };
