@@ -11,7 +11,7 @@ import Link from "next/link";
 const Sidebar = () => {
   return (
     <div className="sideNav">
-      <h3>Twitch Tools</h3>
+      <h3>Twools</h3>
       <ul className="list">
         <li>
           <Link href="/administration">

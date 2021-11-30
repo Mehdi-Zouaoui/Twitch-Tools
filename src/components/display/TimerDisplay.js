@@ -35,13 +35,13 @@ const TimerDisplay = ({ data }) => {
       {data.display === "dial" && (
         <div className="dial">
           <h3>{data.title}</h3>
-          <div className="">
+          <div className="dialContainer">
             {/* <p>{("0" + (time/10)%100).slice(-2)}</p> */}
-            <p>{("0" + (Math.floor(time / 60000) % 60)).slice(-2)}</p>
-            <p>{("0" + (Math.floor(time / 1000) % 60)).slice(-2)}</p>
+            <p>{("0" + (Math.floor(time / 60000) % 60)).slice(-2)} : </p>
+            <p>{("0" + (Math.floor(time / 1000) % 60)).slice(-2)} : </p>
             <p>{("0" + ((time / 10) % 100)).slice(-2)}</p>
           </div>
-          <div className="timerButtonContainer">
+          <div className="dialButtonContainer">
             {!started && time === 0 && (
               <button onClick={() => start()}>
                 <FontAwesomeIcon icon={faPlay} />

@@ -1,25 +1,49 @@
+import { useState, useEffect } from "react";
 
-import { useState } from "react";
-
-const Counter = ({ data }) => {
+const Counter = () => {
   const [index, setIndex] = useState(0);
+  const [data, setData] = useState([]);
 
-  const increment = () => {
-    setIndex(index + 1);
-  };
-  const decrement = () => {
-    index > 0 ? setIndex(index - 1) : null;
-  };
+  // useEffect(() => {
+  //   setData(JSON.parse(localStorage.getItem("counter")));
+  //   console.log("here", data);
+  // }, []);
+
+  useEffect(() => {
+    setData(JSON.parse(localStorage.getItem("counters")));
+
+    function checkCounter() {
+      const items = localStorage.getItem(`counters`);
+
+      if (items) {
+        setData(JSON.parse(items));
+      }
+    }
+
+    window.addEventListener("storage", checkCounter);
+
+    return () => {
+      window.removeEventListener("storage", checkCounter);
+    };
+  }, []);
 
   return (
-    <div className="counterDisplay">
-      <h1>Counter</h1>
-      <div className="counterButtonContainer">
-      <button>Display</button>
-      <button onClick={increment}>+</button>
-      <button onClick={decrement}>-</button>
-      </div>
-      <div>{index}</div>
+    <div>
+      {data && (
+        <div>
+          {data.map((item, index) => (
+            <div
+              className="counterDisplay"
+              style={{ backgroundColor: item.color }}
+              key={index}
+            >
+              <h1>{item.title}</h1>
+
+              <div>{item.value}</div>
+            </div>
+          ))}
+        </div>
+      )}
     </div>
   );
 };

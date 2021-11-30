@@ -6,10 +6,13 @@ import { faTrash } from "@fortawesome/free-solid-svg-icons";
 import { useUser } from "@auth0/nextjs-auth0";
 import axios from "axios";
 import CounterDisplay from "./display/CounterDisplay";
+import { useRouter } from 'next/router';
+
 
 
 
 const Counter = ({ countersData }) => {
+  const router = useRouter();
   const [formTitle, setFormTitle] = useState("");
   const [formColor, setFormColor] = useState("#eb5e28");
   const [formUpdate, setFormUpdate] = useState({
@@ -17,6 +20,8 @@ const Counter = ({ countersData }) => {
     update: false,
   });
   const [formCreation, setFormCreation] = useState(false);
+  const countersArray = [];
+  localStorage.setItem('counters' , JSON.stringify(countersArray))
 
   // const { user, error, isLoading } = useUser();
   const url = "http://localhost:3000";
@@ -26,6 +31,9 @@ const Counter = ({ countersData }) => {
     control,
     formState: { errors },
   } = useForm();
+  const refreshData = () => {
+    router.replace(router.asPath);
+  }
 
   const onSubmit = (data) => {
     // data.author = user.sub;
@@ -34,6 +42,7 @@ const Counter = ({ countersData }) => {
       .post(url + "/api/counter", data)
       .then((res) => {
         console.log("back", res);
+        refreshData();
       })
       .catch((err) => {
         console.log("err", err);
