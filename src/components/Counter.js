@@ -18,8 +18,10 @@ const Counter = ({ countersData }) => {
   });
   const [formCreation, setFormCreation] = useState(false);
   const countersArray = [];
-  let counters = JSON.parse(localStorage.getItem("counters"));
+  const [counterTest, setCounterTest] = useState();
   localStorage.setItem("counters", JSON.stringify(countersArray));
+  let storedCounters = JSON.parse(localStorage.getItem("counters"));
+  const [counters , setCounters] = useState(storedCounters);
 
   // const { user, error, isLoading } = useUser();
   const url = "http://localhost:3000";
@@ -32,9 +34,12 @@ const Counter = ({ countersData }) => {
   const refreshData = () => {
     router.replace(router.asPath);
   };
-  // useEffect(() => {
-  //   counters = JSON.parse(localStorage.getItem("counters"));
-  // }, [counters]);
+
+
+  useEffect(() => {
+    console.log('yes')
+    localStorage.setItem("counters", JSON.stringify(counters));
+  }, [counters]);
 
   const onSubmit = (data) => {
     // data.author = user.sub;
@@ -58,6 +63,7 @@ const Counter = ({ countersData }) => {
             data={item}
             key={index}
             counters={counters}
+            setCounters = {setCounters}
             update={setFormUpdate}
           />
         ))}
