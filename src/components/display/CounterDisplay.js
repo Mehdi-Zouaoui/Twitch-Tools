@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Link from "next/link";
 import {
@@ -16,42 +16,22 @@ const CounterDisplay = ({ data, update }) => {
   const [index, setIndex] = useState(0);
   const [options, setOptions] = useState(false);
   const [stream, setStream] = useState(false);
-  const counters = JSON.parse(localStorage.getItem("counters"));
+  let counters = JSON.parse(localStorage.getItem("counters"));
 
-  counters.forEach((item, index) => {
-    console.log("item", item);
-  });
+  useEffect(() => {
+    if (stream) {
+      counters.push({ ...data, value: index });
+      console.log("data", data);
+    } else {
+      counters = counters.filter((item) => item._id !== data._id);
+    }
 
+    localStorage.setItem("counters", JSON.stringify(counters));
+  }, [stream]);
+  counters.forEach((item, index) => {});
 
   const refreshData = () => {
     router.replace(router.asPath);
-  };
-
-  const setAndRedirect = (data) => {
-    console.log('show' ,stream)
-   
-      console.log("test boolean", stream);
-      counters.push({ ...data, value: index });
-      localStorage.setItem("counters", JSON.stringify(counters));
-      return (
-        <div>
-          <Link href="http://localhost:3000/stream/counter">
-            <a target="_blank" id="opener" rel="noopener noreferrer">
-              <FontAwesomeIcon icon={faEye} />
-            </a>
-          </Link>
-        </div>
-      );
-  };
-
-  const removeAndUnshow = () => {
-    console.log("unshow", stream);
-    counters.forEach((item, index) => {
-      console.log(item)
-    });
-    return(
-      <FontAwesomeIcon icon={faEyeSlash} />
-    )
   };
 
   const increment = () => {
@@ -82,8 +62,24 @@ const CounterDisplay = ({ data, update }) => {
 
   return (
     <div className="counterDisplay">
-      <button className="counterStream" onClick={() => setStream(!stream)}>
-        {stream ? setAndRedirect(data) : removeAndUnshow() }
+      <button
+        className="counterStream"
+        onClick={() => {
+          console.log("before", stream);
+          setStream(!stream);
+        }}
+      >
+        {stream === false ? (
+          <div>
+            <Link href="http://localhost:3000/stream/counter">
+              <a target="_blank" id="opener" rel="noopener noreferrer">
+                <FontAwesomeIcon icon={faEye} />
+              </a>
+            </Link>
+          </div>
+        ) : (
+          <FontAwesomeIcon icon={faEyeSlash} />
+        )}
       </button>
       <h1>{data.title}</h1>
       <div className="counterColor" style={{ backgroundColor: data.color }} />
