@@ -6,10 +6,7 @@ import { faTrash } from "@fortawesome/free-solid-svg-icons";
 import { useUser } from "@auth0/nextjs-auth0";
 import axios from "axios";
 import CounterDisplay from "./display/CounterDisplay";
-import { useRouter } from 'next/router';
-
-
-
+import { useRouter } from "next/router";
 
 const Counter = ({ countersData }) => {
   const router = useRouter();
@@ -21,7 +18,8 @@ const Counter = ({ countersData }) => {
   });
   const [formCreation, setFormCreation] = useState(false);
   const countersArray = [];
-  localStorage.setItem('counters' , JSON.stringify(countersArray))
+  let counters = JSON.parse(localStorage.getItem("counters"));
+  localStorage.setItem("counters", JSON.stringify(countersArray));
 
   // const { user, error, isLoading } = useUser();
   const url = "http://localhost:3000";
@@ -33,7 +31,10 @@ const Counter = ({ countersData }) => {
   } = useForm();
   const refreshData = () => {
     router.replace(router.asPath);
-  }
+  };
+  // useEffect(() => {
+  //   counters = JSON.parse(localStorage.getItem("counters"));
+  // }, [counters]);
 
   const onSubmit = (data) => {
     // data.author = user.sub;
@@ -53,7 +54,12 @@ const Counter = ({ countersData }) => {
     <div className="counterComponent">
       <div className="counterData">
         {countersData.map((item, index) => (
-          <CounterDisplay data={item} key={index} update={setFormUpdate} />
+          <CounterDisplay
+            data={item}
+            key={index}
+            counters={counters}
+            update={setFormUpdate}
+          />
         ))}
       </div>
       {formUpdate.update && (
