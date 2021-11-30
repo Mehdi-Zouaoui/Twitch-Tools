@@ -1,0 +1,23 @@
+.stream{
+    width: 100%;
+    padding-top: 20px;
+.streamDisplay{
+
+    .counterStreamDisplay{
+        width: 20%;
+        color : white;
+        border-radius: 10px;
+        display: flex;
+        height: 100px;
+        justify-content: space-around;
+        margin-bottom: 15px;
+        align-items: center;
+        .streamCounterTitle{
+
+        }
+        .streamCounterValue{
+            font-size: 30px;
+        }
+    }
+}
+}

@@ -40,7 +40,6 @@ const CounterDisplay = ({ data, update, counters, setCounters }) => {
         item._id === data._id ? { ...item, value: index } : { ...item }
       )
     );
-    
   };
   const decrement = (data) => {
     index > 0 ? setIndex(index - 1) : null;
@@ -54,8 +53,9 @@ const CounterDisplay = ({ data, update, counters, setCounters }) => {
     fetch("http://localhost:3000/api/counter/" + id, {
       method: "DELETE",
     }).then((res) => {
+      setCounters(counters.filter((item) => item._id !== id));
       console.log(res);
-      refreshData();
+      // refreshData();
     });
   };
   const editCounter = () => {
@@ -89,7 +89,7 @@ const CounterDisplay = ({ data, update, counters, setCounters }) => {
             {" "}
             <FontAwesomeIcon icon={faPlus} />
           </button>
-          <button className="counterOperation"  onClick={() => decrement(data)}>
+          <button className="counterOperation" onClick={() => decrement(data)}>
             {" "}
             <FontAwesomeIcon icon={faMinus} />
           </button>

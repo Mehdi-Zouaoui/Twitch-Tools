@@ -2,7 +2,7 @@ import React from "react";
 import { useForm, useFieldArray, Controller } from "react-hook-form";
 import { useState, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faTrash } from "@fortawesome/free-solid-svg-icons";
+import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
 import { useUser } from "@auth0/nextjs-auth0";
 import axios from "axios";
 import CounterDisplay from "./display/CounterDisplay";
@@ -71,9 +71,12 @@ const Counter = ({ countersData }) => {
       {formUpdate.update && (
         <div className="counterCreation">
           <div className="counterFormContainer">
+            <div>
             <h3 className="counterTitle">
               Modifier {formUpdate.counterData.title}
+              <button onClick={() => setFormUpdate(prevState => ({...prevState, update: false}))}><FontAwesomeIcon icon={faArrowLeft} /></button>
             </h3>
+            </div>
             <form className="counterForm" onSubmit={handleSubmit(onSubmit)}>
               <div className="counterInputContainer">
                 <input
