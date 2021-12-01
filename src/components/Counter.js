@@ -19,9 +19,15 @@ const Counter = ({ countersData }) => {
   const [formCreation, setFormCreation] = useState(false);
   const countersArray = [];
   const [counterTest, setCounterTest] = useState();
-  localStorage.setItem("counters", JSON.stringify(countersArray));
+  if (
+    JSON.parse(localStorage.getItem("counters")) === null ||
+    JSON.parse(localStorage.getItem("counters")).length === 0
+  ) {
+    localStorage.setItem("counters", JSON.stringify(countersArray));
+  }
   let storedCounters = JSON.parse(localStorage.getItem("counters"));
-  const [counters , setCounters] = useState(storedCounters);
+
+  const [counters, setCounters] = useState(storedCounters);
 
   // const { user, error, isLoading } = useUser();
   const url = "http://localhost:3000";
@@ -35,24 +41,46 @@ const Counter = ({ countersData }) => {
     router.replace(router.asPath);
   };
 
-
   useEffect(() => {
-    console.log('yes')
+    console.log("yes");
     localStorage.setItem("counters", JSON.stringify(counters));
   }, [counters]);
 
   const onSubmit = (data) => {
     // data.author = user.sub;
-    console.log("data", data);
-    axios
-      .post(url + "/api/counter", data)
-      .then((res) => {
-        console.log("back", res);
-        refreshData();
-      })
-      .catch((err) => {
-        console.log("err", err);
-      });
+    console.log(formUpdate.counterData);
+    if (formUpdate.update === false) {
+      console.log("POST");
+      axios
+        .post(url + "/api/counter", data)
+        .then((res) => {
+          console.log("back", res);
+          refreshData();
+        })
+        .catch((err) => {
+          console.log("err", err);
+        });
+    }
+    if (formUpdate.update === true) {
+      console.log("PUT");
+      data = { ...data, _id: formUpdate.counterData._id, value: 0 };
+      axios
+        .put(url + "/api/counter/" + formUpdate.counterData._id, data)
+        .then((res) => {
+          counters.forEach((item) => {
+            console.log("HERE LOOK", item, data);
+          });
+          setCounters(
+            counters.map((item) =>
+              item._id === formUpdate.counterData._id ? data : { ...item }
+            )
+          );
+          refreshData();
+        })
+        .catch((err) => {
+          console.log("err", err);
+        });
+    }
   };
 
   return (
@@ -63,7 +91,7 @@ const Counter = ({ countersData }) => {
             data={item}
             key={index}
             counters={counters}
-            setCounters = {setCounters}
+            setCounters={setCounters}
             update={setFormUpdate}
           />
         ))}
@@ -72,10 +100,19 @@ const Counter = ({ countersData }) => {
         <div className="counterCreation">
           <div className="counterFormContainer">
             <div>
-            <h3 className="counterTitle">
-              Modifier {formUpdate.counterData.title}
-              <button onClick={() => setFormUpdate(prevState => ({...prevState, update: false}))}><FontAwesomeIcon icon={faArrowLeft} /></button>
-            </h3>
+              <h3 className="counterTitle">
+                Modifier {formUpdate.counterData.title}
+                <button
+                  onClick={() =>
+                    setFormUpdate((prevState) => ({
+                      ...prevState,
+                      update: false,
+                    }))
+                  }
+                >
+                  <FontAwesomeIcon icon={faArrowLeft} />
+                </button>
+              </h3>
             </div>
             <form className="counterForm" onSubmit={handleSubmit(onSubmit)}>
               <div className="counterInputContainer">
@@ -133,12 +170,16 @@ const Counter = ({ countersData }) => {
                   {...register("color")}
                   className="counterFormColor"
                   value={formColor}
-                  onChange={(e) => setFormColor(e.target.value)}
+                  onChange={(e) =>{
+                    e.preventDefault();
+                    setFormColor(e.target.value)
+                  } }
                 />
               </div>{" "}
               <input
                 type="submit"
                 className="counterSubmit"
+                style={{ backgroundColor:formColor}}
                 value="Enregistrer"
               />
             </form>

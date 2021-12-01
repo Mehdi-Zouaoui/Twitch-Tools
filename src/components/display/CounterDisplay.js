@@ -55,11 +55,14 @@ const CounterDisplay = ({ data, update, counters, setCounters }) => {
     }).then((res) => {
       setCounters(counters.filter((item) => item._id !== id));
       console.log(res);
-      // refreshData();
+      refreshData();
     });
   };
   const editCounter = () => {
+  
     update({ counterData: data, update: true });
+    console.log('update Data', data)
+    
   };
 
   return (
