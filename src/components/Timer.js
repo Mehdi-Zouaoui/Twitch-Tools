@@ -1,6 +1,6 @@
 import TimerDisplay from "../components/display/TimerDisplay";
 import { useForm, useFieldArray, Controller } from "react-hook-form";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faStopwatch,
@@ -21,6 +21,7 @@ export const getStaticProps = async () => {
 };
 
 const Timer = ({ timersData }) => {
+  const timersArray = [];
   const [formColor, setFormColor] = useState("#eb5e28");
   const [formTitle, setFormTitle] = useState("");
   const [type, setType] = useState(false);
@@ -34,18 +35,32 @@ const Timer = ({ timersData }) => {
     milliseconds: false,
   });
   const url = "http://localhost:3000";
-
+  if (
+    JSON.parse(localStorage.getItem("timers")) === null ||
+    JSON.parse(localStorage.getItem("timers")).length === 0
+  ) {
+    localStorage.setItem("timers", JSON.stringify(timersArray));
+  }
+  let storedTimers = JSON.parse(localStorage.getItem("timers"));
+  const [timers, setTimers] = useState(storedTimers);
   const {
     register,
     handleSubmit,
     control,
     formState: { errors },
   } = useForm();
+
+  useEffect(() => {
+    console.log("yes");
+    localStorage.setItem("timers", JSON.stringify(timers));
+  }, [timers]);
+
   const onSubmit = (data) => {
     // data.author = user.sub;
     console.log("data", data);
     data.type = type;
     data.display = display;
+    data.value = 0;
     axios
       .post(url + "/api/timer", data)
       .then((res) => {
@@ -60,7 +75,13 @@ const Timer = ({ timersData }) => {
     <div className="timerComponent">
       <div className="timersContainer">
         {timersData.map((item, index) => (
-          <TimerDisplay data={item} key={index} />
+          <TimerDisplay
+            data={item}
+            key={index}
+            timers={timers}
+            setTimers={setTimers}
+           
+          />
         ))}
       </div>
       <div className="timerCreation">
@@ -206,11 +227,36 @@ const Timer = ({ timersData }) => {
                 
               )} */}
               <div className="timerDataContainer">
-                {checked.days && <div><h5>Jours</h5><input type="number"/></div>}
-                {checked.hours && <div><h5>Heures</h5><input type="number"/></div>}
-                {checked.minutes && <div><h5>Minutes</h5><input type="number"/></div>}
-                {checked.seconds && <div><h5>Secondes</h5><input type="number"/></div>}
-                {checked.milliseconds && <div><h5>Millisecondes</h5><input type="number"/></div>}
+                {checked.days && (
+                  <div>
+                    <h5>Jours</h5>
+                    <input type="number" />
+                  </div>
+                )}
+                {checked.hours && (
+                  <div>
+                    <h5>Heures</h5>
+                    <input type="number" />
+                  </div>
+                )}
+                {checked.minutes && (
+                  <div>
+                    <h5>Minutes</h5>
+                    <input type="number" />
+                  </div>
+                )}
+                {checked.seconds && (
+                  <div>
+                    <h5>Secondes</h5>
+                    <input type="number" />
+                  </div>
+                )}
+                {checked.milliseconds && (
+                  <div>
+                    <h5>Millisecondes</h5>
+                    <input type="number" />
+                  </div>
+                )}
               </div>
             </div>{" "}
             <input

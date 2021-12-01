@@ -5,8 +5,9 @@
         display: flex;
         flex-wrap: wrap;
         justify-content: space-between;
-        overflow: scroll;
-        height: 550px;
+        overflow-y: scroll;
+        height: 500px;
+        width: 50%;
     }
 
     .timerCreation {

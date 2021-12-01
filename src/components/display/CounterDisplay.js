@@ -13,7 +13,6 @@ import { useRouter } from "next/router";
 import { counter } from "@fortawesome/fontawesome-svg-core";
 
 const CounterDisplay = ({ data, update, counters, setCounters }) => {
-  console.log("counter", counters);
   const router = useRouter();
   const [index, setIndex] = useState(0);
   const [options, setOptions] = useState(false);
