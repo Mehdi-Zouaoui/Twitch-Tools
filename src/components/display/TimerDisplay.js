@@ -58,7 +58,7 @@ const TimerDisplay = ({ data, timers, setTimers }) => {
             ? {
                 ...item,
                 started: true,
-                value: ("0" + ((time / 10) % 100)).slice(-2),
+                value: ("0" + (Math.floor(time / 1000) % 60)).slice(-2),
               }
             : { ...item }
         )
