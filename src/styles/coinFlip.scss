@@ -249,17 +249,3 @@ $shine: #e9f4ff;
   66% { transform: rotate(-4deg) }
   100% { transform: rotate() }
 }
-
-/********* BODY STYLES *********/
-html,
-body {
-  height: 100%;
-}
-
-body {
-  align-items: center;
-  background: $bg;
-  display: flex;
-  justify-content: center;
-  -webkit-font-smoothing: antialiased;
-}

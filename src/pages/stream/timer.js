@@ -1,9 +1,12 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { CountdownCircleTimer } from "react-countdown-circle-timer";
+import StreamedTimer from "./components/StreamedTimer";
 const Timer = () => {
   const [index, setIndex] = useState(0);
+  const interval = useRef();
   const [data, setData] = useState([]);
   const [time, setTime] = useState(0);
+
   useEffect(() => {
     setData(JSON.parse(localStorage.getItem("timers")));
     function checkTimers() {
@@ -23,32 +26,7 @@ const Timer = () => {
       {data && (
         <div className="streamDisplay">
           {data.map((item, index) => (
-            <div
-              className="counterStreamDisplay"
-              style={{ backgroundColor: item.color }}
-              key={index}
-            >
-              {item.display === "dial" && (
-                <div className="dial">
-                  <h3>{item.title}</h3>
-                  <div>BONJOUR DIAL</div>
-                  <div className="dialContainer">
-                      <div>{item.value}</div>
-                    {/* <p>{("0" + (time/10)%100).slice(-2)}</p> */}
-                    {/* <p>
-                      {("0" + (Math.floor(time / 60000) % 60)).slice(-2)} :{" "}
-                    </p>
-                    <p>{("0" + (Math.floor(time / 1000) % 60)).slice(-2)} : </p>
-                    <p>{("0" + ((time / 10) % 100)).slice(-2)}</p> */}
-                  </div>
-                
-                </div>
-              )}
-          
-              <h1 className="streamCounterTitle">{item.title}</h1>
-
-              <div className="streamCounterValue">{item.value}</div>
-            </div>
+            <StreamedTimer data={item} key={index} />
           ))}
         </div>
       )}

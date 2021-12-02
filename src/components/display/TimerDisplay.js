@@ -20,7 +20,6 @@ const renderTime = ({ remainingTime }) => {
 
 const TimerDisplay = ({ data, timers, setTimers }) => {
   const router = useRouter();
-  const interval = useRef();
   const [started, setStarted] = useState(false);
   const [time, setTime] = useState(0);
   const [key, setKey] = useState(0);
@@ -49,32 +48,32 @@ const TimerDisplay = ({ data, timers, setTimers }) => {
       )
     );
 
-    interval.current = setInterval(() => {
-      setTime((prevTime) => prevTime + 10);
-      console.log("time", ("0" + ((time / 10) % 100)).slice(-2));
-      setTimers(
-        timers.map((item) =>
-          item._id === data._id
-            ? {
-                ...item,
-                started: true,
-                value: ("0" + (Math.floor(time / 1000) % 60)).slice(-2),
-              }
-            : { ...item }
-        )
-      );
-    }, 10);
+    // interval.current = setInterval(() => {
+    //   setTime((prevTime) => prevTime + 10);
+    //   console.log("time", ("0" + ((time / 10) % 100)).slice(-2));
+    //   setTimers(
+    //     timers.map((item) =>
+    //       item._id === data._id
+    //         ? {
+    //             ...item,
+    //             started: true,
+    //             value: ("0" + (Math.floor(time / 1000) % 60)).slice(-2),
+    //           }
+    //         : { ...item }
+    //     )
+    //   );
+    // }, 10);
     console.log("running");
     setStarted(true);
   };
   const stop = () => {
-    clearInterval(interval.current);
+
     setTimers(
       timers.map((item) =>
         item._id === data._id ? { ...item, started: false } : { ...item }
       )
     );
-    console.log("timer stoped");
+   
     setStarted(false);
   };
 
