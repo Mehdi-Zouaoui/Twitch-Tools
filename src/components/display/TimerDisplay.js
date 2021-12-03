@@ -41,11 +41,11 @@ const TimerDisplay = ({ data, timers, setTimers }) => {
 
   const start = () => {
     setTimers(
-      timers.map((item) =>
-        item._id === data._id
-          ? { ...item, started: true, value: 0 }
-          : { ...item }
-      )
+      timers.map((item) => {
+        if (item._id === data._id) {
+          return { ...item, started: true, value: 0 };
+        }
+      })
     );
 
     // interval.current = setInterval(() => {
@@ -67,13 +67,12 @@ const TimerDisplay = ({ data, timers, setTimers }) => {
     setStarted(true);
   };
   const stop = () => {
-
     setTimers(
       timers.map((item) =>
         item._id === data._id ? { ...item, started: false } : { ...item }
       )
     );
-   
+
     setStarted(false);
   };
 

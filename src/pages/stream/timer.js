@@ -3,7 +3,6 @@ import { CountdownCircleTimer } from "react-countdown-circle-timer";
 import StreamedTimer from "./components/StreamedTimer";
 const Timer = () => {
   const [index, setIndex] = useState(0);
-  const interval = useRef();
   const [data, setData] = useState([]);
   const [time, setTime] = useState(0);
 

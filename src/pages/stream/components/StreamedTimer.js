@@ -6,8 +6,11 @@ const StreamedTimer = ({ data }) => {
   const [time, setTime] = useState(0);
   console.log(data);
   if (data.started) {
+    console.log('running')
+    clearInterval(interval.current);
     interval.current = setInterval(() => {
       console.log("started");
+      setTime(time+1)
     }, 1000);
   }
   if(data.started === false) {
@@ -17,6 +20,7 @@ const StreamedTimer = ({ data }) => {
   return (
     <div className="stream">
       <div>{data.title}</div>
+      <div>{time}</div>
     </div>
   );
 };
