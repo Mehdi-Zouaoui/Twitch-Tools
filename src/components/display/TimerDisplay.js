@@ -27,6 +27,10 @@ const TimerDisplay = ({ data, timers, setTimers }) => {
   const [time, setTime] = useState(0);
   const [key, setKey] = useState(0);
   const [stream, setStream] = useState(false);
+  const [days , setDays] = useState(0);
+  const [hours , setHours] = useState(0);
+  const [minutes , setMinutes] = useState(0);
+  const [secondes , setSecondes] = useState(0);
 
   useEffect(() => {
     if (stream) {
@@ -41,6 +45,28 @@ const TimerDisplay = ({ data, timers, setTimers }) => {
   const refreshData = () => {
     router.replace(router.asPath);
   };
+
+  const startCountdown = () => {
+    
+    const target = new Date("12/08/2021 23:59:59").getTime()
+
+    
+    clearInterval(interval.current)
+    interval.current = setInterval(() => {
+      const now = new Date().getTime()
+
+      const distance = (target - now)
+
+      const d = Math.floor(distance/ (1000*60*60*24))
+      const h = Math.floor((distance % (1000*60*60*24)) / (1000*60*60))
+      const m = Math.floor((distance % (1000*60*60)) / (1000*60))
+      const s = Math.floor((distance % (1000*60)) / 1000)
+      setDays(d)
+      setHours(h)
+      setMinutes(m)
+      setSecondes(s)
+    })
+  }
 
   const start = () => {
     setTimers(
@@ -116,6 +142,25 @@ const TimerDisplay = ({ data, timers, setTimers }) => {
         <FontAwesomeIcon icon={faTrash} />{" "}
       </button> */}
       <div className="buttonFormatContainer">
+   
+      <button
+        className="timerStream"
+        onClick={() => {
+          console.log("before", stream);
+          setStream(!stream);
+        }}
+      >
+        {stream === false ? (
+          <div>
+            <a href="http://localhost:3000/stream/timer" target="stream">
+              <FontAwesomeIcon icon={faEye} />
+            </a>
+          </div>
+        ) : (
+          <FontAwesomeIcon icon={faEyeSlash} />
+        )}
+      </button>
+      
         <button
           className="displayChoiceButton defaultChoice"
           onClick={(e) => {
@@ -139,6 +184,11 @@ const TimerDisplay = ({ data, timers, setTimers }) => {
       <div className="dial">
           <h3>{data.title}</h3>
           <div className="dialContainer">
+            <button onClick={() => startCountdown() }> Start</button>
+            <p>{days < 10 ? '0' + days : days}:</p>
+            <p>{hours < 10 ? '0' + hours : hours}:</p>
+            <p>{minutes < 10 ? '0' + minutes : minutes}:</p>
+            <p>{secondes < 10 ? '0' + secondes : secondes}</p>
             {/* <p>{("0" + (time/10)%100).slice(-2)}</p> */}
             {/* <p>{("0" + (Math.floor(time / 60000) % 60)).slice(-2)} : </p>
             <p>{("0" + (Math.floor(time / 1000) % 60)).slice(-2)} : </p>
