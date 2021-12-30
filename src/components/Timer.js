@@ -34,6 +34,13 @@ const Timer = ({ timersData }) => {
     seconds: false,
     milliseconds: false,
   });
+  const [rangeValue, setRangeValue] = useState({
+    days: 0,
+    hours: 0,
+    minutes: 0,
+    seconds: 0,
+    milliseconds: 0,
+  });
   const url = "http://localhost:3000";
   if (
     JSON.parse(localStorage.getItem("timers")) === null ||
@@ -57,18 +64,24 @@ const Timer = ({ timersData }) => {
 
   const onSubmit = (data) => {
     // data.author = user.sub;
-    console.log("data", data);
+   
+    data.value
     data.type = type;
-    data.display = display;
-    data.value = 0;
-    axios
-      .post(url + "/api/timer", data)
-      .then((res) => {
-        console.log("back", res);
-      })
-      .catch((err) => {
-        console.log("err", err);
-      });
+    if(data.type === false){
+      data.value = rangeValue;
+      data.checked = checked;
+    } 
+    else data.value = 0;
+    
+    console.log("data", data);
+    // axios
+    //   .post(url + "/api/timer", data)
+    //   .then((res) => {
+    //     console.log("back", res);
+    //   })
+    //   .catch((err) => {
+    //     console.log("err", err);
+    //   });
   };
 
   return (
@@ -80,7 +93,6 @@ const Timer = ({ timersData }) => {
             key={index}
             timers={timers}
             setTimers={setTimers}
-           
           />
         ))}
       </div>
@@ -127,7 +139,7 @@ const Timer = ({ timersData }) => {
                 </div>
               </div>
               <div className="timerFlexContainer">
-                <div className="displayButtonContainer">
+                {/* <div className="displayButtonContainer">
                   <button
                     className="displayChoiceButton defaultChoice"
                     onClick={(e) => {
@@ -146,74 +158,184 @@ const Timer = ({ timersData }) => {
                   >
                     <div>00:00</div>
                   </button>
-                </div>
-                <div className="checkboxContainer">
-                  <label>
-                    <input
-                      name="days"
-                      type="checkbox"
-                      onClick={() =>
-                        setChecked((prevState) => ({
-                          ...prevState,
-                          days: !prevState.days,
-                        }))
-                      }
-                    />
-                    Jours
-                  </label>
-                  <label>
-                    <input
-                      name="hours"
-                      type="checkbox"
-                      onClick={() =>
-                        setChecked((prevState) => ({
-                          ...prevState,
-                          hours: !prevState.hours,
-                        }))
-                      }
-                    />
-                    Heures
-                  </label>
-                  <label>
-                    <input
-                      name="minutes"
-                      type="checkbox"
-                      onClick={() =>
-                        setChecked((prevState) => ({
-                          ...prevState,
-                          minutes: !prevState.minutes,
-                        }))
-                      }
-                    />
-                    Minutes
-                  </label>
-                  <label>
-                    <input
-                      name="seconds"
-                      type="checkbox"
-                      onClick={() =>
-                        setChecked((prevState) => ({
-                          ...prevState,
-                          seconds: !prevState.seconds,
-                        }))
-                      }
-                    />
-                    Secondes
-                  </label>
-                  <label>
-                    <input
-                      name="milliseconds"
-                      type="checkbox"
-                      onClick={() =>
-                        setChecked((prevState) => ({
-                          ...prevState,
-                          milliseconds: !prevState.milliseconds,
-                        }))
-                      }
-                    />
-                    Millisecondes
-                  </label>
-                </div>
+                </div> */}
+                {type === false && (
+                  <div className="timePicker">
+                    {/* <div>
+                    <input type="text" />
+                    <input type="text" />
+                  </div> */}
+                    <div className="timePickerContainer">
+                      <div className="rangeContainer">
+                        <div htmlFor="days" className="dateSelect">
+                          <input
+                            name="days"
+                            type="checkbox"
+                            onClick={() =>
+                              setChecked((prevState) => ({
+                                ...prevState,
+                                days: !prevState.days,
+                              }))
+                            }
+                          />
+                          <h4>Jours</h4>
+                        </div>
+                        <div className="rangeDisplayContainer">
+                          <input
+                            disabled={!checked.days}
+                            id="range"
+                            type="range"
+                            value={rangeValue.days}
+                            onChange={(e) =>
+                              setRangeValue((prevState) => ({
+                                ...prevState,
+                                days: e.target.value,
+                              }))
+                            }
+                            name="daysRange"
+                            min="0"
+                            max="365"
+                            step="1"
+                          />
+                          <div>{rangeValue.days}</div>
+                        </div>
+                      </div>
+                      <div className="rangeContainer">
+                        <div htmlFor="hours" className="dateSelect">
+                          <input
+                            name="hours"
+                            type="checkbox"
+                            onClick={() =>
+                              setChecked((prevState) => ({
+                                ...prevState,
+                                hours: !prevState.hours,
+                              }))
+                            }
+                          />
+                          <h4>Heures</h4>{" "}
+                        </div>
+                        <div className="rangeDisplayContainer">
+                          <input
+                            id="range"
+                            type="range"
+                            value={rangeValue.hours}
+                            onChange={(e) =>
+                              setRangeValue((prevState) => ({
+                                ...prevState,
+                                hours: e.target.value,
+                              }))
+                            }
+                            disabled={!checked.hours}
+                            min="0"
+                            max="24"
+                            step="1"
+                          />
+                          <div>{rangeValue.hours}</div>
+                        </div>
+                      </div>{" "}
+                      <div className="rangeContainer">
+                        <div htmlFor="minutes" className="dateSelect">
+                          <input
+                            name="minutes"
+                            type="checkbox"
+                            onClick={() =>
+                              setChecked((prevState) => ({
+                                ...prevState,
+                                minutes: !prevState.minutes,
+                              }))
+                            }
+                          />
+                          <h4>Minutes</h4>{" "}
+                        </div>
+                        <div className="rangeDisplayContainer">
+                          <input
+                            id="range"
+                            type="range"
+                            value={rangeValue.minutes}
+                            onChange={(e) =>
+                              setRangeValue((prevState) => ({
+                                ...prevState,
+                                minutes: e.target.value,
+                              }))
+                            }
+                            disabled={!checked.minutes}
+                            min="0"
+                            max="60"
+                            step="1"
+                          />
+                          <div>{rangeValue.minutes}</div>
+                        </div>
+                      </div>
+                      <div className="rangeContainer">
+                        <div htmlFor="seconds" className="dateSelect">
+                          <input
+                            name="seconds"
+                            type="checkbox"
+                            onClick={() =>
+                              setChecked((prevState) => ({
+                                ...prevState,
+                                seconds: !prevState.seconds,
+                              }))
+                            }
+                          />
+                          <h4>Secondes</h4>{" "}
+                        </div>
+
+                        <div className="rangeDisplayContainer">
+                          <input
+                            id="range"
+                            type="range"
+                            value={rangeValue.seconds}
+                            onChange={(e) =>
+                              setRangeValue((prevState) => ({
+                                ...prevState,
+                                seconds: e.target.value,
+                              }))
+                            }
+                            disabled={!checked.seconds}
+                            min="0"
+                            max="60"
+                            step="1"
+                          />
+                          <div>{rangeValue.seconds}</div>
+                        </div>
+                      </div>{" "}
+                      <div className="rangeContainer">
+                        <div htmlFor="milliseconds" className="dateSelect">
+                          <input
+                            name="milliseconds"
+                            type="checkbox"
+                            onClick={() =>
+                              setChecked((prevState) => ({
+                                ...prevState,
+                                milliseconds: !prevState.milliseconds,
+                              }))
+                            }
+                          />
+                          <h4>Millisecondes</h4>{" "}
+                        </div>
+                        <div className="rangeDisplayContainer">
+                          <input
+                            id="range"
+                            type="range"
+                            value={rangeValue.milliseconds}
+                            onChange={(e) =>
+                              setRangeValue((prevState) => ({
+                                ...prevState,
+                                milliseconds: e.target.value,
+                              }))
+                            }
+                            disabled={!checked.milliseconds}
+                            min="0"
+                            max="100"
+                            step="1"
+                          />
+                          <div>{rangeValue.milliseconds}</div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                )}
               </div>
               {/* <select {...register("format")} defaultValue="Format">
                 <option value="Day">DD : HH : MM</option>
@@ -226,38 +348,6 @@ const Timer = ({ timersData }) => {
                   
                 
               )} */}
-              <div className="timerDataContainer">
-                {checked.days && (
-                  <div>
-                    <h5>Jours</h5>
-                    <input type="number" />
-                  </div>
-                )}
-                {checked.hours && (
-                  <div>
-                    <h5>Heures</h5>
-                    <input type="number" />
-                  </div>
-                )}
-                {checked.minutes && (
-                  <div>
-                    <h5>Minutes</h5>
-                    <input type="number" />
-                  </div>
-                )}
-                {checked.seconds && (
-                  <div>
-                    <h5>Secondes</h5>
-                    <input type="number" />
-                  </div>
-                )}
-                {checked.milliseconds && (
-                  <div>
-                    <h5>Millisecondes</h5>
-                    <input type="number" />
-                  </div>
-                )}
-              </div>
             </div>{" "}
             <input
               type="submit"

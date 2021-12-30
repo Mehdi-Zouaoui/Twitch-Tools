@@ -48,7 +48,7 @@ const TimerDisplay = ({ data, timers, setTimers }) => {
 
   const startCountdown = () => {
     
-    const target = new Date("12/08/2021 23:59:59").getTime()
+    const target = new Date("12/11/2021 23:59:59").getTime()
 
     
     clearInterval(interval.current)
@@ -184,11 +184,11 @@ const TimerDisplay = ({ data, timers, setTimers }) => {
       <div className="dial">
           <h3>{data.title}</h3>
           <div className="dialContainer">
-            <button onClick={() => startCountdown() }> Start</button>
-            <p>{days < 10 ? '0' + days : days}:</p>
+            {/* <button onClick={() => startCountdown() }> Start</button> */}
+            {/* <p>{days < 10 ? '0' + days : days}:</p>
             <p>{hours < 10 ? '0' + hours : hours}:</p>
             <p>{minutes < 10 ? '0' + minutes : minutes}:</p>
-            <p>{secondes < 10 ? '0' + secondes : secondes}</p>
+            <p>{secondes < 10 ? '0' + secondes : secondes}</p> */}
             {/* <p>{("0" + (time/10)%100).slice(-2)}</p> */}
             {/* <p>{("0" + (Math.floor(time / 60000) % 60)).slice(-2)} : </p>
             <p>{("0" + (Math.floor(time / 1000) % 60)).slice(-2)} : </p>
