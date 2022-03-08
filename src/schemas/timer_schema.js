@@ -8,7 +8,8 @@ const TimerSchema = new Schema({
   format : String,
   display : String,
   type : Boolean,
-  defaultValue : String
+  defaultValue : String,
+  values : Object
 });
 
 module.exports =  mongoose.models.Timer || mongoose.model("Timer", TimerSchema);

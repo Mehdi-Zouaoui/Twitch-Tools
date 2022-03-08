@@ -65,23 +65,30 @@ const Timer = ({ timersData }) => {
   const onSubmit = (data) => {
     // data.author = user.sub;
    
-    data.value
+    
     data.type = type;
     if(data.type === false){
-      data.value = rangeValue;
+
+      data.values = 
+      rangeValue.days * 24 * 60 * 60 * 1000 + 
+      rangeValue.hours * 60 * 60 *1000 +
+      rangeValue.minutes * 60 * 1000 + 
+      rangeValue.seconds * 1000 +
+      rangeValue.milliseconds;
+      
       data.checked = checked;
     } 
-    else data.value = 0;
+    else data.values = 0;
     
     console.log("data", data);
-    // axios
-    //   .post(url + "/api/timer", data)
-    //   .then((res) => {
-    //     console.log("back", res);
-    //   })
-    //   .catch((err) => {
-    //     console.log("err", err);
-    //   });
+    axios
+      .post(url + "/api/timer", data)
+      .then((res) => {
+        console.log("back", res);
+      })
+      .catch((err) => {
+        console.log("err", err);
+      });
   };
 
   return (
@@ -89,7 +96,7 @@ const Timer = ({ timersData }) => {
       <div className="timersContainer">
         {timersData.map((item, index) => (
           <TimerDisplay
-            data={item}
+            currentTimer={item}
             key={index}
             timers={timers}
             setTimers={setTimers}
@@ -352,6 +359,7 @@ const Timer = ({ timersData }) => {
             <input
               type="submit"
               className="timerSubmit"
+             
               value="Enregistrer"
               style={{ backgroundColor: formColor }}
             />

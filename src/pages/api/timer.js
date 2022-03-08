@@ -10,7 +10,8 @@ const timer = async (req, res) => {
       author: req.body.author,
       format: req.body.format,
       display: req.body.display,
-      type: req.body.type,
+      values : req.body.values,
+      type: req.body.type
     });
     res.json(item);
     item.save(function (err) {
