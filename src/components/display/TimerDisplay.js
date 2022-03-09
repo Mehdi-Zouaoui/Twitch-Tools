@@ -1,5 +1,6 @@
 import { useState, useRef, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import Link from "next/link";
 import {
   faRedo,
   faPlay,
@@ -27,20 +28,16 @@ const TimerDisplay = ({ currentTimer, timers, setTimers }) => {
   const [time, setTime] = useState(0);
   const [key, setKey] = useState(0);
   const [stream, setStream] = useState(false);
-  const [days, setDays] = useState(0);
-  const [hours, setHours] = useState(0);
-  const [minutes, setMinutes] = useState(0);
-  const [secondes, setSecondes] = useState(0);
+
 
   useEffect(() => {
     if (stream) {
-      setTimers((oldArray) => [...oldArray, { ...data }]);
-      console.log("data", data);
+      setTimers((oldArray) => [...oldArray, { ...currentTimer }]);
     } else {
       console.log("test gettind timers", timers);
       setTimers(
         timers.filter((item) => {
-          item._id !== null && item._id !== data._id;
+          item._id !== null && item._id !== currentTimer._id;
         })
       );
       // counters = counters.filter((item) => item._id !== data._id);
@@ -50,7 +47,6 @@ const TimerDisplay = ({ currentTimer, timers, setTimers }) => {
   const refreshData = () => {
     router.replace(router.asPath);
   };
-
 
   const start = (data) => {
     console.log("test on start", data);
@@ -65,32 +61,7 @@ const TimerDisplay = ({ currentTimer, timers, setTimers }) => {
     clearInterval(interval.current);
 
     if (data.type === false) {
-      console.log("Coutdown", data.values);
-
-      clearInterval(interval.current);
-      interval.current = setInterval(() => {
-        setTime((prevTime) => prevTime + 10);
-
-        let total_s = parseInt(Math.floor(data.values / 1000));
-        console.log('total S' , total_s);
-        let total_m = parseInt(Math.floor(total_s / 60));
-        console.log('total M' , total_m);
-        let total_h = parseInt(Math.floor(total_m / 60));
-        console.log('total H' , total_h);
-        let d= parseInt(Math.floor(total_h / 24));
-        console.log('total D' , d)
-       
-        let s = parseInt(total_s % 60);
-        let m = parseInt(total_m % 60);
-        let h = parseInt(total_h % 24);
-        
-
-        setDays(d);
-        setHours(h);
-        setMinutes(m);
-        setSecondes(s);
-        console.log("ICI", d , ":" , h , ":", m, ":" , s);
-      }, 10);
+     
     } else {
       console.log("Timer");
       interval.current = setInterval(() => {
@@ -107,7 +78,7 @@ const TimerDisplay = ({ currentTimer, timers, setTimers }) => {
     clearInterval(interval.current);
     setTimers(
       timers.map((item) =>
-        item._id === data._id
+        item._id === currentTimer._id
           ? { ...item, started: false, restart: false }
           : { ...item }
       )
@@ -121,7 +92,7 @@ const TimerDisplay = ({ currentTimer, timers, setTimers }) => {
     setRedo(false);
     setTimers(
       timers.map((item) =>
-        item._id === data._id
+        item._id === currentTImer._id
           ? { ...item, restart: true, started: false }
           : { ...item }
       )
@@ -169,9 +140,11 @@ const TimerDisplay = ({ currentTimer, timers, setTimers }) => {
         >
           {stream === false ? (
             <div>
-              <a href="http://localhost:3000/stream/timer" target="stream">
-                <FontAwesomeIcon icon={faEye} />
-              </a>
+              <Link href="http://localhost:3000/stream/timer">
+                <a  target="stream">
+                  <FontAwesomeIcon icon={faEye} />
+                </a>
+              </Link>
             </div>
           ) : (
             <FontAwesomeIcon icon={faEyeSlash} />

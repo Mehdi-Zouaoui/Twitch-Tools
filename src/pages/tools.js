@@ -3,7 +3,8 @@ import { useUser } from "@auth0/nextjs-auth0";
 import Card from "../components/Card";
 import Counter from "../components/Counter";
 import CoinFlip from "../components/CoinFlip";
-import Timer from '../components/Timer'
+import Timer from "../components/Timer";
+import Sondage from "../components/Sondage";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faCoins,
@@ -14,22 +15,25 @@ import { ApiClient } from "twitch";
 import axios from "axios";
 const tmi = require("tmi.js");
 
-const userTools = ({ sondages, countersData , timersData }) => {
+const userTools = ({ countersData, timersData , sondagesData }) => {
+  const OAUTH_BOT_TOKEN = process.env.OAUTH_BOT_TOKEN;
   const { user, error, isLoading } = useUser();
   const [displayedTool, setDisplayedTool] = useState(1);
   const [connected, setConnected] = useState(false);
   const [currentTool, setCurrentTool] = useState(0);
   const client = new tmi.Client({
     identity: {
-      username: "TwoolsBot",
-      password: "oauth:9xzeu9mexq3949592op21ku83rpixz",
+      username: "twoolsbot",
+      password: "oauth:0qa0cemeueq7tewnhhfeqv30rq3v2w",
     },
     options: { debug: true },
-    channels: ["kamet0"],
+    channels: ["twoolsbot"],
   });
 
   client.on("connected", () => {
     console.log("The bot is Online!");
+   
+    
   });
 
   client.on("disconnected", () => {
@@ -82,21 +86,30 @@ const userTools = ({ sondages, countersData , timersData }) => {
                   </div>
 
                   <div className="displayTools">
-                    <div className="counterCard" onClick={() => setDisplayedTool(1)}>
+                    <div
+                      className="counterCard"
+                      onClick={() => setDisplayedTool(1)}
+                    >
                       <div>
                         <FontAwesomeIcon icon={faCalculator} />
                       </div>
                       <h3>Counter</h3>
                       <p>Crées : 10</p>
                     </div>
-                    <div className="timerCard" onClick={() => setDisplayedTool(2)}>
+                    <div
+                      className="timerCard"
+                      onClick={() => setDisplayedTool(2)}
+                    >
                       <div>
                         <FontAwesomeIcon icon={faClock} />
                       </div>
                       <h3>Timers</h3>
                       <p>Crées : 10</p>
                     </div>
-                    <div className="coinFlipCard" onClick={() => setDisplayedTool(3)}>
+                    <div
+                      className="coinFlipCard"
+                      onClick={() => setDisplayedTool(3)}
+                    >
                       <div>
                         <FontAwesomeIcon icon={faCoins} />
                       </div>
@@ -115,13 +128,13 @@ const userTools = ({ sondages, countersData , timersData }) => {
                 {displayedTool === 2 && (
                   <div>
                     <h3>Mes timers</h3>
-                    <Timer timersData  ={timersData}/>
+                    <Timer timersData={timersData} />
                   </div>
                 )}
                 {displayedTool === 3 && (
                   <div>
                     <h3>Mes coin flip</h3>
-                    <CoinFlip/>
+                    <CoinFlip />
                   </div>
                 )}
               </div>
@@ -133,6 +146,8 @@ const userTools = ({ sondages, countersData , timersData }) => {
                 <button onClick={() => handleTwitchConnect()}>
                   Appuyer pour vous connecter au chat twitch
                 </button>
+                <button onClick={async() => { await socket.disconnect()}}>Test</button>
+                <Sondage sondagesData ={sondagesData}/>
               </div>
             )}
           </div>
@@ -163,18 +178,19 @@ const userTools = ({ sondages, countersData , timersData }) => {
 export default userTools;
 
 export const getStaticProps = async () => {
-  const res = await fetch("http://localhost:3000/api/sondage");
-  const data = await res.json();
+ 
   const counters = await fetch("http://localhost:3000/api/counter");
   const countersJSON = await counters.json();
   const timers = await fetch("http://localhost:3000/api/timer");
   const timersJSON = await timers.json();
+  const sondages = await fetch("http://localhost:3000/api/sondage");
+  const sondagesJSON = await sondages.json();
 
   return {
     props: {
-      sondages: data,
+      sondagesData: sondagesJSON,
       countersData: countersJSON,
-      timersData: timersJSON
+      timersData: timersJSON,
     },
   };
 };
