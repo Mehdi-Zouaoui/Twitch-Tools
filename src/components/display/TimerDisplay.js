@@ -29,7 +29,6 @@ const TimerDisplay = ({ currentTimer, timers, setTimers }) => {
   const [key, setKey] = useState(0);
   const [stream, setStream] = useState(false);
 
-
   useEffect(() => {
     if (stream) {
       setTimers((oldArray) => [...oldArray, { ...currentTimer }]);
@@ -57,20 +56,7 @@ const TimerDisplay = ({ currentTimer, timers, setTimers }) => {
         }
       })
     );
-    console.log("timers on start", timers);
-    clearInterval(interval.current);
 
-    if (data.type === false) {
-     
-    } else {
-      console.log("Timer");
-      interval.current = setInterval(() => {
-        setTime((prevTime) => prevTime + 10);
-        console.log("time", ("0" + ((time / 10) % 100)).slice(-2));
-      }, 10);
-    }
-
-    console.log("running");
     setStarted(true);
     setRedo(true);
   };
@@ -141,7 +127,7 @@ const TimerDisplay = ({ currentTimer, timers, setTimers }) => {
           {stream === false ? (
             <div>
               <Link href="http://localhost:3000/stream/timer">
-                <a  target="stream">
+                <a target="stream">
                   <FontAwesomeIcon icon={faEye} />
                 </a>
               </Link>

@@ -1,46 +1,58 @@
 import { useState, useEffect, useRef } from "react";
 import { CountdownCircleTimer } from "react-countdown-circle-timer";
-const renderTime = ({ remainingTime }) => {
-  return (
-    <div className="timer">
-      <div className="value">{remainingTime}</div>
-    </div>
-  );
-};
+// const renderTime = ({ remainingTime }) => {
+//   return (
+//     <div className="timer">
+//       <div className="value">{remainingTime}</div>
+//     </div>
+//   );
+// };
 
 const StreamedTimer = ({ data }) => {
   const [index, setIndex] = useState(0);
   const interval = useRef();
-  const [time, setTime] = useState(0);
+  const [time, setTime] = useState(data.values ? data.values : 0);
   const [days, setDays] = useState(0);
   const [hours, setHours] = useState(0);
   const [minutes, setMinutes] = useState(0);
   const [secondes, setSecondes] = useState(0);
-  console.log(data);
+  const [millisecondes, setMilliseconds] = useState(0);
 
-  if (data.started) {
-    console.log("running");
-    console.log("Coutdown", data.values);
-    let timeTest = data.values;
-    console.log(time);
+  if (data.started && data.type === false) {
+    // let timeTest = data.values;
+    // console.log(timeTest);
     clearInterval(interval.current);
     interval.current = setInterval(() => {
-      let total_s = parseInt(Math.floor(timeTest / 1000));
-      console.log("total S", total_s);
-      let total_m = parseInt(Math.floor(total_s / 60));
-      let total_h = parseInt(Math.floor(total_m / 60));
-      let d = parseInt(Math.floor(total_h / 24));
+      const getSeconds = parseInt(Math.floor(time / 1000));
+      const getMinutes = parseInt(Math.floor(total_s / 60));
+      const getHours = parseInt(Math.floor(total_m / 60));
+      const d = parseInt(Math.floor(total_h / 24));
 
-      let s = parseInt(total_s % 60);
-      let m = parseInt(total_m % 60);
-      let h = parseInt(total_h % 24);
+      const s = parseInt(getSeconds % 60);
+      const m = parseInt(getMinutes % 60);
+      const h = parseInt(getHours % 24);
 
       setDays(d);
       setHours(h);
       setMinutes(m);
       setSecondes(s);
-      timeTest = timeTest - 1000;
+      setTime(time - 1000);
     }, 1000);
+  }
+  if (data.started && data.type === true) {
+    clearInterval(interval.current);
+    interval.current = setInterval(() => {
+      const getMilliseconds = Math.floor((time % 1000) / 100);
+      const getSeconds = Math.floor((time / (1000 * 60)) % 60)
+      const getMinutes = Math.floor((time / 1000) % 60);;
+      const getHours = Math.floor((time / (1000 * 60 * 60)) % 24);
+      setMilliseconds(getMilliseconds);
+      setHours(getSeconds);
+      setMinutes(getMinutes);
+      setSecondes(getHours);
+      // setDays(getDays);
+      setTime(time + 10);
+    }, 10);
   }
   if (data.started === false) {
     clearInterval(interval.current);
@@ -55,11 +67,11 @@ const StreamedTimer = ({ data }) => {
     <div className="stream">
       <div>{data.title}</div>
       <div style={{ display: "flex" }}>
-        <p>{days} </p>
+        <p>{days} : </p>
         <p>{hours} : </p>
         <p>{minutes} : </p>
-        <p>{secondes}  </p>
-   
+        <p>{secondes} </p>
+        <p>{millisecondes} </p>
       </div>
     </div>
   );

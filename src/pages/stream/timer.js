@@ -6,14 +6,18 @@ const Timer = () => {
   const [data, setData] = useState([]);
   const [time, setTime] = useState(0);
 
+     
+  function checkTimers() {
+    const items = localStorage.getItem(`timers`);
+    if (items) {
+      setData(JSON.parse(items));
+      console.log('IN USE EFFECT' , JSON.parse(items))
+    }
+  }
+
   useEffect(() => {
     setData(JSON.parse(localStorage.getItem("timers")));
-    function checkTimers() {
-      const items = localStorage.getItem(`timers`);
-      if (items) {
-        setData(JSON.parse(items));
-      }
-    }
+
     window.addEventListener("storage", checkTimers);
     return () => {
       window.removeEventListener("storage", checkTimers);
