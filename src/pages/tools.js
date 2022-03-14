@@ -15,54 +15,12 @@ import { ApiClient } from "twitch";
 import axios from "axios";
 const tmi = require("tmi.js");
 
-const userTools = ({ countersData, timersData , sondagesData }) => {
-  const OAUTH_BOT_TOKEN = process.env.OAUTH_BOT_TOKEN;
+const userTools = ({ countersData, timersData, sondagesData }) => {
   const { user, error, isLoading } = useUser();
   const [displayedTool, setDisplayedTool] = useState(1);
-  const [connected, setConnected] = useState(false);
+
   const [currentTool, setCurrentTool] = useState(0);
-  const client = new tmi.Client({
-    identity: {
-      username: "twoolsbot",
-      password: "oauth:0qa0cemeueq7tewnhhfeqv30rq3v2w",
-    },
-    options: { debug: true },
-    channels: ["twoolsbot"],
-  });
-
-  client.on("connected", () => {
-    console.log("The bot is Online!");
-   
-    
-  });
-
-  client.on("disconnected", () => {
-    console.log(" DISCONNECTED The bot is Offline!");
-  });
-
-  client.on("message", (channel, tags, message, self) => {
-    // "Alca: Hello, World!"
-    if (self || !message.startsWith("!")) return;
-    const args = message.slice(1).split(" ");
-    const command = args.shift().toLowerCase();
-    if (command === "disconnect" || !connected) {
-      console.log("Saw !disconnect command in chat");
-      client.disconnect();
-    }
-    console.log(client.readyState());
-    console.log(`${tags["display-name"]}: ${message}`);
-  });
-
-  const handleTwitchConnect = async () => {
-    if (connected) {
-      setConnected(false);
-      client.say("TwoolsBot", "disconnected");
-    } else {
-      await client.connect();
-      client.say("TwoolsBot", "connected");
-      setConnected(true);
-    }
-  };
+  
 
   if (isLoading) return <div>Loading...</div>;
   return (
@@ -143,11 +101,11 @@ const userTools = ({ countersData, timersData , sondagesData }) => {
             {currentTool === 3 && (
               <div>
                 Sondage
-                <button onClick={() => handleTwitchConnect()}>
-                  Appuyer pour vous connecter au chat twitch
-                </button>
-                <button onClick={async() => { await socket.disconnect()}}>Test</button>
-                <Sondage sondagesData ={sondagesData}/>
+
+                <Sondage
+                  sondagesData={sondagesData}
+                  
+                />
               </div>
             )}
           </div>
@@ -178,7 +136,6 @@ const userTools = ({ countersData, timersData , sondagesData }) => {
 export default userTools;
 
 export const getStaticProps = async () => {
- 
   const counters = await fetch("http://localhost:3000/api/counter");
   const countersJSON = await counters.json();
   const timers = await fetch("http://localhost:3000/api/timer");

@@ -11,7 +11,10 @@ import { CountdownCircleTimer } from "react-countdown-circle-timer";
 const StreamedTimer = ({ data }) => {
   const [index, setIndex] = useState(0);
   const interval = useRef();
-  const [time, setTime] = useState(data.values ? data.values : 0);
+  const [originalTime, setOriginalTime] = useState(
+    data.values ? data.values : 0
+  );
+  const [time, setTime] = useState(0);
   const [days, setDays] = useState(0);
   const [hours, setHours] = useState(0);
   const [minutes, setMinutes] = useState(0);
@@ -21,12 +24,13 @@ const StreamedTimer = ({ data }) => {
   if (data.started && data.type === false) {
     // let timeTest = data.values;
     // console.log(timeTest);
+    console.log("values in loop", time);
     clearInterval(interval.current);
     interval.current = setInterval(() => {
       const getSeconds = parseInt(Math.floor(time / 1000));
-      const getMinutes = parseInt(Math.floor(total_s / 60));
-      const getHours = parseInt(Math.floor(total_m / 60));
-      const d = parseInt(Math.floor(total_h / 24));
+      const getMinutes = parseInt(Math.floor(getSeconds / 60));
+      const getHours = parseInt(Math.floor(getMinutes / 60));
+      const d = parseInt(Math.floor(getHours / 24));
 
       const s = parseInt(getSeconds % 60);
       const m = parseInt(getMinutes % 60);
@@ -43,8 +47,8 @@ const StreamedTimer = ({ data }) => {
     clearInterval(interval.current);
     interval.current = setInterval(() => {
       const getMilliseconds = Math.floor((time % 1000) / 100);
-      const getSeconds = Math.floor((time / (1000 * 60)) % 60)
-      const getMinutes = Math.floor((time / 1000) % 60);;
+      const getSeconds = Math.floor((time / (1000 * 60)) % 60);
+      const getMinutes = Math.floor((time / 1000) % 60);
       const getHours = Math.floor((time / (1000 * 60 * 60)) % 24);
       setMilliseconds(getMilliseconds);
       setHours(getSeconds);
@@ -58,7 +62,10 @@ const StreamedTimer = ({ data }) => {
     clearInterval(interval.current);
     if (data.restart === true) {
       console.log("stoped , you wanna restart ?");
-      setTime((prevTime) => prevTime * 0);
+      data.type === false
+        ? setTime(originalTime)
+        : setTime((prevTime) => prevTime * 0);
+      console.log("values", time, originalTime);
       data.restart = false;
     }
   }

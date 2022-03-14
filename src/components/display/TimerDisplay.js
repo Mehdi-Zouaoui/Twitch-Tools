@@ -56,7 +56,7 @@ const TimerDisplay = ({ currentTimer, timers, setTimers }) => {
         }
       })
     );
-
+      console.log('TIMERS' , timers)
     setStarted(true);
     setRedo(true);
   };
@@ -78,7 +78,7 @@ const TimerDisplay = ({ currentTimer, timers, setTimers }) => {
     setRedo(false);
     setTimers(
       timers.map((item) =>
-        item._id === currentTImer._id
+        item._id === currentTimer._id
           ? { ...item, restart: true, started: false }
           : { ...item }
       )
