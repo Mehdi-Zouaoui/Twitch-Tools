@@ -5,21 +5,33 @@ const tmi = require("tmi.js");
 function Sondage({ sondagesData, viewersResponses, quantity }) {
   const OAUTH_BOT_TOKEN = process.env.OAUTH_BOT_TOKEN;
   const [connected, setConnected] = useState(false);
-
-  const [answer, setAnswer] = useState({
-    A: 0,
-    B: 0,
-    C: 0,
-    D: 0,
-  });
+  const [selected, setSelected] = useState({});
+  const [answer, setAnswer] = useState({});
+  const SECRET = process.env.SECRET;
   const [messagesQuantity, setMessagesQuantity] = useState(0);
+  console.log("rerender", sondagesData);
+  useEffect(() => {
+    if (Object.keys(selected).length > 0) {
+      selected.fields.forEach((field, index) => {
+        console.log("currentSurvey fields", field.name, index);
+        setAnswer((prevState) => ({
+          ...prevState,
+          [field.name]: 0,
+        }));
+      });
+    }
+  }, [selected]);
 
   const client = new tmi.Client({
+    options: { debug: true, messagesLogLevel: "info" },
+    connection: {
+      reconnect: true,
+      secure: true,
+    },
     identity: {
       username: "twoolsbot",
-      password: "oauth:0qa0cemeueq7tewnhhfeqv30rq3v2w",
+      password: "oauth:3v5b2me2u2xxq390nmub33xrhyhcxe",
     },
-    options: { debug: true },
     channels: ["twoolsbot"],
   });
 
@@ -32,33 +44,19 @@ function Sondage({ sondagesData, viewersResponses, quantity }) {
   });
 
   client.on("message", (channel, tags, message, self) => {
-    // "Alca: Hello, World!"
+    if (self) return true;
+    
+      // users[tags.username] = true;
+      Object.keys(answer).forEach((item) => {
+        setAnswer((prevState) => ({
+          ...prevState,
+          [item]: answer[item] + 1,
+        }));
+        setMessagesQuantity((prevnumber) => prevnumber + 1);
+      });
 
-    switch (message) {
-      case "A":
-        console.log("A");
-        setMessagesQuantity((prevnumber) => prevnumber + 1);
-        setAnswer((prevState) => ({ ...prevState, A: prevState.A + 1 }));
-        break;
-      case "B":
-        console.log("B");
-        setMessagesQuantity((prevnumber) => prevnumber + 1);
-        setAnswer((prevState) => ({ ...prevState, B: prevState.B + 1 }));
-        break;
-      case "C":
-        console.log("C");
-        setMessagesQuantity((prevnumber) => prevnumber + 1);
-        setAnswer((prevState) => ({ ...prevState, C: prevState.C + 1 }));
-        break;
-      case "D":
-        console.log("D");
-        setMessagesQuantity((prevnumber) => prevnumber + 1);
-        setAnswer((prevState) => ({ ...prevState, D: prevState.D + 1 }));
-        break;
-      default:
-        console.log("No response");
-    }
-    console.log("HERE IS MESSAGE", answer, messagesQuantity);
+      console.log("HERE IS MESSAGE", answer, messagesQuantity);
+    
 
     if (self || !message.startsWith("!")) return;
     const args = message.slice(1).split(" ");
@@ -73,12 +71,13 @@ function Sondage({ sondagesData, viewersResponses, quantity }) {
     console.log("Message received");
   });
 
-  const handleTwitchConnect = async () => {
+  const handleTwitchConnect = async (survey) => {
     if (connected) {
       setConnected(false);
       client.say("TwoolsBot", "disconnected");
     } else {
       await client.connect();
+
       client.say("TwoolsBot", "connected");
       setConnected(true);
     }
@@ -86,14 +85,21 @@ function Sondage({ sondagesData, viewersResponses, quantity }) {
 
   return (
     <div>
+      <button
+        onClick={() => {
+          console.log(answer);
+        }}
+      ></button>
       {sondagesData.map((item, index) => (
-        <SondageDisplay
-          currentSondage={item}
-          key={index}
-          currentResponses={answer}
-          quantity={quantity}
-          twitchConnect={handleTwitchConnect}
-        />
+        <div key={index}>
+          <SondageDisplay
+            currentSondage={item}
+            currentResponses={answer}
+            setSelected={setSelected}
+            quantity={quantity}
+            twitchConnect={handleTwitchConnect}
+          />
+        </div>
       ))}
     </div>
   );

@@ -1,10 +1,23 @@
 import React from "react";
 
-function SondageDisplay({ currentSondage, key, currentResponses, quantity , twitchConnect }) {
+function SondageDisplay({
+  currentSondage,
+  currentResponses,
+  quantity,
+  twitchConnect,
+  setSelected,
+}) {
   return (
-    <div key={key}>
+    <div>
       <h2>{currentSondage.title}</h2>
-      <button onClick={() => {twitchConnect()}}>Connect to Twitch</button>
+      <button
+        onClick={() => {
+          setSelected(currentSondage);
+          twitchConnect();
+        }}
+      >
+        Connect to Twitch
+      </button>
       <div className="sondageFlexContainer">
         {currentSondage.fields.map((field, index) => (
           <div className="sondageField" key={index}>
@@ -13,24 +26,17 @@ function SondageDisplay({ currentSondage, key, currentResponses, quantity , twit
         ))}
       </div>
       <div>
-        {quantity > 0
-          ? ((currentResponses.A / quantity) * 100).toFixed(0) + "%"
-          : currentResponses.A}
-      </div>
-      <div>
-        {quantity > 0
-          ? ((currentResponses.B / quantity) * 100).toFixed(0) + "%"
-          : currentResponses.B}
-      </div>
-      <div>
-        {quantity > 0
-          ? ((currentResponses.C / quantity) * 100).toFixed(0) + "%"
-          : currentResponses.C}
-      </div>
-      <div>
-        {quantity > 0
-          ? ((currentResponses.D / quantity) * 100).toFixed(0) + "%"
-          : currentResponses.D}
+        {Object.keys(currentResponses).map((key, index) => (
+          <div key={key}>
+            {" "}
+            <div>
+              ICI - {key}-{currentResponses[key]}
+            </div>
+            {quantity > 0
+              ? ((currentResponses[key] / quantity) * 100).toFixed(0) + "%"
+              : currentResponses[key]}
+          </div>
+        ))}
       </div>
     </div>
   );
