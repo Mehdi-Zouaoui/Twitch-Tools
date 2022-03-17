@@ -4,16 +4,14 @@ function SondageDisplay({
   currentSondage,
   currentResponses,
   quantity,
-  twitchConnect,
-  setSelected,
+  setSelectedSurvey,
 }) {
   return (
     <div>
       <h2>{currentSondage.title}</h2>
       <button
         onClick={() => {
-          setSelected(currentSondage);
-          twitchConnect();
+          setSelectedSurvey(currentSondage)
         }}
       >
         Connect to Twitch

@@ -1,26 +1,26 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import SondageDisplay from "../components/display/SondageDisplay";
 const tmi = require("tmi.js");
 
 function Sondage({ sondagesData, viewersResponses, quantity }) {
   const OAUTH_BOT_TOKEN = process.env.OAUTH_BOT_TOKEN;
   const [connected, setConnected] = useState(false);
-  const [selected, setSelected] = useState({});
+  const [test, setTest] = useState(0);
+  const refContainer = useRef({});
+  const [selectedSurvey, setSelectedSurvey] = useState({});
   const [answer, setAnswer] = useState({});
   const SECRET = process.env.SECRET;
   const [messagesQuantity, setMessagesQuantity] = useState(0);
-  console.log("rerender", sondagesData);
   useEffect(() => {
-    if (Object.keys(selected).length > 0) {
-      selected.fields.forEach((field, index) => {
+    if (Object.keys(selectedSurvey).length > 0) {
+      selectedSurvey.fields.forEach((field, index) => {
         console.log("currentSurvey fields", field.name, index);
-        setAnswer((prevState) => ({
-          ...prevState,
-          [field.name]: 0,
-        }));
+        refContainer.current[field.name] = 0;
       });
+
+      handleTwitchConnect();
     }
-  }, [selected]);
+  }, [selectedSurvey]);
 
   const client = new tmi.Client({
     options: { debug: true, messagesLogLevel: "info" },
@@ -44,19 +44,16 @@ function Sondage({ sondagesData, viewersResponses, quantity }) {
   });
 
   client.on("message", (channel, tags, message, self) => {
-    if (self) return true;
-    
-      // users[tags.username] = true;
-      Object.keys(answer).forEach((item) => {
-        setAnswer((prevState) => ({
-          ...prevState,
-          [item]: answer[item] + 1,
-        }));
-        setMessagesQuantity((prevnumber) => prevnumber + 1);
-      });
+    // if (self) return true;
+    // users[tags.username] = true;
+    Object.keys(refContainer.current).forEach((item) => {
+      if (message === item) {
+        refContainer.current[item]++;
+      }
+      setMessagesQuantity((prevnumber) => prevnumber + 1);
+    });
 
-      console.log("HERE IS MESSAGE", answer, messagesQuantity);
-    
+    console.log("HERE IS MESSAGE", refContainer.current, messagesQuantity);
 
     if (self || !message.startsWith("!")) return;
     const args = message.slice(1).split(" ");
@@ -76,8 +73,7 @@ function Sondage({ sondagesData, viewersResponses, quantity }) {
       setConnected(false);
       client.say("TwoolsBot", "disconnected");
     } else {
-      await client.connect();
-
+      client.connect();
       client.say("TwoolsBot", "connected");
       setConnected(true);
     }
@@ -95,9 +91,8 @@ function Sondage({ sondagesData, viewersResponses, quantity }) {
           <SondageDisplay
             currentSondage={item}
             currentResponses={answer}
-            setSelected={setSelected}
+            setSelectedSurvey={setSelectedSurvey}
             quantity={quantity}
-            twitchConnect={handleTwitchConnect}
           />
         </div>
       ))}
