@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect , useRef} from "react";
 import { useUser } from "@auth0/nextjs-auth0";
 import Card from "../components/Card";
 import Counter from "../components/Counter";
@@ -20,6 +20,7 @@ const userTools = ({ countersData, timersData, sondagesData }) => {
   const [displayedTool, setDisplayedTool] = useState(1);
 
   const [currentTool, setCurrentTool] = useState(0);
+  const toolRef = useRef(null)
   
 
   if (isLoading) return <div>Loading...</div>;

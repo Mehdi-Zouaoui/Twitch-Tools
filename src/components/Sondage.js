@@ -1,12 +1,14 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import SondageDisplay from "../components/display/SondageDisplay";
 const tmi = require("tmi.js");
 
 function Sondage({ sondagesData, viewersResponses, quantity }) {
   const OAUTH_BOT_TOKEN = process.env.OAUTH_BOT_TOKEN;
   const [connected, setConnected] = useState(false);
-  const [test, setTest] = useState(0);
+  const [test, setTest] = useState("");
   const refContainer = useRef({});
+  const [count , setCount] = useState(0)
+  const refQuantity = useRef(0);
   const [selectedSurvey, setSelectedSurvey] = useState({});
   const [answer, setAnswer] = useState({});
   const SECRET = process.env.SECRET;
@@ -16,11 +18,24 @@ function Sondage({ sondagesData, viewersResponses, quantity }) {
       selectedSurvey.fields.forEach((field, index) => {
         console.log("currentSurvey fields", field.name, index);
         refContainer.current[field.name] = 0;
+        return () => {
+          setAnswer((prevState) => ({
+            ...prevState,
+            [field.name]: 0,
+          }));
+        };
       });
 
       handleTwitchConnect();
     }
   }, [selectedSurvey]);
+
+  const onRefChange = useCallback(
+    (node) => {
+      console.log(node);
+    },
+    [count]
+  );
 
   const client = new tmi.Client({
     options: { debug: true, messagesLogLevel: "info" },
@@ -46,14 +61,15 @@ function Sondage({ sondagesData, viewersResponses, quantity }) {
   client.on("message", (channel, tags, message, self) => {
     // if (self) return true;
     // users[tags.username] = true;
+
     Object.keys(refContainer.current).forEach((item) => {
       if (message === item) {
         refContainer.current[item]++;
+        refQuantity.current++;
       }
-      setMessagesQuantity((prevnumber) => prevnumber + 1);
     });
 
-    console.log("HERE IS MESSAGE", refContainer.current, messagesQuantity);
+    console.log("HERE IS MESSAGE", refContainer.current, refQuantity.current);
 
     if (self || !message.startsWith("!")) return;
     const args = message.slice(1).split(" ");
@@ -90,9 +106,10 @@ function Sondage({ sondagesData, viewersResponses, quantity }) {
         <div key={index}>
           <SondageDisplay
             currentSondage={item}
-            currentResponses={answer}
+            currentResponses={refContainer}
             setSelectedSurvey={setSelectedSurvey}
-            quantity={quantity}
+            quantity={refQuantity}
+            ref={onRefChange}
           />
         </div>
       ))}
