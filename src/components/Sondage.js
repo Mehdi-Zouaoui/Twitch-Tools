@@ -5,9 +5,9 @@ const tmi = require("tmi.js");
 function Sondage({ sondagesData, viewersResponses, quantity }) {
   const OAUTH_BOT_TOKEN = process.env.OAUTH_BOT_TOKEN;
   const [connected, setConnected] = useState(false);
-  const [test, setTest] = useState("");
+  const [selected, setSelected] = useState(false);
   const refContainer = useRef({});
-  const [count , setCount] = useState(0)
+  const [count, setCount] = useState(0);
   const refQuantity = useRef(0);
   const [selectedSurvey, setSelectedSurvey] = useState({});
   const [answer, setAnswer] = useState({});
@@ -61,11 +61,15 @@ function Sondage({ sondagesData, viewersResponses, quantity }) {
   client.on("message", (channel, tags, message, self) => {
     // if (self) return true;
     // users[tags.username] = true;
+    console.log("Message sended");
 
     Object.keys(refContainer.current).forEach((item) => {
       if (message === item) {
         refContainer.current[item]++;
         refQuantity.current++;
+        setCount((currentValue) => currentValue + 1);
+        setAnswer(refContainer.current);
+        console.log(count);
       }
     });
 
@@ -97,11 +101,7 @@ function Sondage({ sondagesData, viewersResponses, quantity }) {
 
   return (
     <div>
-      <button
-        onClick={() => {
-          console.log(answer);
-        }}
-      ></button>
+      
       {sondagesData.map((item, index) => (
         <div key={index}>
           <SondageDisplay

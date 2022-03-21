@@ -75,7 +75,7 @@ const Timer = ({ timersData }) => {
       rangeValue.minutes * 60 * 1000 + 
       rangeValue.seconds * 1000 +
       rangeValue.milliseconds;
-      
+      data.display = "dial"
       data.checked = checked;
     } 
     else data.values = 0;

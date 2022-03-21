@@ -6,7 +6,7 @@ const TimerSchema = new Schema({
   color : String,
   author: String,
   format : String,
-  display : String,
+  display : {type : String , default : "dial"},
   type : Boolean,
   defaultValue : String,
   values : Object

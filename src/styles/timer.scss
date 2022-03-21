@@ -8,6 +8,9 @@
         overflow-y: scroll;
         height: 500px;
         width: 50%;
+        .dialContainer{
+            display : flex;
+        }
     }
 
     .timerCreation {

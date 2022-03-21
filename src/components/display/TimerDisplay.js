@@ -7,7 +7,7 @@ import {
   faPause,
   faEye,
   faEyeSlash,
-  faTrash,
+  faClock,
   faStopwatch,
 } from "@fortawesome/free-solid-svg-icons";
 import { CountdownCircleTimer } from "react-countdown-circle-timer";
@@ -96,26 +96,13 @@ const TimerDisplay = ({ currentTimer, timers, setTimers }) => {
 
   return (
     <div className="timerContainer">
-      {/* <button
-        className="timerStream"
-        onClick={() => {
-          console.log("before", stream);
-          setStream(!stream);
-        }}
-      >
-        {stream === false ? (
-          <div>
-            <a href="http://localhost:3000/stream/timer" target="stream">
-              <FontAwesomeIcon icon={faEye} />
-            </a>
-          </div>
-        ) : (
-          <FontAwesomeIcon icon={faEyeSlash} />
-        )}
-      </button>
-      <button className="counterDelete" onClick={() => removeTimer(data._id)}>
-        <FontAwesomeIcon icon={faTrash} />{" "}
-      </button> */}
+ 
+     
+      {currentTimer.display === "dial" && (
+        
+        <div className="dialContainer">
+          
+     
       <div className="buttonFormatContainer">
         <button
           className="timerStream"
@@ -156,20 +143,9 @@ const TimerDisplay = ({ currentTimer, timers, setTimers }) => {
           <div>00:00</div>
         </button>
       </div>
-      <div className="displayTimerContainer">
         <div className="dial">
           <h3>{currentTimer.title}</h3>
-          <div className="dialContainer">
-            {/* <button onClick={() => startCountdown() }> Start</button> */}
-            {/* <p>{days < 10 ? '0' + days : days}:</p>
-            <p>{hours < 10 ? '0' + hours : hours}:</p>
-            <p>{minutes < 10 ? '0' + minutes : minutes}:</p>
-            <p>{secondes < 10 ? '0' + secondes : secondes}</p> */}
-            {/* <p>{("0" + (time/10)%100).slice(-2)}</p> */}
-            {/* <p>{("0" + (Math.floor(time / 60000) % 60)).slice(-2)} : </p>
-            <p>{("0" + (Math.floor(time / 1000) % 60)).slice(-2)} : </p>
-            <p>{("0" + ((time / 10) % 100)).slice(-2)}</p> */}
-          </div>
+      
           <div className="dialButtonContainer">
             {!started && time === 0 && (
               <button onClick={() => start(currentTimer)}>
@@ -193,40 +169,8 @@ const TimerDisplay = ({ currentTimer, timers, setTimers }) => {
             )}
           </div>
         </div>
-      </div>
-      {currentTimer.display === "dial" && (
-        <div></div>
-        // <div className="dial">
-        //   <h3>{data.title}</h3>
-        //   <div className="dialContainer">
-        //     {/* <p>{("0" + (time/10)%100).slice(-2)}</p> */}
-        //     {/* <p>{("0" + (Math.floor(time / 60000) % 60)).slice(-2)} : </p>
-        //     <p>{("0" + (Math.floor(time / 1000) % 60)).slice(-2)} : </p>
-        //     <p>{("0" + ((time / 10) % 100)).slice(-2)}</p> */}
-        //   </div>
-        //   <div className="dialButtonContainer">
-        //     {!started && time === 0 && (
-        //       <button onClick={() => start()}>
-        //         <FontAwesomeIcon icon={faPlay} />
-        //       </button>
-        //     )}
-        //     {started && (
-        //       <button onClick={() => stop()}>
-        //         <FontAwesomeIcon icon={faPause} />
-        //       </button>
-        //     )}
-        //     {!started && time !== 0 && (
-        //       <button onClick={() => start()}>
-        //         <FontAwesomeIcon icon={faPlay} />
-        //       </button>
-        //     )}
-        //     {!started && redo > 0 && (
-        //       <button onClick={() => restart()}>
-        //         <FontAwesomeIcon icon={faRedo} />
-        //       </button>
-        //     )}
-        //   </div>
-        // </div>
+        </div>
+      
       )}
       {currentTimer.display === "stopwatch" && (
         <div className="stopWatchContainer">
@@ -246,10 +190,7 @@ const TimerDisplay = ({ currentTimer, timers, setTimers }) => {
                 {renderTime}
               </CountdownCircleTimer>
             </div>
-            {/* <p>{("0" + (time/10)%100).slice(-2)}</p> */}
-            {/* <p>{("0" + (Math.floor(time / 60000) % 60)).slice(-2)}</p>
-            <p>{("0" + (Math.floor(time / 1000) % 60)).slice(-2)}</p>
-            <p>{("0" + ((time / 10) % 100)).slice(-2)}</p> */}
+          
           </div>
           <div className="stopWatchButtonContainer">
             {!started && time === 0 && (
