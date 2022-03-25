@@ -27,19 +27,19 @@ const StreamedTimer = ({ data }) => {
     console.log("values in loop", time);
     clearInterval(interval.current);
     interval.current = setInterval(() => {
-      const getSeconds = parseInt(Math.floor(time / 1000));
+      let getSeconds = parseInt(Math.floor(time / 1000));
+      const getHours = parseInt(Math.floor(getSeconds / 360));
+      getSeconds = getSeconds % 3600; // seconds remaining after extracting hours
       const getMinutes = parseInt(Math.floor(getSeconds / 60));
-      const getHours = parseInt(Math.floor(getMinutes / 60));
-      const d = parseInt(Math.floor(getHours / 24));
+      getSeconds = getSeconds % 60;
 
-      const s = parseInt(getSeconds % 60);
-      const m = parseInt(getMinutes % 60);
-      const h = parseInt(getHours % 24);
+      const d = parseInt(Math.floor(getSeconds / 60 / 60 / 24));
+      getSeconds = getSeconds % 86400;
 
       setDays(d);
-      setHours(h);
-      setMinutes(m);
-      setSecondes(s);
+      setHours(getHours);
+      setMinutes(getMinutes);
+      setSecondes(getSeconds);
       setTime(time - 1000);
     }, 1000);
   }

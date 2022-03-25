@@ -54,6 +54,7 @@ const TimerDisplay = ({ currentTimer, timers, setTimers }) => {
         if (item._id === data._id) {
           return { ...item, started: true, value: 0, restart: false };
         }
+        else return item
       })
     );
       console.log('TIMERS' , timers)
