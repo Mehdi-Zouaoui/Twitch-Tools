@@ -6,10 +6,9 @@ import { faTrash } from "@fortawesome/free-solid-svg-icons";
 import { useUser } from "@auth0/nextjs-auth0";
 import axios from "axios";
 
-
 const Sondage = () => {
   const [formField, setFormFields] = useState([]);
-  const { user} = useUser();
+  const { user } = useUser();
   const url = "http://localhost:3000";
 
   const {
@@ -27,16 +26,16 @@ const Sondage = () => {
   );
 
   const onSubmit = (data) => {
-    data.author = user.sub
-    console.log('data' , data)
-    axios
-    .post(url + "/api/sondage", data)
-    .then((res) => {
-      console.log("back", res);
-    })
-    .catch((err) => {
-      console.log("err", err);
-    });
+    data.author = user.sub;
+    console.log("data", data);
+    // axios
+    // .post(url + "/api/sondage", data)
+    // .then((res) => {
+    //   console.log("back", res);
+    // })
+    // .catch((err) => {
+    //   console.log("err", err);
+    // });
   };
 
   return (
@@ -52,10 +51,11 @@ const Sondage = () => {
         >
           Ajouter un réponse
         </button>
+        <button className="changeFormat"> Test </button>
 
         <form className="toolForm" onSubmit={handleSubmit(onSubmit)}>
           <label htmlFor="title"> Titre : </label>
-          <input className="field" {...register("title")} name="title"/>
+          <input className="field" {...register("title")} name="title" />
           <ul className="formInputs">
             {fields.map((item, index) => (
               <li key={item.id}>

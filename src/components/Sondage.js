@@ -37,6 +37,10 @@ function Sondage({ sondagesData, viewersResponses, quantity }) {
     [count]
   );
 
+  const disconnectBot = () => {
+    console.log("dc function fired");
+    client.say("twoolsbot", "disconnected");
+  };
   const client = new tmi.Client({
     options: { debug: true, messagesLogLevel: "info" },
     connection: {
@@ -52,10 +56,12 @@ function Sondage({ sondagesData, viewersResponses, quantity }) {
 
   client.on("connected", () => {
     console.log("The bot is Online!");
+    client.say("twoolsbot", "connected");
   });
 
   client.on("disconnected", () => {
     console.log(" DISCONNECTED The bot is Offline!");
+    client.say("twoolsbot", "disconnected");
   });
 
   client.on("message", (channel, tags, message, self) => {
@@ -63,13 +69,13 @@ function Sondage({ sondagesData, viewersResponses, quantity }) {
     // users[tags.username] = true;
     console.log("Message sended");
 
-    Object.keys(refContainer.current).forEach((item) => {
-      if (message === item) {
+    Object.keys(refContainer.current).forEach((item, index) => {
+      console.log(" LE CONTENU ", item, "LA POSITION ", index + 1);
+      if (message == index + 1) {
         refContainer.current[item]++;
         refQuantity.current++;
         setCount((currentValue) => currentValue + 1);
         setAnswer(refContainer.current);
-        console.log(count);
       }
     });
 
@@ -91,17 +97,15 @@ function Sondage({ sondagesData, viewersResponses, quantity }) {
   const handleTwitchConnect = async (survey) => {
     if (connected) {
       setConnected(false);
-      client.say("TwoolsBot", "disconnected");
     } else {
       client.connect();
-      client.say("TwoolsBot", "connected");
+
       setConnected(true);
     }
   };
 
   return (
     <div>
-      
       {sondagesData.map((item, index) => (
         <div key={index}>
           <SondageDisplay
@@ -109,6 +113,7 @@ function Sondage({ sondagesData, viewersResponses, quantity }) {
             currentResponses={refContainer}
             setSelectedSurvey={setSelectedSurvey}
             quantity={refQuantity}
+            disconnect={disconnectBot}
             ref={onRefChange}
           />
         </div>

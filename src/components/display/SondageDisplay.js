@@ -5,6 +5,7 @@ function SondageDisplay({
   currentSondage,
   currentResponses,
   quantity,
+  disconnect,
   setSelectedSurvey,
 }) {
   const [selected, setSelected] = useState(false);
@@ -20,13 +21,17 @@ function SondageDisplay({
       >
         Connect to Twitch
       </button>
+      <button onClick={() => {
+        disconnect()
+      }}>DC</button>
 
       <div className="sondageFlexContainer">
         {selected ? (
           <div className="sondageFieldsContainer">
             {Object.keys(currentResponses.current).map((key, index) => (
               <div key={key} className="sondageField">
-                <div>{[key]}</div>
+                <div>{index + 1}.</div>
+                <div> {[key]}</div>
 
                 <div>
                   {quantity.current > 0

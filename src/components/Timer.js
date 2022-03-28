@@ -70,11 +70,11 @@ const Timer = ({ timersData }) => {
     if(data.type === false){
 
       data.values = 
-      rangeValue.days * 24 * 60 * 60 * 1000 + 
-      rangeValue.hours * 60 * 60 *1000 +
-      rangeValue.minutes * 60 * 1000 + 
-      rangeValue.seconds * 1000 +
-      rangeValue.milliseconds;
+      (rangeValue.days * 24 * 60 * 60 * 1000) + 
+      (rangeValue.hours * 60 * 60 *1000) +
+      (rangeValue.minutes * 60 * 1000 )+ 
+      (rangeValue.seconds * 1000) +
+      (rangeValue.milliseconds);
       data.display = "dial"
       data.checked = checked;
     } 

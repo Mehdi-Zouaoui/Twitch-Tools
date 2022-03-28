@@ -22,26 +22,28 @@ const StreamedTimer = ({ data }) => {
   const [millisecondes, setMilliseconds] = useState(0);
 
   if (data.started && data.type === false) {
-    // let timeTest = data.values;
-    // console.log(timeTest);
-    console.log("values in loop", time);
+    setTime(originalTime);
     clearInterval(interval.current);
     interval.current = setInterval(() => {
-      let getSeconds = parseInt(Math.floor(time / 1000));
-      const getHours = parseInt(Math.floor(getSeconds / 360));
-      getSeconds = getSeconds % 3600; // seconds remaining after extracting hours
-      const getMinutes = parseInt(Math.floor(getSeconds / 60));
-      getSeconds = getSeconds % 60;
+      let getMilliseconds = parseInt(Math.floor(time));
+      const getDays = parseInt(
+        Math.floor(getMilliseconds / (1000 * 3600 * 24))
+      );
+      getMilliseconds = getMilliseconds % (24 * 3600 * 1000);
+      const getHours = parseInt(Math.floor(getMilliseconds / (3600 * 1000)));
+      getMilliseconds = getMilliseconds % (3600 * 1000);
+      const getMinutes = parseInt(Math.floor(getMilliseconds / (60 * 1000)));
+      getMilliseconds = getMilliseconds % (60 * 1000);
+      const getSeconds = parseInt(Math.floor(getMilliseconds / 1000));
+      getMilliseconds = getMilliseconds % 1000;
 
-      const d = parseInt(Math.floor(getSeconds / 60 / 60 / 24));
-      getSeconds = getSeconds % 86400;
-
-      setDays(d);
+      setDays(getDays);
       setHours(getHours);
       setMinutes(getMinutes);
       setSecondes(getSeconds);
-      setTime(time - 1000);
-    }, 1000);
+      setMilliseconds(getMilliseconds);
+      setTime(time - 10);
+    }, 10);
   }
   if (data.started && data.type === true) {
     clearInterval(interval.current);
@@ -74,11 +76,11 @@ const StreamedTimer = ({ data }) => {
     <div className="stream">
       <div>{data.title}</div>
       <div style={{ display: "flex" }}>
-        <p>{days} : </p>
-        <p>{hours} : </p>
-        <p>{minutes} : </p>
-        <p>{secondes} </p>
-        <p>{millisecondes} </p>
+        <p>{days > 9 ? days : "0" + days} : </p>
+        <p>{hours > 9 ? hours : "0" + hours} : </p>
+        <p>{minutes > 9 ? minutes : "0" + minutes} : </p>
+        <p>{secondes > 9 ? secondes : "0" + secondes} : </p>
+        <p>{millisecondes > 9 ? millisecondes : "0" + millisecondes} </p>
       </div>
     </div>
   );

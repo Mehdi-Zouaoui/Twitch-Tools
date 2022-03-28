@@ -8,9 +8,7 @@
         overflow-y: scroll;
         height: 500px;
         width: 50%;
-        .dialContainer{
-            display : flex;
-        }
+       
     }
 
     .timerCreation {
@@ -257,10 +255,14 @@
 }
 
 .timerContainer {
-    width: 45%;
+    width: 50%;
     margin-bottom: 10px;
-    display: flex;
-
+    .dialContainer{
+        display : flex;
+        justify-content: space-between;
+    
+    }
+    
     .buttonFormatContainer {
         display: flex;
         flex-direction: column;
@@ -285,6 +287,7 @@
         flex-direction: column;
         height: 260px;
         align-items: center;
+        width: 65%;
         color: white;
         border-radius: 10px;
         background-color: #252422;
@@ -298,6 +301,7 @@
             justify-content: space-around;
         }
         .dialButtonContainer {
+            
             button {
                 border: none;
                 background-color: transparent;

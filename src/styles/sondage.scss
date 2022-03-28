@@ -1,19 +1,24 @@
-.sondageFlexContainer{
+.sondageFlexContainer {
     width: 50%;
-   
-    line-height:100px;
-    padding:0 20px;
+    border-radius: 10px;
+    line-height: 100px;
+    padding: 0 20px;
     background-color: rgb(185, 107, 107);
     color: white;
-    .sondageFieldsContainer{
+    .sondageFieldsContainer {
         width: 100%;
         display: flex;
         flex-wrap: wrap;
-        .sondageField{
+        .sondageField {
             width: 45%;
             display: flex;
-            justify-content: space-around;
+            justify-content: space-between;
+            margin: 10px 15px;
+            padding :  0 10px;
+            background: white;
+            border-radius: 10px;
+            font-size: 25px;
+            color: black;
         }
     }
-   
 }
