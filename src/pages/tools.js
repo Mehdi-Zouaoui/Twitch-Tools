@@ -16,14 +16,14 @@ import axios from "axios";
 const tmi = require("tmi.js");
 
 const userTools = ({ countersData, timersData, sondagesData }) => {
-  const { user, error, isLoading } = useUser();
+  // const { user, error, isLoading } = useUser();
   const [displayedTool, setDisplayedTool] = useState(1);
 
   const [currentTool, setCurrentTool] = useState(0);
   const toolRef = useRef(null)
   
 
-  if (isLoading) return <div>Loading...</div>;
+  // if (isLoading) return <div>Loading...</div>;
   return (
     <div className="container">
       <main>

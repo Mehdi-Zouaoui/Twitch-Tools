@@ -1,6 +1,7 @@
 import Head from "next/head";
 import { useForm } from "react-hook-form";
 import { useUser } from "@auth0/nextjs-auth0";
+import Router from 'next/router'
 
 import axios from "axios";
 
@@ -28,11 +29,10 @@ export default function Home() {
   if (error) return <div>{error.message}</div>;
 
   if (user) {
-    return (
-      <div>
-        Welcome {user.name}! <a href="/api/auth/logout">Logout</a>
-      </div>
-    );
+
+    return <div>Ok</div>
+ 
+
   }
   return <a href="/api/auth/login">Login</a>;
 

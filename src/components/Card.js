@@ -8,16 +8,18 @@ const Card = ({ title , color}) => {
         <div className="topCard">
         <h2>{title}</h2>
         <button className ="addTool"> 
-        <Link href="/tools/sondage">
+        <Link href="/tool/sondage">
             <a>
             <FontAwesomeIcon icon={faPlus} />
             </a>
           </Link>
           </button>
-       
+        <div className="cardIcon"/>
         </div>
         <div className="bottomCard">
             <p>Aucun créé pour le moment</p>
+            <hr/>
+            <p>Dernier créer le : </p>
         </div>
     
     </div>
