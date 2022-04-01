@@ -1,4 +1,4 @@
-import { useState, useEffect , useRef} from "react";
+import { useState, useEffect, useRef } from "react";
 import { useUser } from "@auth0/nextjs-auth0";
 import Card from "../components/Card";
 import Counter from "../components/Counter";
@@ -18,10 +18,11 @@ const tmi = require("tmi.js");
 const userTools = ({ countersData, timersData, sondagesData }) => {
   // const { user, error, isLoading } = useUser();
   const [displayedTool, setDisplayedTool] = useState(1);
+  const { user, error, isLoading } = useUser();
 
   const [currentTool, setCurrentTool] = useState(0);
-  const toolRef = useRef(null)
-  
+  const toolRef = useRef(null);
+  console.log('user' , user)
 
   // if (isLoading) return <div>Loading...</div>;
   return (
@@ -102,11 +103,7 @@ const userTools = ({ countersData, timersData, sondagesData }) => {
             {currentTool === 3 && (
               <div>
                 Sondage
-
-                <Sondage
-                  sondagesData={sondagesData}
-                  
-                />
+                <Sondage sondagesData={sondagesData} />
               </div>
             )}
           </div>
