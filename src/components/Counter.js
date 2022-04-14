@@ -5,6 +5,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
 import { useUser } from "@auth0/nextjs-auth0";
 import axios from "axios";
+
 import CounterDisplay from "./display/CounterDisplay";
 import { useRouter } from "next/router";
 
@@ -17,6 +18,8 @@ const Counter = ({ countersData }) => {
     update: false,
   });
   const [formCreation, setFormCreation] = useState(false);
+  const { user, error, isLoading } = useUser();
+
   const countersArray = [];
   const [counterTest, setCounterTest] = useState();
   if (
@@ -50,7 +53,8 @@ const Counter = ({ countersData }) => {
     // data.author = user.sub;
     console.log(formUpdate.counterData);
     if (formUpdate.update === false) {
-      console.log("POST");
+      data.author = user.sub;
+      console.log("POST", data);
       axios
         .post(url + "/api/counter", data)
         .then((res) => {
@@ -86,15 +90,17 @@ const Counter = ({ countersData }) => {
   return (
     <div className="counterComponent">
       <div className="counterData">
-        {countersData.map((item, index) => (
-          <CounterDisplay
-            data={item}
-            key={index}
-            counters={counters}
-            setCounters={setCounters}
-            update={setFormUpdate}
-          />
-        ))}
+        {countersData.map((item, index) =>
+          item.author === user.sub ? (
+            <CounterDisplay
+              data={item}
+              key={index}
+              counters={counters}
+              setCounters={setCounters}
+              update={setFormUpdate}
+            />
+          ) : null
+        )}
       </div>
       {formUpdate.update && (
         <div className="counterCreation">
@@ -170,16 +176,16 @@ const Counter = ({ countersData }) => {
                   {...register("color")}
                   className="counterFormColor"
                   value={formColor}
-                  onChange={(e) =>{
+                  onChange={(e) => {
                     e.preventDefault();
-                    setFormColor(e.target.value)
-                  } }
+                    setFormColor(e.target.value);
+                  }}
                 />
               </div>{" "}
               <input
                 type="submit"
                 className="counterSubmit"
-                style={{ backgroundColor:formColor}}
+                style={{ backgroundColor: formColor }}
                 value="Enregistrer"
               />
             </form>

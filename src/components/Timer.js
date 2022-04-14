@@ -2,6 +2,8 @@ import TimerDisplay from "../components/display/TimerDisplay";
 import { useForm, useFieldArray, Controller } from "react-hook-form";
 import { useState, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { useUser } from "@auth0/nextjs-auth0";
+
 import {
   faStopwatch,
   faEyeDropper,
@@ -24,6 +26,8 @@ const Timer = ({ timersData }) => {
   const timersArray = [];
   const [formColor, setFormColor] = useState("#eb5e28");
   const [formTitle, setFormTitle] = useState("");
+  const { user, error, isLoading } = useUser();
+
   const [type, setType] = useState(false);
   const [display, setDisplay] = useState("");
   const [format, setFormat] = useState({});
@@ -64,22 +68,20 @@ const Timer = ({ timersData }) => {
 
   const onSubmit = (data) => {
     // data.author = user.sub;
-   
-    
-    data.type = type;
-    if(data.type === false){
 
-      data.values = 
-      (rangeValue.days * 24 * 60 * 60 * 1000) + 
-      (rangeValue.hours * 60 * 60 *1000) +
-      (rangeValue.minutes * 60 * 1000 )+ 
-      (rangeValue.seconds * 1000) +
-      (rangeValue.milliseconds);
-      data.display = "dial"
+    data.type = type;
+    if (data.type === false) {
+      data.values =
+        rangeValue.days * 24 * 60 * 60 * 1000 +
+        rangeValue.hours * 60 * 60 * 1000 +
+        rangeValue.minutes * 60 * 1000 +
+        rangeValue.seconds * 1000 +
+        rangeValue.milliseconds;
+      data.display = "dial";
       data.checked = checked;
-    } 
-    else data.values = 0;
-    
+      data.author = user.sub;
+    } else data.values = 0;
+
     console.log("data", data);
     axios
       .post(url + "/api/timer", data)
@@ -94,14 +96,16 @@ const Timer = ({ timersData }) => {
   return (
     <div className="timerComponent">
       <div className="timersContainer">
-        {timersData.map((item, index) => (
-          <TimerDisplay
-            currentTimer={item}
-            key={index}
-            timers={timers}
-            setTimers={setTimers}
-          />
-        ))}
+        {timersData.map((item, index) =>
+          item.author === user.sub ? (
+            <TimerDisplay
+              currentTimer={item}
+              key={index}
+              timers={timers}
+              setTimers={setTimers}
+            />
+          ) : null
+        )}
       </div>
       <div className="timerCreation">
         <div className="timerFormContainer">
@@ -359,7 +363,6 @@ const Timer = ({ timersData }) => {
             <input
               type="submit"
               className="timerSubmit"
-             
               value="Enregistrer"
               style={{ backgroundColor: formColor }}
             />

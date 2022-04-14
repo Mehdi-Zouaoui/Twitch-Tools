@@ -1,5 +1,7 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 import SondageDisplay from "../components/display/SondageDisplay";
+import { useUser } from "@auth0/nextjs-auth0";
+
 const tmi = require("tmi.js");
 
 function Sondage({ sondagesData, viewersResponses, quantity }) {
@@ -10,6 +12,7 @@ function Sondage({ sondagesData, viewersResponses, quantity }) {
   const [count, setCount] = useState(0);
   const refQuantity = useRef(0);
   const [selectedSurvey, setSelectedSurvey] = useState({});
+  const { user, error, isLoading } = useUser();
   const [answer, setAnswer] = useState({});
   const SECRET = process.env.SECRET;
   const [messagesQuantity, setMessagesQuantity] = useState(0);
@@ -106,18 +109,20 @@ function Sondage({ sondagesData, viewersResponses, quantity }) {
 
   return (
     <div>
-      {sondagesData.map((item, index) => (
-        <div key={index}>
-          <SondageDisplay
-            currentSondage={item}
-            currentResponses={refContainer}
-            setSelectedSurvey={setSelectedSurvey}
-            quantity={refQuantity}
-            disconnect={disconnectBot}
-            ref={onRefChange}
-          />
-        </div>
-      ))}
+      {sondagesData.map((item, index) =>
+        item.author === user.sub ? (
+          <div key={index}>
+            <SondageDisplay
+              currentSondage={item}
+              currentResponses={refContainer}
+              setSelectedSurvey={setSelectedSurvey}
+              quantity={refQuantity}
+              disconnect={disconnectBot}
+              ref={onRefChange}
+            />
+          </div>
+        ) : null
+      )}
     </div>
   );
 }

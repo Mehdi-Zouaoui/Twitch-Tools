@@ -2,7 +2,7 @@ import React from "react";
 import { useForm, useFieldArray, Controller } from "react-hook-form";
 import { useState, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faTrash } from "@fortawesome/free-solid-svg-icons";
+import { faTrash, faPlus , faDownload  } from "@fortawesome/free-solid-svg-icons";
 import { useUser } from "@auth0/nextjs-auth0";
 import axios from "axios";
 
@@ -10,7 +10,9 @@ const Sondage = () => {
   const [formField, setFormFields] = useState([]);
   const { user } = useUser();
   const url = "http://localhost:3000";
+ 
 
+  
   const {
     register,
     handleSubmit,
@@ -24,6 +26,12 @@ const Sondage = () => {
       // keyName: "id", default to "id", you can change the key name
     }
   );
+
+useEffect(() => {
+
+  append({ name: "Entrer votre question..." });
+  append({ name: "Entrer votre question..." });
+}, [])
 
   const onSubmit = (data) => {
     data.author = user.sub;
@@ -39,24 +47,23 @@ const Sondage = () => {
   };
 
   return (
-    <div className="container">
+    <div className="surveyContainer">
       <div className="formContainer">
-        <h3 className="toolTitle">Sondage</h3>
-        <button
-          className="addField"
-          onClick={() => {
-            console.log("added");
-            append({ name: "Entrer votre question..." });
-          }}
-        >
-          Ajouter un réponse
+        <div className="surveyFormHeader">
+        <h3 className="toolTitle">Créer votre Sondage</h3>
+        <button type="submit" className="submit" value="Enregistrer" >
+        <FontAwesomeIcon icon={faDownload}/>
         </button>
-        <button className="changeFormat"> Test </button>
-
+        </div>
+  
         <form className="toolForm" onSubmit={handleSubmit(onSubmit)}>
-          <label htmlFor="title"> Titre : </label>
-          <input className="field" {...register("title")} name="title" />
-          <ul className="formInputs">
+          <div className="surveyTitleContainer">
+            <label htmlFor="title"> Titre  </label>
+            <input className="newField" {...register("title")} name="title" />
+          </div>
+
+          <h4 className="surveySubtitle">Réponses</h4>
+          <ul className="surveyFormInputs">
             {fields.map((item, index) => (
               <li key={item.id}>
                 <div className="formField">
@@ -78,12 +85,26 @@ const Sondage = () => {
               </li>
             ))}
           </ul>
+          <button
+            className="addSurveyField"
+            onClick={() => {
+              console.log("added");
+              append({ name: "Entrer votre question..." });
+            }}
+          >
+                   <FontAwesomeIcon icon={faPlus} className="plusIcon" />
 
-          <input type="submit" className="submit" value="Enregistrer" />
+            Ajouter un réponse
+          </button>
+          <div className="indexTypeContainer">
+            <div>A.</div>
+            <div  className="active">1.</div>
+          </div>
+   
         </form>
       </div>
       <div className="previewContainer">
-        <h5>Preview</h5>
+      
         {fields.length ? (
           <div className="display">
             <h3>Title</h3>

@@ -33,6 +33,12 @@ const Sidebar = () => {
         <li>
           <FontAwesomeIcon icon={faEnvelope} />
         </li>
+        <li className="liPrenium">
+          <div className="prenium">
+            <h3>Use our prenium features</h3>
+            <button>Get Prenium</button>
+          </div>
+        </li>
       </ul>
       <div className="logOut">
         <a href="/api/auth/logout" className="logout">

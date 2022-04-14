@@ -1,0 +1,154 @@
+$dark: #231f20;
+$yellow: #f5cb5c;;
+.surveyContainer {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  justify-content: space-around;
+  .formContainer {
+    width: 45%;
+    .surveyFormHeader {
+      display: flex;
+
+      .toolTitle {
+        font-size: 3em;
+        margin-top: 0;
+        font-weight: lighter;
+      }
+      .submit {
+        background: #f5cb5c;
+        border: none;
+        border-radius: 5px;
+        width: 4em;
+        height: 4em;
+        margin-left: 4em;
+      }
+    }
+
+    .toolForm {
+      .surveyTitleContainer {
+        display: flex;
+        width: 50%;
+        flex-direction: column;
+        margin: 3em 0 3em 0;
+        label {
+          font-size: 30px;
+        }
+        .newField {
+          border: none;
+          border-bottom: 1.5px solid #c9c9c9;
+          height: 40px;
+        }
+      }
+      .surveySubtitle {
+        font-size: 25px;
+      }
+      .surveyFormInputs {
+        list-style: none;
+        display: flex;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        padding: 0;
+        li {
+          width: 40%;
+          border-bottom: 1.5px solid #c9c9c9;
+          .formField {
+            display: flex;
+            flex-direction: column;
+            height: 8em;
+            justify-content: space-around;
+
+            .fieldContainer {
+              display: flex;
+              justify-content: space-between;
+              .field {
+                border: none;
+
+                height: 40px;
+                width: 100%;
+              }
+              .deleteButton {
+                background: transparent;
+                border-radius: 5px;
+                height: 40px;
+                width: 40px;
+              }
+            }
+          }
+        }
+      }
+      .addSurveyField {
+        margin-top: 4em;
+        background-color: #f5cb5c;
+        border-radius: 5px;
+        padding: 20px 0 20px 0;
+        width: 40%;
+        border: none;
+        .plusIcon {
+          margin-right: 15px;
+        }
+      }
+      .indexTypeContainer {
+        display: flex;
+        padding: 3em 0;
+        div {
+          border: 1px solid black;
+          width: 3em;
+          height: 3em;
+
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          border: 1px solid black;
+          color: black;
+        }
+        .active {
+          background: black;
+          color: #f5cb5c;
+        }
+      }
+    }
+  }
+   
+  .previewContainer {
+    width: 45%;
+    height: 60%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid $yellow;
+    border-radius: 10px;
+    .display {
+      border-radius: 5px;
+      width: 90%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+
+      
+      .preview {
+        display: flex;
+        flex-wrap: wrap;
+        width: 100%;
+        justify-content: space-around;
+        background: $dark;
+        border-radius: 10px;
+
+        .previewContent {
+          width: 75%;
+          height: 1.5em;
+          background-color: white;
+          border-radius: 3px;
+          margin: 1em 0;
+          display: flex;
+          align-items: center;
+          justify-content: flex-start;
+          .previewIndex {
+            margin: 0 1.5em;
+          }
+        }
+      }
+    }
+  }
+}
