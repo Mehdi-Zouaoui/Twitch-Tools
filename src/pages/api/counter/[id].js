@@ -15,6 +15,7 @@ export default async (req, res) => {
   }
   if (method === "PUT") {
     try {
+      
       const counter = await CounterSchema.findByIdAndUpdate( id , req.body , {
           new: true,
           runValidators: true

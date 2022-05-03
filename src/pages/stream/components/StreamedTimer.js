@@ -9,6 +9,7 @@ import { CountdownCircleTimer } from "react-countdown-circle-timer";
 // };
 
 const StreamedTimer = ({ data }) => {
+  
   const [index, setIndex] = useState(0);
   const interval = useRef();
   const [originalTime, setOriginalTime] = useState(
@@ -22,6 +23,7 @@ const StreamedTimer = ({ data }) => {
   const [millisecondes, setMilliseconds] = useState(0);
 
   if (data.started && data.type === false) {
+    console.log('Countdown')
     setTime(originalTime);
     clearInterval(interval.current);
     interval.current = setInterval(() => {
@@ -43,19 +45,20 @@ const StreamedTimer = ({ data }) => {
       setSecondes(getSeconds);
       setMilliseconds(getMilliseconds);
       setTime(time - 10);
-    }, 10);
+    }, 10000);
   }
   if (data.started && data.type === true) {
     clearInterval(interval.current);
     interval.current = setInterval(() => {
-      const getMilliseconds = Math.floor((time % 1000) / 100);
-      const getSeconds = Math.floor((time / (1000 * 60)) % 60);
-      const getMinutes = Math.floor((time / 1000) % 60);
+      const getMilliseconds = Math.floor(time % 1000);
+      const getSeconds = Math.floor((time / 1000) % 60);
+
+      const getMinutes = Math.floor((time / (1000 * 60)) % 60);
       const getHours = Math.floor((time / (1000 * 60 * 60)) % 24);
       setMilliseconds(getMilliseconds);
-      setHours(getSeconds);
+      setSecondes(getSeconds);
       setMinutes(getMinutes);
-      setSecondes(getHours);
+      setHours(getHours);
       // setDays(getDays);
       setTime(time + 10);
     }, 10);
@@ -75,12 +78,16 @@ const StreamedTimer = ({ data }) => {
   return (
     <div className="stream">
       <div>{data.title}</div>
-      <div style={{ display: "flex" }}>
-        <p>{days > 9 ? days : "0" + days} : </p>
-        <p>{hours > 9 ? hours : "0" + hours} : </p>
-        <p>{minutes > 9 ? minutes : "0" + minutes} : </p>
-        <p>{secondes > 9 ? secondes : "0" + secondes} : </p>
-        <p>{millisecondes > 9 ? millisecondes : "0" + millisecondes} </p>
+      <div style={{ display: "flex", flexDirection: "column" }}>
+        <p> Days : {days > 9 ? days : "0" + days} </p>
+        <p> Hours : {hours > 9 ? hours : "0" + hours} </p>
+        <p> Minutes : {minutes > 9 ? minutes : "0" + minutes} </p>
+        <p> Secondes : {secondes > 9 ? secondes : "0" + secondes} </p>
+        <p>
+          {" "}
+          Millisecondes :{" "}
+          {millisecondes /10  > 9 ? millisecondes / 10 : "0" + millisecondes / 10}{" "}
+        </p>
       </div>
     </div>
   );

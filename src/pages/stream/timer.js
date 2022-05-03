@@ -11,13 +11,12 @@ const Timer = () => {
     const items = localStorage.getItem(`timers`);
     if (items) {
       setData(JSON.parse(items));
-      console.log('IN USE EFFECT' , JSON.parse(items))
+      console.log('IN USE EFFECT')
     }
   }
 
   useEffect(() => {
-    setData(JSON.parse(localStorage.getItem("timers")));
-
+    console.log('wtf')
     window.addEventListener("storage", checkTimers);
     return () => {
       window.removeEventListener("storage", checkTimers);

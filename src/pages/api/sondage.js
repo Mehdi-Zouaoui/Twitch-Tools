@@ -9,6 +9,8 @@ const sondage = async (req, res) => {
       title: req.body.title,
       fields: req.body.fields,
       author: req.body.author,
+      index : req.body.index,
+      color : req.body.color
     });
     res.json(item);
     item.save(function (err) {

@@ -20,7 +20,7 @@ const renderTime = ({ remainingTime }) => {
   );
 };
 
-const TimerDisplay = ({ currentTimer, timers, setTimers }) => {
+const TimerDisplay = ({ currentTimer, timers, setTimers, opened, setOpened }) => {
   const interval = useRef();
   const router = useRouter();
   const [started, setStarted] = useState(false);
@@ -28,6 +28,7 @@ const TimerDisplay = ({ currentTimer, timers, setTimers }) => {
   const [time, setTime] = useState(0);
   const [key, setKey] = useState(0);
   const [stream, setStream] = useState(false);
+ 
 
   useEffect(() => {
     if (stream) {
@@ -47,17 +48,26 @@ const TimerDisplay = ({ currentTimer, timers, setTimers }) => {
     router.replace(router.asPath);
   };
 
+  const openInNewTab = (url) => {
+    if (!opened) {
+      const newTab = window.open(url, "_blank", "noopener,noreferrer");
+      if (newTab) newTab.opener = null;
+      setOpened(true)
+    }
+    else console.log('already open')
+  };
+
   const start = (data) => {
     console.log("test on start", data);
     setTimers(
       timers.map((item) => {
         if (item._id === data._id) {
+          console.log("try this", item._id, data._id);
           return { ...item, started: true, value: 0, restart: false };
-        }
-        else return item
+        } else return item;
       })
     );
-      console.log('TIMERS' , timers)
+    console.log("TIMERS", timers);
     setStarted(true);
     setRedo(true);
   };
@@ -97,81 +107,77 @@ const TimerDisplay = ({ currentTimer, timers, setTimers }) => {
 
   return (
     <div className="timerContainer">
- 
-     
       {currentTimer.display === "dial" && (
-        
         <div className="dialContainer">
-          
-     
-      <div className="buttonFormatContainer">
-        <button
-          className="timerStream"
-          onClick={() => {
-            console.log("before", stream);
-            setStream(!stream);
-          }}
-        >
-          {stream === false ? (
-            <div>
-              <Link href="http://localhost:3000/stream/timer">
-                <a target="stream">
-                  <FontAwesomeIcon icon={faEye} />
-                </a>
-              </Link>
-            </div>
-          ) : (
-            <FontAwesomeIcon icon={faEyeSlash} />
-          )}
-        </button>
+          <div className="buttonFormatContainer">
+            <button
+              className="timerStream"
+              onClick={() => {
+                console.log("before", stream);
+                setStream(!stream);
+              }}
+            >
+              {stream === false ? (
+                <div>
+                  <div
+                    onClick={() =>
+                      openInNewTab("http://localhost:3000/stream/timer")
+                    }
+                  >
+                    <FontAwesomeIcon icon={faEye} />
+                  </div>
+                </div>
+              ) : (
+                <FontAwesomeIcon icon={faEyeSlash} />
+              )}
+            </button>
 
-        <button
-          className="displayChoiceButton defaultChoice"
-          onClick={(e) => {
-            e.preventDefault();
-            // setDisplay("stopwatch");
-          }}
-        >
-          <FontAwesomeIcon icon={faStopwatch} />
-        </button>
-        <button
-          className="displayChoiceButton"
-          onClick={(e) => {
-            e.preventDefault();
-            // setDisplay("dial");
-          }}
-        >
-          <div>00:00</div>
-        </button>
-      </div>
-        <div className="dial">
-          <h3>{currentTimer.title}</h3>
-      
-          <div className="dialButtonContainer">
-            {!started && time === 0 && (
-              <button onClick={() => start(currentTimer)}>
-                <FontAwesomeIcon icon={faPlay} />
-              </button>
-            )}
-            {started && (
-              <button onClick={() => stop()}>
-                <FontAwesomeIcon icon={faPause} />
-              </button>
-            )}
-            {!started && time !== 0 && (
-              <button onClick={() => start()}>
-                <FontAwesomeIcon icon={faPlay} />
-              </button>
-            )}
-            {!started && redo > 0 && (
-              <button onClick={() => restart()}>
-                <FontAwesomeIcon icon={faRedo} />
-              </button>
-            )}
+            <button
+              className="displayChoiceButton defaultChoice"
+              onClick={(e) => {
+                e.preventDefault();
+                // setDisplay("stopwatch");
+              }}
+            >
+              <FontAwesomeIcon icon={faStopwatch} />
+            </button>
+            <button
+              className="displayChoiceButton"
+              onClick={(e) => {
+                e.preventDefault();
+                // setDisplay("dial");
+              }}
+            >
+              <div>00:00</div>
+            </button>
+          </div>
+          <div className="dial">
+            <h3>{currentTimer.title}</h3>
+
+            <div className="dialButtonContainer">
+              {!started && time === 0 && (
+                <button onClick={() => start(currentTimer)}>
+                  <FontAwesomeIcon icon={faPlay} />
+                </button>
+              )}
+              {started && (
+                <button onClick={() => stop()}>
+                  <FontAwesomeIcon icon={faPause} />
+                </button>
+              )}
+              {!started && time !== 0 && (
+                <button onClick={() => start()}>
+                  <FontAwesomeIcon icon={faPlay} />
+                </button>
+              )}
+              {!started && redo > 0 && (
+                <button onClick={() => restart()}>
+                  <FontAwesomeIcon icon={faRedo} />
+                </button>
+              )}
+            </div>
           </div>
         </div>
-        </div>
-      
       )}
       {currentTimer.display === "stopwatch" && (
         <div className="stopWatchContainer">
@@ -191,7 +197,6 @@ const TimerDisplay = ({ currentTimer, timers, setTimers }) => {
                 {renderTime}
               </CountdownCircleTimer>
             </div>
-          
           </div>
           <div className="stopWatchButtonContainer">
             {!started && time === 0 && (

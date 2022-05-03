@@ -1,5 +1,5 @@
 $dark: #231f20;
-$yellow: #f5cb5c;;
+$yellow: #f5cb5c;
 .surveyContainer {
   display: flex;
   width: 100%;
@@ -7,39 +7,53 @@ $yellow: #f5cb5c;;
   justify-content: space-around;
   .formContainer {
     width: 45%;
-    .surveyFormHeader {
-      display: flex;
-
-      .toolTitle {
-        font-size: 3em;
-        margin-top: 0;
-        font-weight: lighter;
-      }
-      .submit {
-        background: #f5cb5c;
-        border: none;
-        border-radius: 5px;
-        width: 4em;
-        height: 4em;
-        margin-left: 4em;
-      }
+    .toolTitle {
+      font-size: 3em;
+      margin-top: 0;
+      font-weight: lighter;
     }
 
     .toolForm {
-      .surveyTitleContainer {
+      .surveyFormHeader {
         display: flex;
-        width: 50%;
-        flex-direction: column;
-        margin: 3em 0 3em 0;
-        label {
-          font-size: 30px;
+        align-items: center;
+        justify-content: space-between;
+        .surveyTitleContainer {
+          display: flex;
+          width: 50%;
+          flex-direction: column;
+          margin: 3em 0 3em 0;
+          label {
+            font-size: 30px;
+          }
+
+          .newField {
+            border: none;
+            border-bottom: 1.5px solid #c9c9c9;
+            height: 40px;
+          }
         }
-        .newField {
+        .counterFormColor {
+          background-color: transparent;
+          -webkit-border-radius: 45px;
+          -moz-border-radius: 45px;
+          border-radius: 45px;
+          font-size: 15px;
+          width: 50px;
+          height: 50px;
           border: none;
-          border-bottom: 1.5px solid #c9c9c9;
-          height: 40px;
+          padding: 2px 15px;
+          width: -webkit-calc(20% - 15px);
+          width: -moz-calc(20% - 15px);
+          width: calc(20% - 15px);
+          margin-bottom: 10px;
+        }
+        #color::-webkit-color-swatch {
+          border: none;
+          border-radius: 15px;
         }
       }
+
       .surveySubtitle {
         font-size: 25px;
       }
@@ -48,7 +62,10 @@ $yellow: #f5cb5c;;
         display: flex;
         justify-content: space-between;
         flex-wrap: wrap;
-        padding: 0;
+        padding-right: 50px;
+        padding-left: 0;
+        max-height: 250px;
+        overflow: auto;
         li {
           width: 40%;
           border-bottom: 1.5px solid #c9c9c9;
@@ -70,6 +87,7 @@ $yellow: #f5cb5c;;
               .deleteButton {
                 background: transparent;
                 border-radius: 5px;
+                border: 2px solid #c9c9c9;
                 height: 40px;
                 width: 40px;
               }
@@ -107,9 +125,16 @@ $yellow: #f5cb5c;;
           color: #f5cb5c;
         }
       }
+      .submit {
+        background: #f5cb5c;
+        border: none;
+        border-radius: 5px;
+        width: 4em;
+        height: 4em;
+      }
     }
   }
-   
+
   .previewContainer {
     width: 45%;
     height: 60%;
@@ -126,7 +151,6 @@ $yellow: #f5cb5c;;
       flex-direction: column;
       align-items: center;
 
-      
       .preview {
         display: flex;
         flex-wrap: wrap;

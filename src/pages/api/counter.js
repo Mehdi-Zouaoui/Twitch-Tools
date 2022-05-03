@@ -9,6 +9,8 @@ const counter = async (req, res) => {
       title: req.body.title,
       color: req.body.color,
       author: req.body.author,
+      value : req.body.value,
+      isStreamed : req.body.isStreamed,
     });
     res.json(item);
     item.save(function (err) {

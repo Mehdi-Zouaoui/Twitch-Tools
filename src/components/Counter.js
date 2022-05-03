@@ -11,6 +11,7 @@ import { useRouter } from "next/router";
 
 const Counter = ({ countersData }) => {
   const router = useRouter();
+  
   const [formTitle, setFormTitle] = useState("");
   const [formColor, setFormColor] = useState("#eb5e28");
   const [formUpdate, setFormUpdate] = useState({
@@ -51,9 +52,12 @@ const Counter = ({ countersData }) => {
 
   const onSubmit = (data) => {
     // data.author = user.sub;
+    
     console.log(formUpdate.counterData);
     if (formUpdate.update === false) {
+      data.value = 0;
       data.author = user.sub;
+      data.isStreamed = false;
       console.log("POST", data);
       axios
         .post(url + "/api/counter", data)

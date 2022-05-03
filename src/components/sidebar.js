@@ -5,13 +5,22 @@ import {
   faChartBar,
   faSignOutAlt,
   faUser,
+  faCrown
 } from "@fortawesome/free-solid-svg-icons";
+import Image from "next/image";
 import Link from "next/link";
+
 
 const Sidebar = () => {
   return (
     <div className="sideNav">
-      <h3>Twools</h3>
+      <Image
+            className="locationsImage"
+            alt=""
+            width="100"
+            height="50"
+            src={"/logoYellowTop.svg"}
+          />
       <ul className="list">
         <li>
           <Link href="/administration">
@@ -34,10 +43,9 @@ const Sidebar = () => {
           <FontAwesomeIcon icon={faEnvelope} />
         </li>
         <li className="liPrenium">
-          <div className="prenium">
-            <h3>Use our prenium features</h3>
-            <button>Get Prenium</button>
-          </div>
+           <FontAwesomeIcon icon={faCrown} />
+       
+  
         </li>
       </ul>
       <div className="logOut">

@@ -1,6 +1,6 @@
-.counterDisplay{
-    background-color:#c44536;
-    color : white;
+.counterDisplay {
+    background-color: #f5cb5c;
+    color: black;
     border-radius: 10px;
     width: 100%;
     display: flex;
@@ -8,52 +8,67 @@
     justify-content: space-around;
     margin-bottom: 15px;
     align-items: center;
-    h1{
-        width: 40%
+    h1 {
+        width: 40%;
     }
-    .counterColor{
+    .counterColor {
         width: 35px;
         height: 35px;
         border-radius: 50%;
     }
-    .counterStream{
+    .counterStream {
         border: none;
         border-radius: 50%;
         width: 35px;
         height: 35px;
         background-color: white;
     }
-    .counterButtonContainer{
+    .counterButtonContainer {
         width: 30%;
         display: flex;
-        justify-content: space-around; 
+        justify-content: space-around;
         height: 100%;
-        padding:5px 0px;
-        
-       
-        .counterOperationContainer{
+        padding: 5px 0px;
+        align-items: center;
+
+        .counterOperationContainer {
             display: flex;
             flex-direction: column;
             justify-content: space-between;
             align-items: center;
-            .counterOperation{
+            height: 100%;
+
+            .counterOperation {
                 width: 50px;
                 border: none;
                 height: 40px;
                 border-radius: 5px;
                 background-color: white;
-               
-              
+
+                &:active {
+                    background-color: black;
+                    color: white;
+                }
             }
         }
-        .counterCrud{
+        .counterUndo {
+            border: none;
+           background: transparent;
+            width: 35px;
+            height: 35px;
+            &:active{
+                color: white;
+            }
+          
+        }
+        .counterCrud {
             display: flex;
             align-items: center;
             justify-content: center;
-            .options{
+            .options {
                 font-size: 35px;
-             text-align: center;
-             padding-bottom: 10px;
+                text-align: center;
+                padding-bottom: 10px;
             }
         }
     }

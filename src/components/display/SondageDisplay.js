@@ -5,29 +5,37 @@ function SondageDisplay({
   currentSondage,
   currentResponses,
   quantity,
-  disconnect,
+  test,
+  connected,
+  selectedSurvey,
   setSelectedSurvey,
 }) {
-  const [selected, setSelected] = useState(false);
 
-  return (
-    <div>
+  useEffect(() => {
+    console.log("HEYO" , connected);
+  }, [selectedSurvey]);
+  return ( 
+    <div >
       <h2>{currentSondage.title}</h2>
       <button
         onClick={() => {
-          setSelected(true);
+          
           setSelectedSurvey(currentSondage);
         }}
       >
         Connect to Twitch
       </button>
-      <button onClick={() => {
-        disconnect()
-      }}>DC</button>
+      <button
+        onClick={() => {
+          test();
+        }}
+      >
+        DC
+      </button>
 
-      <div className="sondageFlexContainer">
-        {selected ? (
-          <div className="sondageFieldsContainer">
+      <div className="sondageFlexContainer" >
+        {connected ? (
+          <div className="sondageFieldsContainer" style={{backgroundColor:currentSondage.color}}>
             {Object.keys(currentResponses.current).map((key, index) => (
               <div key={key} className="sondageField">
                 <div>{index + 1}.</div>
@@ -45,7 +53,7 @@ function SondageDisplay({
             ))}
           </div>
         ) : (
-          <div className="sondageFlexContainer">
+          <div className="sondageFlexContainer" style={{backgroundColor:currentSondage.color}}>
             {currentSondage.fields.map((field, index) => (
               <div className="sondageField" key={index}>
                 {field.name}

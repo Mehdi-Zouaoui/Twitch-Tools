@@ -3,9 +3,11 @@ const { Schema } = mongoose;
 
 const CounterSchema = new Schema({
   title: String,
-  color : String,
+  color: String,
   author: String,
-  value : Number,
+  value: Number,
+  isStreamed: Boolean,
 });
 
-module.exports =  mongoose.models.Counter || mongoose.model("Counter", CounterSchema);
+module.exports =
+  mongoose.models.Counter || mongoose.model("Counter", CounterSchema);

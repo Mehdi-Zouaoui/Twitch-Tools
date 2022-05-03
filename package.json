@@ -14,22 +14,29 @@
     "@fortawesome/free-regular-svg-icons": "^5.15.4",
     "@fortawesome/free-solid-svg-icons": "^5.15.4",
     "@fortawesome/react-fontawesome": "^0.1.15",
+    "@prisma/client": "^3.13.0",
+    "@react-three/fiber": "^8.0.12",
+    "apollo-server-micro": "^3.6.7",
     "axios": "^0.22.0",
     "bcrypt": "^5.0.1",
+    "graphql": "^16.4.0",
     "jsonwebtoken": "^8.5.1",
+    "micro-cors": "^0.1.1",
     "mongoose": "^6.0.10",
     "next": "11.1.2",
     "next-auth": "^4.3.1",
-    "react": "17.0.2",
+    "react": "^18.1.0",
     "react-countdown-circle-timer": "^2.5.4",
-    "react-dom": "17.0.2",
+    "react-dom": "^18.1.0",
     "react-hook-form": "^7.17.2",
     "sass": "^1.42.1",
+    "three": "^0.140.0",
     "tmi.js": "^1.8.5",
     "twitch": "^4.6.7"
   },
   "devDependencies": {
     "eslint": "8.0.0",
-    "eslint-config-next": "11.1.2"
+    "eslint-config-next": "11.1.2",
+    "prisma": "^3.13.0"
   }
 }

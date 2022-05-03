@@ -35,7 +35,7 @@ export default function Home({ usersData }) {
         });
     }
 
-    return <div>Ok</div>;
+    Router.push("/administration");
   }
   return <a href="/api/auth/login">Login</a>;
 }

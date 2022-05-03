@@ -8,45 +8,62 @@ import {
   faMinus,
   faTrash,
   faEdit,
+  faUndo,
 } from "@fortawesome/free-solid-svg-icons";
 import { useRouter } from "next/router";
 import { counter } from "@fortawesome/fontawesome-svg-core";
+import axios from "axios";
 
 const CounterDisplay = ({ data, update, counters, setCounters }) => {
   const router = useRouter();
   const [index, setIndex] = useState(0);
   const [options, setOptions] = useState(false);
   const [stream, setStream] = useState(false);
-
+  const url = "http://localhost:3000";
   useEffect(() => {
-    if (stream) {
-      setCounters((oldArray) => [...oldArray, { ...data, value: index }]);
-      console.log("data", data);
-    } else {
-      setCounters(counters.filter((item) => item._id !== data._id));
-      // counters = counters.filter((item) => item._id !== data._id);
-    }
-  }, [stream]);
+  
+  },[]);
 
   const refreshData = () => {
     router.replace(router.asPath);
   };
 
-  const increment = (data) => {
-    setIndex(index + 1);
-    setCounters(
-      counters.map((item) =>
-        item._id === data._id ? { ...item, value: index } : { ...item }
-      )
-    );
+  const streamCounter = (data) => {
+    data.isStreamed = true;
+    axios
+      .put(url + "/api/counter/" + data._id, data)
+      .then((res) => {
+        console.log("res", res);
+        refreshData();
+      })
+      .catch((err) => {
+        console.log("err", err);
+      });
   };
+  const increment = (data) => {
+    data.value += 1;
+    axios
+      .put(url + "/api/counter/" + data._id, data)
+      .then((res) => {
+        console.log("res", res);
+        refreshData();
+      })
+      .catch((err) => {
+        console.log("err", err);
+      });
+  };
+
   const decrement = (data) => {
-    index > 0 ? setIndex(index - 1) : null;
-    setCounters(
-      counters.map((item) =>
-        item._id === data._id ? { ...item, value: index } : { ...item }
-      )
-    );
+    data.value > 0 ? (data.value -= 1) : (data.value = 0);
+    axios
+      .put(url + "/api/counter/" + data._id, data)
+      .then((res) => {
+        console.log("res", res);
+        refreshData();
+      })
+      .catch((err) => {
+        console.log("err", err);
+      });
   };
   const removeCounter = (id) => {
     fetch("http://localhost:3000/api/counter/" + id, {
@@ -58,10 +75,8 @@ const CounterDisplay = ({ data, update, counters, setCounters }) => {
     });
   };
   const editCounter = () => {
-  
     update({ counterData: data, update: true });
-    console.log('update Data', data)
-    
+    console.log("update Data", data);
   };
 
   return (
@@ -73,11 +88,9 @@ const CounterDisplay = ({ data, update, counters, setCounters }) => {
           setStream(!stream);
         }}
       >
-        {stream === false ? (
-          <div>
-            <a href="http://localhost:3000/stream/counter" target="stream">
-              <FontAwesomeIcon icon={faEye} />
-            </a>
+        {data.isStreamed === false ? (
+          <div onClick={() => streamCounter(data)}>
+            <FontAwesomeIcon icon={faEye} />
           </div>
         ) : (
           <FontAwesomeIcon icon={faEyeSlash} />
@@ -94,6 +107,11 @@ const CounterDisplay = ({ data, update, counters, setCounters }) => {
           <button className="counterOperation" onClick={() => decrement(data)}>
             {" "}
             <FontAwesomeIcon icon={faMinus} />
+          </button>
+        </div>
+        <div>
+          <button className="counterUndo">
+            <FontAwesomeIcon icon={faUndo} />
           </button>
         </div>
         <div className="counterCrud">

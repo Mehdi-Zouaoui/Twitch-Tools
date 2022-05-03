@@ -1,5 +1,6 @@
 import TimerDisplay from "../components/display/TimerDisplay";
 import { useForm, useFieldArray, Controller } from "react-hook-form";
+import { useRouter } from "next/router";
 import { useState, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useUser } from "@auth0/nextjs-auth0";
@@ -23,12 +24,14 @@ export const getStaticProps = async () => {
 };
 
 const Timer = ({ timersData }) => {
+  console.log('timers data' , timersData)
+  const router = useRouter();
   const timersArray = [];
   const [formColor, setFormColor] = useState("#eb5e28");
   const [formTitle, setFormTitle] = useState("");
   const { user, error, isLoading } = useUser();
-
   const [type, setType] = useState(false);
+  const [opened, setOpened] = useState(false);
   const [display, setDisplay] = useState("");
   const [format, setFormat] = useState({});
   const [checked, setChecked] = useState({
@@ -46,6 +49,9 @@ const Timer = ({ timersData }) => {
     milliseconds: 0,
   });
   const url = "http://localhost:3000";
+  const refreshData = () => {
+    router.replace(router.asPath);
+  };
   if (
     JSON.parse(localStorage.getItem("timers")) === null ||
     JSON.parse(localStorage.getItem("timers")).length === 0
@@ -80,13 +86,17 @@ const Timer = ({ timersData }) => {
       data.display = "dial";
       data.checked = checked;
       data.author = user.sub;
-    } else data.values = 0;
+    } else {
+      data.author = user.sub;
+      data.values = 0;
+    }
 
     console.log("data", data);
     axios
       .post(url + "/api/timer", data)
       .then((res) => {
         console.log("back", res);
+        refreshData();
       })
       .catch((err) => {
         console.log("err", err);
@@ -100,6 +110,8 @@ const Timer = ({ timersData }) => {
           item.author === user.sub ? (
             <TimerDisplay
               currentTimer={item}
+              opened = {opened}
+              setOpened = {setOpened}
               key={index}
               timers={timers}
               setTimers={setTimers}

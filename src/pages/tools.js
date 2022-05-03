@@ -1,10 +1,12 @@
 import { useState, useEffect, useRef } from "react";
 import { useUser } from "@auth0/nextjs-auth0";
+import { useRouter } from "next/router";
 import Card from "../components/Card";
 import Counter from "../components/Counter";
 import CoinFlip from "../components/CoinFlip";
 import Timer from "../components/Timer";
 import Sondage from "../components/Sondage";
+import Object from "../components/Object";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faCoins,
@@ -15,6 +17,9 @@ import { ApiClient } from "twitch";
 import axios from "axios";
 const tmi = require("tmi.js");
 
+
+
+
 const userTools = ({ countersData, timersData, sondagesData }) => {
   // const { user, error, isLoading } = useUser();
   const [displayedTool, setDisplayedTool] = useState(1);
@@ -22,8 +27,12 @@ const userTools = ({ countersData, timersData, sondagesData }) => {
 
   const [currentTool, setCurrentTool] = useState(0);
   const toolRef = useRef(null);
-  console.log('user' , user)
+  console.log("user", user);
 
+
+  useEffect(() => {
+    console.log('tool changed')
+  }, [displayedTool]);
   // if (isLoading) return <div>Loading...</div>;
   return (
     <div className="container">
@@ -32,11 +41,15 @@ const userTools = ({ countersData, timersData, sondagesData }) => {
           <nav className="toolsNavigation">
             <ul className="toolsList">
               <li onClick={() => setCurrentTool(1)}>Counter</li>
-              <li onClick={() => setCurrentTool(2)}>Random</li>
+              <li onClick={() => setCurrentTool(2)}>Composant 3D</li>
               <li onClick={() => setCurrentTool(3)}>Sondage</li>
             </ul>
           </nav>
           <div className="displayedTool">
+          {/* <div>
+                Composant 3D
+                <Object />
+              </div> */}
             {currentTool === 1 && (
               <div className="counter">
                 <div className="cardContainer">
@@ -99,7 +112,12 @@ const userTools = ({ countersData, timersData, sondagesData }) => {
                 )}
               </div>
             )}
-            {currentTool === 2 && <div>Random</div>}
+            {currentTool === 2 && (
+              <div>
+                Composant 3D
+                <Object />
+              </div>
+            )}
             {currentTool === 3 && (
               <div>
                 Sondage

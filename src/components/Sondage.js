@@ -17,6 +17,11 @@ function Sondage({ sondagesData, viewersResponses, quantity }) {
   const SECRET = process.env.SECRET;
   const [messagesQuantity, setMessagesQuantity] = useState(0);
   useEffect(() => {
+    console.log("rerendered");
+    refContainer.current = {};
+    refQuantity.current = 0;
+    setAnswer({});
+    setSelected(false);
     if (Object.keys(selectedSurvey).length > 0) {
       selectedSurvey.fields.forEach((field, index) => {
         console.log("currentSurvey fields", field.name, index);
@@ -58,22 +63,28 @@ function Sondage({ sondagesData, viewersResponses, quantity }) {
   });
 
   client.on("connected", () => {
-    console.log("The bot is Online!");
+    console.log("The bot is Online!", client.readyState);
     client.say("twoolsbot", "connected");
   });
 
   client.on("disconnected", () => {
     console.log(" DISCONNECTED The bot is Offline!");
+    setConnected(false);
     client.say("twoolsbot", "disconnected");
   });
+
+  const test = () => {
+    console.log(client.readyState());
+  };
 
   client.on("message", (channel, tags, message, self) => {
     // if (self) return true;
     // users[tags.username] = true;
-    console.log("Message sended");
+    console.log(client.readyState());
+    // console.log("Message sended");
 
     Object.keys(refContainer.current).forEach((item, index) => {
-      console.log(" LE CONTENU ", item, "LA POSITION ", index + 1);
+      // console.log(" LE CONTENU ", item, "LA POSITION ", index + 1);
       if (message == index + 1) {
         refContainer.current[item]++;
         refQuantity.current++;
@@ -82,7 +93,7 @@ function Sondage({ sondagesData, viewersResponses, quantity }) {
       }
     });
 
-    console.log("HERE IS MESSAGE", refContainer.current, refQuantity.current);
+    // console.log("HERE IS MESSAGE", refContainer.current, refQuantity.current);
 
     if (self || !message.startsWith("!")) return;
     const args = message.slice(1).split(" ");
@@ -113,11 +124,12 @@ function Sondage({ sondagesData, viewersResponses, quantity }) {
         item.author === user.sub ? (
           <div key={index}>
             <SondageDisplay
+              test={test}
               currentSondage={item}
               currentResponses={refContainer}
+              connected={selectedSurvey == item ? true : false}
               setSelectedSurvey={setSelectedSurvey}
               quantity={refQuantity}
-              disconnect={disconnectBot}
               ref={onRefChange}
             />
           </div>

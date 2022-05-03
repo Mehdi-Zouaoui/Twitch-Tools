@@ -2,17 +2,18 @@ import React from "react";
 import { useForm, useFieldArray, Controller } from "react-hook-form";
 import { useState, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faTrash, faPlus , faDownload  } from "@fortawesome/free-solid-svg-icons";
-import { useUser } from "@auth0/nextjs-auth0";
+import { faTrash, faPlus, faDownload } from "@fortawesome/free-solid-svg-icons";
+import { useUser } from "@auth0/nextjs-auth0";``
+import {useRouter} from 'next/router'
 import axios from "axios";
 
 const Sondage = () => {
   const [formField, setFormFields] = useState([]);
+  const [indexType, setIndexType] = useState("number");
+  const [color, setColor] = useState("#f5cb5c");
   const { user } = useUser();
   const url = "http://localhost:3000";
- 
-
-  
+  const router = useRouter()
   const {
     register,
     handleSubmit,
@@ -27,39 +28,50 @@ const Sondage = () => {
     }
   );
 
-useEffect(() => {
-
-  append({ name: "Entrer votre question..." });
-  append({ name: "Entrer votre question..." });
-}, [])
+  useEffect(() => {
+    append({ name: "Entrer votre question..." });
+    append({ name: "Entrer votre question..." });
+  }, []);
 
   const onSubmit = (data) => {
     data.author = user.sub;
+    data.index = indexType;
+    data.color = color;
     console.log("data", data);
-    // axios
-    // .post(url + "/api/sondage", data)
-    // .then((res) => {
-    //   console.log("back", res);
-    // })
-    // .catch((err) => {
-    //   console.log("err", err);
-    // });
+    axios
+      .post(url + "/api/sondage", data)
+      .then((res) => {
+        console.log("back", res);
+        router.push('/tools')
+      })
+      .catch((err) => {
+        console.log("err", err);
+      });
   };
 
   return (
     <div className="surveyContainer">
       <div className="formContainer">
-        <div className="surveyFormHeader">
         <h3 className="toolTitle">Créer votre Sondage</h3>
-        <button type="submit" className="submit" value="Enregistrer" >
-        <FontAwesomeIcon icon={faDownload}/>
-        </button>
-        </div>
-  
+
         <form className="toolForm" onSubmit={handleSubmit(onSubmit)}>
-          <div className="surveyTitleContainer">
-            <label htmlFor="title"> Titre  </label>
-            <input className="newField" {...register("title")} name="title" />
+          <div className="surveyFormHeader">
+            <div className="surveyTitleContainer">
+              <label htmlFor="title"> Titre </label>
+              <input className="newField" {...register("title")} name="title" />
+            </div>
+            <input
+              type="color"
+              id="color"
+              name="color"
+         
+              className="counterFormColor"
+              value={color}
+              onChange={(e) => {
+                e.preventDefault();
+                setColor(e.target.value);
+              }}
+            />
           </div>
 
           <h4 className="surveySubtitle">Réponses</h4>
@@ -86,25 +98,51 @@ useEffect(() => {
             ))}
           </ul>
           <button
+            type="button"
             className="addSurveyField"
             onClick={() => {
               console.log("added");
               append({ name: "Entrer votre question..." });
             }}
           >
-                   <FontAwesomeIcon icon={faPlus} className="plusIcon" />
-
+            <FontAwesomeIcon icon={faPlus} className="plusIcon" />
             Ajouter un réponse
           </button>
-          <div className="indexTypeContainer">
-            <div>A.</div>
-            <div  className="active">1.</div>
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+            }}
+          >
+            <div className="indexTypeContainer">
+              <div
+                onClick={() => {
+                  setIndexType("letter");
+                }}
+              >
+                A.
+              </div>
+              <div
+                onClick={() => {
+                  setIndexType("number");
+                }}
+                className="active"
+              >
+                1.
+              </div>
+            </div>
+            <div className="displayType">
+              <div className="quizz">ICON DE QUIZZ</div>
+              <div className="survey">ICONE DE SONDAGE</div>
+            </div>
           </div>
-   
+          <button type="submit" className="submit" value="Enregistrer">
+            <FontAwesomeIcon icon={faDownload} />
+          </button>
         </form>
       </div>
       <div className="previewContainer">
-      
         {fields.length ? (
           <div className="display">
             <h3>Title</h3>
