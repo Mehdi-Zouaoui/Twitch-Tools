@@ -7,6 +7,8 @@ import CoinFlip from "../components/CoinFlip";
 import Timer from "../components/Timer";
 import Sondage from "../components/Sondage";
 import Object from "../components/Object";
+import { ApolloClient, InMemoryCache, ApolloProvider } from "@apollo/client";
+import { GET_COUNTERS, GET_SURVEYS, GET_TIMERS } from "../../graphql/queries";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faCoins,
@@ -17,21 +19,16 @@ import { ApiClient } from "twitch";
 import axios from "axios";
 const tmi = require("tmi.js");
 
-
-
-
 const userTools = ({ countersData, timersData, sondagesData }) => {
   // const { user, error, isLoading } = useUser();
   const [displayedTool, setDisplayedTool] = useState(1);
   const { user, error, isLoading } = useUser();
-
   const [currentTool, setCurrentTool] = useState(0);
   const toolRef = useRef(null);
   console.log("user", user);
 
-
   useEffect(() => {
-    console.log('tool changed')
+    console.log("tool changed");
   }, [displayedTool]);
   // if (isLoading) return <div>Loading...</div>;
   return (
@@ -46,7 +43,7 @@ const userTools = ({ countersData, timersData, sondagesData }) => {
             </ul>
           </nav>
           <div className="displayedTool">
-          {/* <div>
+            {/* <div>
                 Composant 3D
                 <Object />
               </div> */}
@@ -152,16 +149,21 @@ const userTools = ({ countersData, timersData, sondagesData }) => {
 export default userTools;
 
 export const getStaticProps = async () => {
-  const counters = await fetch("http://localhost:3000/api/counter");
-  const countersJSON = await counters.json();
-  const timers = await fetch("http://localhost:3000/api/timer");
-  const timersJSON = await timers.json();
-  const sondages = await fetch("http://localhost:3000/api/sondage");
-  const sondagesJSON = await sondages.json();
+  const client = new ApolloClient({
+    uri: "http://localhost:3000/api/graphql",
+    cache: new InMemoryCache(),
+  });
+
+  const counters = await client.query({ query: GET_COUNTERS });
+  const countersJSON = counters.data.getCounters;
+  const timers = await client.query({ query: GET_TIMERS });
+  const timersJSON = timers.data.getTimers;
+  const surveys = await client.query({ query: GET_SURVEYS });
+  const surveysJSON = surveys.data.getSurveys;
 
   return {
     props: {
-      sondagesData: sondagesJSON,
+      sondagesData: surveysJSON,
       countersData: countersJSON,
       timersData: timersJSON,
     },

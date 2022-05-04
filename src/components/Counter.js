@@ -60,7 +60,7 @@ const Counter = ({ countersData }) => {
       data.isStreamed = false;
       console.log("POST", data);
       axios
-        .post(url + "/api/counter", data)
+        .post(url + "/api/graphql", data)
         .then((res) => {
           console.log("back", res);
           refreshData();
