@@ -3,6 +3,8 @@ import { useForm, useFieldArray, Controller } from "react-hook-form";
 import { useState, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
+import { useMutation } from "@apollo/client";
+import { CREATE_COUNTER } from "../../graphql/queries";
 import { useUser } from "@auth0/nextjs-auth0";
 import axios from "axios";
 
@@ -11,7 +13,15 @@ import { useRouter } from "next/router";
 
 const Counter = ({ countersData }) => {
   const router = useRouter();
-  
+  const [createCounter] = useMutation(CREATE_COUNTER, {
+    onCompleted: (data) => {
+      console.log('completed')
+      refreshData();
+    },
+    // onError(err) {
+    //   console.log("error here", err);
+    // },
+  });
   const [formTitle, setFormTitle] = useState("");
   const [formColor, setFormColor] = useState("#eb5e28");
   const [formUpdate, setFormUpdate] = useState({
@@ -52,22 +62,22 @@ const Counter = ({ countersData }) => {
 
   const onSubmit = (data) => {
     // data.author = user.sub;
-    
+
     console.log(formUpdate.counterData);
     if (formUpdate.update === false) {
-      data.value = 0;
-      data.author = user.sub;
-      data.isStreamed = false;
       console.log("POST", data);
-      axios
-        .post(url + "/api/graphql", data)
-        .then((res) => {
-          console.log("back", res);
-          refreshData();
-        })
-        .catch((err) => {
-          console.log("err", err);
-        });
+
+      createCounter({
+        variables: {
+          counter: {
+            author: user.sub,
+            color: data.color,
+            isStreamed: false,
+            title: data.title,
+            value: 0,
+          },
+        },
+      });
     }
     if (formUpdate.update === true) {
       console.log("PUT");

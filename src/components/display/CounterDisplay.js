@@ -1,5 +1,7 @@
 import { useState, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { useMutation } from "@apollo/client";
+import { DELETE_COUNTER, UPDATE_COUNTER } from "../../../graphql/queries";
 import Link from "next/link";
 import {
   faEye,
@@ -16,13 +18,29 @@ import axios from "axios";
 
 const CounterDisplay = ({ data, update, counters, setCounters }) => {
   const router = useRouter();
+  const [deleteCounter] = useMutation(DELETE_COUNTER, {
+    onCompleted: (data) => {
+      console.log("completed");
+      refreshData();
+    },
+    // onError(err) {
+    //   console.log("error here", err);
+    // },
+  });
+  const [updateCounter] = useMutation(UPDATE_COUNTER, {
+    onCompleted: (data) => {
+      console.log("completed");
+      refreshData();
+    },
+    // onError(err) {
+    //   console.log("error here", err);
+    // },
+  });
   const [index, setIndex] = useState(0);
   const [options, setOptions] = useState(false);
   const [stream, setStream] = useState(false);
   const url = "http://localhost:3000";
-  useEffect(() => {
-  
-  },[]);
+  useEffect(() => {}, []);
 
   const refreshData = () => {
     router.replace(router.asPath);
@@ -41,16 +59,16 @@ const CounterDisplay = ({ data, update, counters, setCounters }) => {
       });
   };
   const increment = (data) => {
-    data.value += 1;
-    axios
-      .put(url + "/api/counter/" + data._id, data)
-      .then((res) => {
-        console.log("res", res);
-        refreshData();
-      })
-      .catch((err) => {
-        console.log("err", err);
-      });
+    console.log(data.id)
+   
+    updateCounter({
+      variables: {
+        id: data.id,
+        counter: {
+          value: data.value,
+        },
+      },
+    });
   };
 
   const decrement = (data) => {
@@ -66,13 +84,7 @@ const CounterDisplay = ({ data, update, counters, setCounters }) => {
       });
   };
   const removeCounter = (id) => {
-    fetch("http://localhost:3000/api/counter/" + id, {
-      method: "DELETE",
-    }).then((res) => {
-      setCounters(counters.filter((item) => item._id !== id));
-      console.log(res);
-      refreshData();
-    });
+    deleteCounter(id);
   };
   const editCounter = () => {
     update({ counterData: data, update: true });
