@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useMutation } from "@apollo/client";
-import { DELETE_COUNTER, UPDATE_COUNTER } from "../../../graphql/queries";
+import { DELETE_COUNTER, UPDATE_COUNTER , GET_COUNTERS } from "../../../graphql/queries";
 import Link from "next/link";
 import {
   faEye,
@@ -19,22 +19,16 @@ import axios from "axios";
 const CounterDisplay = ({ data, update, counters, setCounters }) => {
   const router = useRouter();
   const [deleteCounter] = useMutation(DELETE_COUNTER, {
-    onCompleted: (data) => {
-      console.log("completed");
+    onCompleted: () => {
+      console.log('deleted done')
       refreshData();
-    },
-    // onError(err) {
-    //   console.log("error here", err);
-    // },
+    }
   });
   const [updateCounter] = useMutation(UPDATE_COUNTER, {
-    onCompleted: (data) => {
-      console.log("completed");
+    onCompleted: () => {
+      console.log('updated done')
       refreshData();
-    },
-    // onError(err) {
-    //   console.log("error here", err);
-    // },
+    }
   });
   const [index, setIndex] = useState(0);
   const [options, setOptions] = useState(false);
@@ -59,13 +53,13 @@ const CounterDisplay = ({ data, update, counters, setCounters }) => {
       });
   };
   const increment = (data) => {
-    console.log(data.id)
-   
+    console.log(data);
+
     updateCounter({
       variables: {
-        id: data.id,
-        counter: {
-          value: data.value,
+        updateCounterId: data.id,
+        input: {
+          value: (data.value += 1),
         },
       },
     });
@@ -73,18 +67,22 @@ const CounterDisplay = ({ data, update, counters, setCounters }) => {
 
   const decrement = (data) => {
     data.value > 0 ? (data.value -= 1) : (data.value = 0);
-    axios
-      .put(url + "/api/counter/" + data._id, data)
-      .then((res) => {
-        console.log("res", res);
-        refreshData();
-      })
-      .catch((err) => {
-        console.log("err", err);
-      });
+    updateCounter({
+      variables: {
+        updateCounterId: data.id,
+        input: {
+          value: data.value,
+        },
+      },
+    });
   };
   const removeCounter = (id) => {
-    deleteCounter(id);
+    console.log(id);
+    deleteCounter({
+      variables: {
+        deleteCounterId: id,
+      },
+    });
   };
   const editCounter = () => {
     update({ counterData: data, update: true });
@@ -96,7 +94,7 @@ const CounterDisplay = ({ data, update, counters, setCounters }) => {
       <button
         className="counterStream"
         onClick={() => {
-          console.log("before", stream);
+          console.log("before", data);
           setStream(!stream);
         }}
       >
@@ -137,7 +135,7 @@ const CounterDisplay = ({ data, update, counters, setCounters }) => {
               </button>
               <button
                 className="counterDelete"
-                onClick={() => removeCounter(data._id)}
+                onClick={() => removeCounter(data.id)}
               >
                 <FontAwesomeIcon icon={faTrash} />{" "}
               </button>

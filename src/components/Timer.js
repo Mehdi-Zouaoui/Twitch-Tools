@@ -4,6 +4,8 @@ import { useRouter } from "next/router";
 import { useState, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useUser } from "@auth0/nextjs-auth0";
+import { useMutation } from "@apollo/client";
+import { CREATE_TIMER } from "../../graphql/queries";
 
 import {
   faStopwatch,
@@ -24,7 +26,7 @@ export const getStaticProps = async () => {
 };
 
 const Timer = ({ timersData }) => {
-  console.log('timers data' , timersData)
+  console.log("timers data", timersData);
   const router = useRouter();
   const timersArray = [];
   const [formColor, setFormColor] = useState("#eb5e28");
@@ -49,6 +51,16 @@ const Timer = ({ timersData }) => {
     milliseconds: 0,
   });
   const url = "http://localhost:3000";
+  const [createTimer] = useMutation(CREATE_TIMER, {
+    onCompleted: (data) => {
+      console.log("completed");
+      refreshData();
+    },
+    // onError(err) {
+    //   console.log("error here", err);
+    // },
+  });
+
   const refreshData = () => {
     router.replace(router.asPath);
   };
@@ -92,15 +104,21 @@ const Timer = ({ timersData }) => {
     }
 
     console.log("data", data);
-    axios
-      .post(url + "/api/timer", data)
-      .then((res) => {
-        console.log("back", res);
-        refreshData();
-      })
-      .catch((err) => {
-        console.log("err", err);
-      });
+
+    createTimer({
+      variables: {
+        timer: {
+          title: data.title,
+          color: data.color,
+          author: user.sub,
+          format: "test",
+          display: data.display,
+          type: data.type,
+          defaultValue: 0,
+          values: data.values,
+        },
+      },
+    });
   };
 
   return (
@@ -110,8 +128,8 @@ const Timer = ({ timersData }) => {
           item.author === user.sub ? (
             <TimerDisplay
               currentTimer={item}
-              opened = {opened}
-              setOpened = {setOpened}
+              opened={opened}
+              setOpened={setOpened}
               key={index}
               timers={timers}
               setTimers={setTimers}

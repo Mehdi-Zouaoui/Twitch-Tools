@@ -35,7 +35,7 @@ const typeDefs = gql`
     format: String
     display: String
     type: Boolean
-    defaultValue: String
+    defaultValue: Int
     values: Int
   }
   type Query {
@@ -52,11 +52,21 @@ const typeDefs = gql`
     value: Int
   }
 
+  input TimerInput {
+    title: String
+    color: String
+    author: String
+    format: String
+    display: String
+    type: Boolean
+    defaultValue: Int
+    values: Int
+  }
   type Mutation {
     createCounter(counter: CounterInput): Counter
-    deleteCounter(id: ID!): String
-    updateCounter(id: ID!, input: CounterInput): Counter
-
+    deleteCounter(id: String!): String
+    updateCounter(id: String!, input: CounterInput): Counter
+    createTimer(timer: TimerInput): Timer
   }
 `;
 
@@ -97,17 +107,41 @@ const resolvers = {
       return "Your counter has been deleted";
     },
     updateCounter: async (_, { id, input }) => {
-      let counter = await CounterSchema.findById(id)
+      let counter = await CounterSchema.findById(id);
 
       if (!counter) {
-        throw new Error('Product not found')
+        throw new Error("Counter for foun", id, input);
       }
 
       counter = await CounterSchema.findOneAndUpdate({ _id: id }, input, {
         new: true,
-      })
+      });
 
-      return counter
+      return counter;
+    },
+    createTimer: async (parent, args, context) => {
+      const {
+        title,
+        color,
+        author,
+        format,
+        display,
+        type,
+        defaultValue,
+        values,
+      } = args.timer;
+      const timer = new TimerSchema({
+        title,
+        color,
+        author,
+        format,
+        display,
+        type,
+        defaultValue,
+        values,
+      });
+      await timer.save();
+      return timer;
     },
   },
 };

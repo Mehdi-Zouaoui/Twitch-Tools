@@ -54,19 +54,33 @@ export const CREATE_COUNTER = gql`
     }
   }
 `;
-export const DELETE_COUNTER = gql`
-  mutation Mutation($id: id) {
-    deleteCounter(id: $id)
+
+export const CREATE_TIMER = gql`
+  mutation Mutation($timer: TimerInput) {
+    createTimer(timer: $timer) {
+      id
+      title
+      color
+      author
+      format
+      display
+      type
+      defaultValue
+      values
+    }
   }
 `;
+
+export const DELETE_COUNTER = gql`
+  mutation DeleteCounter($deleteCounterId: String!) {
+    deleteCounter(id: $deleteCounterId)
+  }
+`;
+
+
 export const UPDATE_COUNTER = gql`
-  mutation Mutation($id: id , $counter: CounterInput) {
-    updateCounter(id: $id , counter: $counter) {
-      id
-      author
-      color
-      isStreamed
-      title
+  mutation UpdateCounter($updateCounterId: String!, $input: CounterInput) {
+    updateCounter(id: $updateCounterId, input: $input) {
       value
     }
   }
