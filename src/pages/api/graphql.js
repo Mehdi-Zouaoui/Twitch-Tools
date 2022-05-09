@@ -62,11 +62,27 @@ const typeDefs = gql`
     defaultValue: Int
     values: Int
   }
+
+  input FieldInput {
+    name: String
+  }
+  input SurveyInput {
+    title: String
+    fields: [FieldInput]
+    author: String
+    index: String
+    color: String
+  }
   type Mutation {
     createCounter(counter: CounterInput): Counter
     deleteCounter(id: String!): String
     updateCounter(id: String!, input: CounterInput): Counter
     createTimer(timer: TimerInput): Timer
+    deleteTimer(id: String!): String
+    updateTimer(id: String!, input: TimerInput): Timer
+    createSurvey(survey: SurveyInput): Survey
+    deleteSurvey(id: String!): String
+    updateSurvey(id: String!, input: SurveyInput): Survey
   }
 `;
 
@@ -142,6 +158,69 @@ const resolvers = {
       });
       await timer.save();
       return timer;
+    },
+
+    deleteTimer: async (_, { id }) => {
+      const timer = await TimerSchema.findById(id);
+
+      if (!timer) {
+        throw new Error("Timer not found");
+      }
+
+      await TimerSchema.findOneAndDelete({ _id: id });
+
+      return "Your timer has been deleted";
+    },
+
+    updateTimer: async (_, { id, input }) => {
+      let timer = await TimerSchema.findById(id);
+
+      if (!timer) {
+        throw new Error("Timer not found", id, input);
+      }
+      console.log(timer);
+      timer = await TimerSchema.findOneAndUpdate({ _id: id }, input, {
+        new: true,
+      });
+
+      return timer;
+    },
+    createSurvey: async (parent, args, context) => {
+      const { title, fields, author, index, color } = args.survey;
+      const survey = new SondageSchema({
+        title,
+        fields,
+        author,
+        index,
+        color,
+      });
+      await survey.save();
+      return survey;
+    },
+
+    deleteSurvey: async (_, { id }) => {
+      const survey = await SondageSchema.findById(id);
+
+      if (!survey) {
+        throw new Error("Survey not found");
+      }
+
+      await SondageSchema.findOneAndDelete({ _id: id });
+
+      return "Your survey has been deleted";
+    },
+    updateSurvey: async (_, { id, input }) => {
+      let survey = await SondageSchema.findById(id);
+
+      if (!survey) {
+        throw new Error("Survey not found", id, input);
+      }
+      console.log(survey);
+      survey = await SondageSchema.findOneAndUpdate({ _id: id }, input, {
+        new: true,
+      });
+
+      return survey;
     },
   },
 };

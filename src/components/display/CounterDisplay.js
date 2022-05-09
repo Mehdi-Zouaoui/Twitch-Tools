@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useMutation } from "@apollo/client";
-import { DELETE_COUNTER, UPDATE_COUNTER , GET_COUNTERS } from "../../../graphql/queries";
+import { DELETE_COUNTER, UPDATE_COUNTER } from "../../../graphql/queries";
 import Link from "next/link";
 import {
   faEye,
@@ -42,15 +42,14 @@ const CounterDisplay = ({ data, update, counters, setCounters }) => {
 
   const streamCounter = (data) => {
     data.isStreamed = true;
-    axios
-      .put(url + "/api/counter/" + data._id, data)
-      .then((res) => {
-        console.log("res", res);
-        refreshData();
-      })
-      .catch((err) => {
-        console.log("err", err);
-      });
+    updateCounter({
+      variables: {
+        updateCounterId: data.id,
+        input: {
+          isStreamed: true,
+        },
+      },
+    });
   };
   const increment = (data) => {
     console.log(data);

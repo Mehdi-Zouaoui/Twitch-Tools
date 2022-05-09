@@ -17,6 +17,7 @@
     "@fortawesome/react-fontawesome": "^0.1.15",
     "@prisma/client": "^3.13.0",
     "@react-three/fiber": "^8.0.12",
+    "@use-gesture/react": "^10.2.12",
     "apollo-server-micro": "^3.6.7",
     "axios": "^0.22.0",
     "bcrypt": "^5.0.1",
@@ -30,7 +31,9 @@
     "react-countdown-circle-timer": "^2.5.4",
     "react-dom": "^18.1.0",
     "react-hook-form": "^7.17.2",
+    "react-spring": "^9.4.5",
     "sass": "^1.42.1",
+    "socket.io": "^4.5.0",
     "three": "^0.140.0",
     "tmi.js": "^1.8.5",
     "twitch": "^4.6.7"

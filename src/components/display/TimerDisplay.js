@@ -12,6 +12,10 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { CountdownCircleTimer } from "react-countdown-circle-timer";
 import { useRouter } from "next/router";
+import { useMutation } from "@apollo/client";
+
+import { DELETE_TIMER, UPDATE_TIMER } from "../../../graphql/queries";
+
 const renderTime = ({ remainingTime }) => {
   return (
     <div className="timer">
@@ -20,7 +24,13 @@ const renderTime = ({ remainingTime }) => {
   );
 };
 
-const TimerDisplay = ({ currentTimer, timers, setTimers, opened, setOpened }) => {
+const TimerDisplay = ({
+  currentTimer,
+  timers,
+  setTimers,
+  opened,
+  setOpened,
+}) => {
   const interval = useRef();
   const router = useRouter();
   const [started, setStarted] = useState(false);
@@ -28,7 +38,18 @@ const TimerDisplay = ({ currentTimer, timers, setTimers, opened, setOpened }) =>
   const [time, setTime] = useState(0);
   const [key, setKey] = useState(0);
   const [stream, setStream] = useState(false);
- 
+  const [deleteTimer] = useMutation(DELETE_TIMER, {
+    onCompleted: () => {
+      console.log("deleted done");
+      refreshData();
+    },
+  });
+  const [updateTimer] = useMutation(UPDATE_TIMER, {
+    onCompleted: () => {
+      console.log("updated done");
+      refreshData();
+    },
+  });
 
   useEffect(() => {
     if (stream) {
@@ -46,15 +67,6 @@ const TimerDisplay = ({ currentTimer, timers, setTimers, opened, setOpened }) =>
 
   const refreshData = () => {
     router.replace(router.asPath);
-  };
-
-  const openInNewTab = (url) => {
-    if (!opened) {
-      const newTab = window.open(url, "_blank", "noopener,noreferrer");
-      if (newTab) newTab.opener = null;
-      setOpened(true)
-    }
-    else console.log('already open')
   };
 
   const start = (data) => {
@@ -96,12 +108,11 @@ const TimerDisplay = ({ currentTimer, timers, setTimers, opened, setOpened }) =>
     );
   };
   const removeTimer = (id) => {
-    fetch("http://localhost:3000/api/timer/" + id, {
-      method: "DELETE",
-    }).then((res) => {
-      setTimers(timers.filter((item) => item._id !== id));
-
-      refreshData();
+    console.log("test remove timer", id);
+    deleteTimer({
+      variables: {
+        deleteTimerId: id,
+      },
     });
   };
 
@@ -119,11 +130,7 @@ const TimerDisplay = ({ currentTimer, timers, setTimers, opened, setOpened }) =>
             >
               {stream === false ? (
                 <div>
-                  <div
-                    onClick={() =>
-                      openInNewTab("http://localhost:3000/stream/timer")
-                    }
-                  >
+                  <div o>
                     <FontAwesomeIcon icon={faEye} />
                   </div>
                 </div>
@@ -149,6 +156,9 @@ const TimerDisplay = ({ currentTimer, timers, setTimers, opened, setOpened }) =>
               }}
             >
               <div>00:00</div>
+            </button>
+            <button onClick={() => removeTimer(currentTimer.id)}>
+              <div>X</div>
             </button>
           </div>
           <div className="dial">

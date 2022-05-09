@@ -4,7 +4,7 @@ import { useRouter } from "next/router";
 const Layout = ({ children }) => {
   const router = useRouter();
 
-  const showLayout = router.pathname === "/stream/counter" ? false : true;
+  const showLayout = router.pathname === "/stream/browserSource" ? false : true;
 
   return (
     <div>

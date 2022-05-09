@@ -77,11 +77,32 @@ export const DELETE_COUNTER = gql`
   }
 `;
 
+export const DELETE_TIMER = gql`
+  mutation DeleteTimer($deleteTimerId: String!) {
+    deleteTimer(id: $deleteTimerId)
+  }
+`;
 
 export const UPDATE_COUNTER = gql`
   mutation UpdateCounter($updateCounterId: String!, $input: CounterInput) {
     updateCounter(id: $updateCounterId, input: $input) {
       value
+      isStreamed
+    }
+  }
+`;
+
+export const UPDATE_TIMER = gql`
+  mutation UpdateTimer($updateTimerId: String!, $input: TimerInput) {
+    updateTimer(id: $updateTimerId, input: $input) {
+      title
+      color
+      author
+      format
+      display
+      type
+      defaultValue
+      values
     }
   }
 `;
