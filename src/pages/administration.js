@@ -2,27 +2,34 @@ import Card from "../components/Card";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useUser } from "@auth0/nextjs-auth0";
 import { useState } from "react";
-
+import { ApolloClient, InMemoryCache, ApolloProvider } from "@apollo/client";
+import { GET_COUNTERS, GET_SURVEYS, GET_TIMERS } from "../../graphql/queries";
 import { faUser } from "@fortawesome/free-regular-svg-icons";
 import { faAngleDown } from "@fortawesome/free-solid-svg-icons";
 import { counter } from "@fortawesome/fontawesome-svg-core";
 
 export const getStaticProps = async () => {
-  const counters = await fetch("http://localhost:3000/api/counter");
-  const countersJSON = await counters.json();
-  const timers = await fetch("http://localhost:3000/api/timer");
-  const timersJSON = await timers.json();
-  const sondages = await fetch("http://localhost:3000/api/sondage");
-  const sondagesJSON = await sondages.json();
+  const client = new ApolloClient({
+    uri: "http://localhost:3000/api/graphql",
+    cache: new InMemoryCache(),
+  });
+
+  const counters = await client.query({ query: GET_COUNTERS });
+  const countersJSON = counters.data.getCounters;
+  const timers = await client.query({ query: GET_TIMERS });
+  const timersJSON = timers.data.getTimers;
+  const surveys = await client.query({ query: GET_SURVEYS });
+  const surveysJSON = surveys.data.getSurveys;
 
   return {
     props: {
-      sondagesData: sondagesJSON,
+      sondagesData: surveysJSON,
       countersData: countersJSON,
       timersData: timersJSON,
     },
   };
 };
+
 
 const Administration = ({ countersData, timersData, sondagesData }) => {
   const { user, error, isLoading } = useUser();

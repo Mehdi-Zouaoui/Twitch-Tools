@@ -1,6 +1,6 @@
 import dbConnect from "../../utils/dbConnect";
 const SondageSchema = require("../../schemas/sondage_schema");
-dbConnect();
+
 
 const sondage = async (req, res) => {
 

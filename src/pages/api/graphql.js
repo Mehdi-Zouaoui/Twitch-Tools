@@ -4,7 +4,11 @@ import dbConnect from "../../utils/dbConnect";
 const CounterSchema = require("../../schemas/counter_schema");
 const SondageSchema = require("../../schemas/sondage_schema");
 const TimerSchema = require("../../schemas/timer_schema");
-dbConnect();
+
+dbConnect()
+
+
+
 
 const typeDefs = gql`
   type Counter {

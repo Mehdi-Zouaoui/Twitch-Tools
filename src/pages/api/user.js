@@ -1,6 +1,6 @@
 import dbConnect from "../../utils/dbConnect";
 const UserSchema = require("../../schemas/user_schema");
-dbConnect();
+
 
 const user = async (req, res) => {
   if (req.method === "POST") {
