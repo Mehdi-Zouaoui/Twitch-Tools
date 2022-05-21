@@ -45,4 +45,5 @@
     "eslint-config-next": "11.1.2",
     "prisma": "^3.13.0"
   }
+  
 }

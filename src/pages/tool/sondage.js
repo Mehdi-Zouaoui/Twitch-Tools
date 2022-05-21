@@ -3,6 +3,8 @@ import { useForm, useFieldArray, Controller } from "react-hook-form";
 import { useState, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrash, faPlus, faDownload } from "@fortawesome/free-solid-svg-icons";
+import { useMutation } from "@apollo/client";
+import { CREATE_SURVEY } from "../../../graphql/queries"
 import { useUser } from "@auth0/nextjs-auth0";``
 import {useRouter} from 'next/router'
 import axios from "axios";
@@ -14,6 +16,16 @@ const Sondage = () => {
   const { user } = useUser();
   const url = "http://localhost:3000";
   const router = useRouter()
+  const [createSurvey] = useMutation(CREATE_SURVEY, {
+    onCompleted: (data) => {
+      console.log('completed')
+      refreshData();
+    },
+    // onError(err) {
+    //   console.log("error here", err);
+    // },
+  });
+
   const {
     register,
     handleSubmit,
@@ -29,24 +41,27 @@ const Sondage = () => {
   );
 
   useEffect(() => {
-    append({ name: "Entrer votre question..." });
-    append({ name: "Entrer votre question..." });
+    append({ name: "Entrer votre question..." , percent : 0});
+    append({ name: "Entrer votre question..." , percent : 0});
   }, []);
 
   const onSubmit = (data) => {
     data.author = user.sub;
     data.index = indexType;
     data.color = color;
+
     console.log("data", data);
-    axios
-      .post(url + "/api/sondage", data)
-      .then((res) => {
-        console.log("back", res);
-        router.push('/tools')
-      })
-      .catch((err) => {
-        console.log("err", err);
-      });
+    createSurvey({
+      variables: {
+        survey: {
+          author: user.sub,
+          color: data.color,
+          title: data.title,
+          fields : data.fileds,
+          index : data.index
+        },
+      },
+    });
   };
 
   return (
@@ -102,7 +117,7 @@ const Sondage = () => {
             className="addSurveyField"
             onClick={() => {
               console.log("added");
-              append({ name: "Entrer votre question..." });
+              append({ name: "Entrer votre question..." , percent : 0});
             }}
           >
             <FontAwesomeIcon icon={faPlus} className="plusIcon" />

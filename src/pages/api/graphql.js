@@ -5,11 +5,6 @@ const CounterSchema = require("../../schemas/counter_schema");
 const SondageSchema = require("../../schemas/sondage_schema");
 const TimerSchema = require("../../schemas/timer_schema");
 
-dbConnect()
-
-
-
-
 const typeDefs = gql`
   type Counter {
     id: String
@@ -21,6 +16,7 @@ const typeDefs = gql`
   }
   type Field {
     name: String
+    percent: String
   }
   type Survey {
     id: String
@@ -41,11 +37,6 @@ const typeDefs = gql`
     type: Boolean
     defaultValue: Int
     values: Int
-  }
-  type Query {
-    getCounters: [Counter]
-    getSurveys: [Survey]
-    getTimers: [Timer]
   }
 
   input CounterInput {
@@ -69,6 +60,7 @@ const typeDefs = gql`
 
   input FieldInput {
     name: String
+    percent: String
   }
   input SurveyInput {
     title: String
@@ -77,6 +69,13 @@ const typeDefs = gql`
     index: String
     color: String
   }
+  type Query {
+    getCounters: [Counter]
+    getCounterById(id: String!): Counter
+    getSurveys: [Survey]
+    getTimers: [Timer]
+  }
+
   type Mutation {
     createCounter(counter: CounterInput): Counter
     deleteCounter(id: String!): String
@@ -94,6 +93,9 @@ const resolvers = {
   Query: {
     getCounters: async () => {
       return await CounterSchema.find();
+    },
+    getCounterById: async (parent, { id }, context) => {
+      return await CounterSchema.findById(id);
     },
     getSurveys: async () => {
       return await SondageSchema.find();

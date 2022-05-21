@@ -12,6 +12,20 @@ export const GET_COUNTERS = gql`
     }
   }
 `;
+
+export const GET_COUNTER_BY_ID = gql`
+  {
+    getCounterById(id: $counterId) {
+      id
+      author
+      color
+      isStreamed
+      title
+      value
+    }
+  }
+`;
+
 export const GET_SURVEYS = gql`
   {
     getSurveys {
@@ -19,6 +33,7 @@ export const GET_SURVEYS = gql`
       title
       fields {
         name
+        percent
       }
       author
       index
@@ -67,6 +82,19 @@ export const CREATE_TIMER = gql`
       type
       defaultValue
       values
+    }
+  }
+`;
+
+export const CREATE_SURVEY = gql`
+  mutation Mutation($survey: SurveyInput) {
+    createSurvey(survey: $survey) {
+      id
+      title
+      fields
+      author
+      index
+      color
     }
   }
 `;
