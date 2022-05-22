@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from "react";
 import StreamedCounter from "./components/StreamedCounter";
 import { useSpring, animated } from "react-spring";
 import { useDrag } from "@use-gesture/react";
+import { tmiClient } from "../../utils/twitchChat";
 // import StreamedSurvey from "./components/StreamedSurvey";
 import Pusher from "pusher-js";
 import {
@@ -17,10 +18,23 @@ import {
   useQuery,
 } from "@apollo/client";
 
-const tmi = require("tmi.js");
+const twitchConnect = async () => {
+  tmiClient.connect();
+};
+const twitchDisconnect = async () => {
+  tmiClient.disconnect();
+};
+
+let currentMessage = tmiClient.on(
+  "message",
+  (channel, tags, message, user, self) => {
+    return message;
+  }
+);
 
 const browserSource = ({ timersData, sondagesData }) => {
   const [countersData, setCountersData] = useState([]);
+  const [surveysData, setSurveysData] = useState([]);
   const surveyRef = useRef();
   const [percents, setPercents] = useState([]);
   const [counter, setCounter] = useState(0);
@@ -28,33 +42,23 @@ const browserSource = ({ timersData, sondagesData }) => {
   const [username, setUsername] = useState("");
   const [test, setTest] = useState();
   const [isLoading, setIsLoading] = useState(true);
-
   const [fetching, setFetching] = useState(false);
   const client = new ApolloClient({
     uri: "http://localhost:3000/api/graphql",
     cache: new InMemoryCache(),
   });
 
-  const tmiClient = new tmi.Client({
-    options: { debug: true, messagesLogLevel: "info" },
-    connection: {
-      secure: true,
-    },
-    identity: {
-      username: "twoolsbot",
-      password: "oauth:3v5b2me2u2xxq390nmub33xrhyhcxe",
-    },
-    channels: ["twoolsbot"],
-  });
-
   useEffect(() => {
     surveyRef.current = {};
     console.log("useEffect triggered");
+    console.log("tmi", tmiClient);
+
     const loadData = async () => {
       const counters = await client.query({ query: GET_COUNTERS });
       const survey = await client.query({ query: GET_SURVEYS });
       console.log("survey", survey);
       setCountersData(counters.data.getCounters);
+      setSurveysData(survey.data.getSurveys);
       surveyRef.current = survey.data.getSurveys[0];
       setPercents(
         survey.data.getSurveys[0].fields.map((item, index) => {
@@ -64,14 +68,17 @@ const browserSource = ({ timersData, sondagesData }) => {
 
       console.log("data loaded");
       setIsLoading(false);
-    };
-    const twitchConnect = async () => {
-      tmiClient.connect();
-      setConnected(true);
+
+      if (survey.data.getSurveys[0].started) {
+        setConnected(true);
+        twitchConnect();
+      } else {
+        setConnected(false);
+        twitchDisconnect();
+      }
     };
 
     loadData();
-    twitchConnect();
 
     const pusher = new Pusher("74661ff50b3ca8023bb7", {
       cluster: "eu",
@@ -84,7 +91,27 @@ const browserSource = ({ timersData, sondagesData }) => {
       setTest("#" + Math.floor(Math.random() * 16777215).toString(16));
       setFetching(!fetching);
     });
+    channel.bind("surveyUpdated", (data) => {
+      // console.log("OH FONCTIONNE ZEUBI");
+      // console.log("received data", data);
 
+      setFetching(!fetching);
+    });
+
+    tmiClient.on("message", (channel, tags, message, user, self) => {
+      setCounter((counter) => counter + 1);
+      console.log("yo", tags);
+      surveyRef.current.fields.forEach((field, index) => {
+        if (message == index + 1) {
+          setPercents((oldPercents) =>
+            oldPercents.map((current, currentIndex) => {
+              return currentIndex == index ? current + 1 : current;
+            })
+          );
+          setUsername(tags.username);
+        }
+      });
+    });
     // const interval = setInterval(() => {
 
     //   console.log("in set interval");
@@ -92,30 +119,9 @@ const browserSource = ({ timersData, sondagesData }) => {
     // return () => clearInterval(interval);
   }, [fetching]);
 
-  tmiClient.on("message", (channel, tags, message, user, self) => {
-    setCounter((counter) => counter + 1);
-    console.log("yo", tags);
-    surveyRef.current.fields.forEach((field, index) => {
-      if (message == index + 1) {
-        setPercents((oldPercents) =>
-          oldPercents.map((current, currentIndex) => {
-            return currentIndex == index ? current + 1 : current;
-          })
-        );
-        setUsername(tags.username);
-      }
-    });
-  });
-
   return (
     <div>
-      <button
-        onClick={() => {
-          tmiClient.disconnect();
-        }}
-      >
-        DC
-      </button>
+      <button onClick={() => {}}>DC</button>
       {countersData
         .filter((counters) => counters.isStreamed === true)
         .map((item, index) => (
@@ -127,22 +133,24 @@ const browserSource = ({ timersData, sondagesData }) => {
       {isLoading ? (
         <div>Loading</div>
       ) : (
-        <div>
-          <div style={{ background: test, color: "white" }}>
-            <StreamedSurvey
-              surveyData={surveyRef.current}
-              percents={percents}
-              counter={counter}
-              currentUsername={username}
-            />
-          </div>
-        </div>
+        surveysData
+          .filter((surveys) => surveys.isStreamed === true)
+          .map((item, index) => (
+            <div style={{ background: test, color: "white" }} key={index}>
+              <StreamedSurvey
+                surveyData={item}
+                percents={percents}
+                counter={counter}
+                currentUsername={username}
+              />
+            </div>
+          ))
       )}
     </div>
   );
 };
 
-const StreamedSurvey = ({ surveyData, percents, counter , currentUsername }) => {
+const StreamedSurvey = ({ surveyData, percents, counter, currentUsername }) => {
   const [index, setIndex] = useState(0);
   const [test, setTest] = useState(false);
   const [currentSurvey, setCurrentSurvey] = useState([]);

@@ -1,69 +1,116 @@
 import React from "react";
 import { useState, useEffect, useCallback } from "react";
-
-function SondageDisplay({
+import { useMutation } from "@apollo/client";
+import { UPDATE_SURVEY } from "../../../graphql/queries";
+const SondageDisplay = ({
   currentSondage,
-  currentResponses,
-  quantity,
-  test,
-  connected,
   selectedSurvey,
   setSelectedSurvey,
-}) {
+}) => {
+  const [streamed, setStreamed] = useState(false);
+  const [started, setStarted] = useState(false);
+  const [updateSurvey] = useMutation(UPDATE_SURVEY, {
+    onCompleted: (data) => {
+      console.log("completed");
+    },
+    // onError(err) {
+    //   console.log("error here", err);
+    // },
+  });
+  useEffect(() => {}, []);
 
-  useEffect(() => {
-    console.log("HEYO" , connected);
-  }, [selectedSurvey]);
-  return ( 
-    <div >
+  const handleStart = () => {
+    setStarted(true);
+    updateSurvey({
+      variables: {
+        updateSurveyId: currentSondage.id,
+        input: {
+          started: true,
+        },
+      },
+    });
+  };
+  const handleStop = () => {
+    setStarted(false);
+    updateSurvey({
+      variables: {
+        updateSurveyId: currentSondage.id,
+        input: {
+          started: false,
+        },
+      },
+    });
+  };
+  const handleCurrentSurvey = () => {
+    if (Object.keys(selectedSurvey).length) {
+      console.log("already streamed");
+      if (streamed) {
+        setSelectedSurvey({});
+        setStreamed(false);
+        updateSurvey({
+          variables: {
+            updateSurveyId: currentSondage.id,
+            input: {
+              isStreamed: false,
+            },
+          },
+        });
+      }
+    } else {
+      setSelectedSurvey(currentSondage);
+      setStreamed(true);
+      updateSurvey({
+        variables: {
+          updateSurveyId: currentSondage.id,
+          input: {
+            isStreamed: true,
+          },
+        },
+      });
+    }
+  };
+  return (
+    <div>
       <h2>{currentSondage.title}</h2>
+      {streamed === false ? (
+        ""
+      ) : (
+        <button
+          onClick={() => {
+            started ? handleStop() : handleStart();
+          }}
+        >
+          {started ? <div>Stop</div> : <div>Start</div>}
+        </button>
+      )}
+
       <button
         onClick={() => {
-          
-          setSelectedSurvey(currentSondage);
+          handleCurrentSurvey();
         }}
       >
-        Connect to Twitch
-      </button>
-      <button
-        onClick={() => {
-          test();
-        }}
-      >
-        DC
+        {!streamed ? <div>Stream</div> : <div>Unstream</div>}
       </button>
 
-      <div className="sondageFlexContainer" >
-        {connected ? (
-          <div className="sondageFieldsContainer" style={{backgroundColor:currentSondage.color}}>
-            {Object.keys(currentResponses.current).map((key, index) => (
-              <div key={key} className="sondageField">
-                <div>{index + 1}.</div>
-                <div> {[key]}</div>
+      <div className="sondageFlexContainer">
+        <div
+          className="sondageFieldsContainer"
+          style={{ backgroundColor: currentSondage.color }}
+        ></div>
 
-                <div>
-                  {quantity.current > 0
-                    ? (
-                        (currentResponses.current[key] / quantity.current) *
-                        100
-                      ).toFixed(0) + "%"
-                    : currentResponses.current[key]}
-                </div>
-              </div>
-            ))}
-          </div>
-        ) : (
-          <div className="sondageFlexContainer" style={{backgroundColor:currentSondage.color}}>
-            {currentSondage.fields.map((field, index) => (
-              <div className="sondageField" key={index}>
-                {field.name}
-              </div>
-            ))}
-          </div>
-        )}
+        <div
+          className="sondageFlexContainer"
+          style={{ backgroundColor: currentSondage.color }}
+        >
+          {currentSondage.fields.map((field, index) => (
+            <div className="sondageField" key={index}>
+              {field.name}
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   );
-}
+};
 
 export default SondageDisplay;

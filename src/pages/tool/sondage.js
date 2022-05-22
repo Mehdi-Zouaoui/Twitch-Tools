@@ -4,9 +4,10 @@ import { useState, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrash, faPlus, faDownload } from "@fortawesome/free-solid-svg-icons";
 import { useMutation } from "@apollo/client";
-import { CREATE_SURVEY } from "../../../graphql/queries"
-import { useUser } from "@auth0/nextjs-auth0";``
-import {useRouter} from 'next/router'
+import { CREATE_SURVEY } from "../../../graphql/queries";
+import { useUser } from "@auth0/nextjs-auth0";
+``;
+import { useRouter } from "next/router";
 import axios from "axios";
 
 const Sondage = () => {
@@ -15,11 +16,10 @@ const Sondage = () => {
   const [color, setColor] = useState("#f5cb5c");
   const { user } = useUser();
   const url = "http://localhost:3000";
-  const router = useRouter()
+  const router = useRouter();
   const [createSurvey] = useMutation(CREATE_SURVEY, {
     onCompleted: (data) => {
-      console.log('completed')
-      refreshData();
+      console.log("completed");
     },
     // onError(err) {
     //   console.log("error here", err);
@@ -41,15 +41,15 @@ const Sondage = () => {
   );
 
   useEffect(() => {
-    append({ name: "Entrer votre question..." , percent : 0});
-    append({ name: "Entrer votre question..." , percent : 0});
+    append({ name: "Entrer votre question...", percent: "0" });
+    append({ name: "Entrer votre question...", percent: "0" });
   }, []);
 
   const onSubmit = (data) => {
     data.author = user.sub;
     data.index = indexType;
     data.color = color;
-
+    data.isStreamed = false;
     console.log("data", data);
     createSurvey({
       variables: {
@@ -57,8 +57,10 @@ const Sondage = () => {
           author: user.sub,
           color: data.color,
           title: data.title,
-          fields : data.fileds,
-          index : data.index
+          fields: data.fields,
+          index: data.index,
+          isStreamed: data.isStreamed,
+          started: false,
         },
       },
     });
@@ -79,7 +81,6 @@ const Sondage = () => {
               type="color"
               id="color"
               name="color"
-         
               className="counterFormColor"
               value={color}
               onChange={(e) => {
@@ -92,7 +93,7 @@ const Sondage = () => {
           <h4 className="surveySubtitle">Réponses</h4>
           <ul className="surveyFormInputs">
             {fields.map((item, index) => (
-              <li key={item.id}>
+              <li key={index}>
                 <div className="formField">
                   <label>Question {index + 1} :</label>
                   <div className="fieldContainer">
@@ -117,7 +118,7 @@ const Sondage = () => {
             className="addSurveyField"
             onClick={() => {
               console.log("added");
-              append({ name: "Entrer votre question..." , percent : 0});
+              append({ name: "Entrer votre question...", percent: "0" });
             }}
           >
             <FontAwesomeIcon icon={faPlus} className="plusIcon" />
@@ -162,12 +163,12 @@ const Sondage = () => {
           <div className="display">
             <h3>Title</h3>
             <div className="preview">
-              {fields.map((item, index) => (
-                <div className="previewContent">
+              {/* {fields.map((item, index) => (
+                <div className="previewContent" key={item.id + "00AZ0"}>
                   <div className="previewIndex">{index + 1}.</div>
                   <div>{item.name}</div>
                 </div>
-              ))}
+              ))} */}
             </div>
           </div>
         ) : (

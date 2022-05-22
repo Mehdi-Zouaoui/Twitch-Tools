@@ -5,6 +5,8 @@ const CounterSchema = require("../../schemas/counter_schema");
 const SondageSchema = require("../../schemas/sondage_schema");
 const TimerSchema = require("../../schemas/timer_schema");
 
+dbConnect();
+
 const typeDefs = gql`
   type Counter {
     id: String
@@ -25,6 +27,8 @@ const typeDefs = gql`
     author: String
     index: String
     color: String
+    isStreamed: Boolean
+    started: Boolean
   }
 
   type Timer {
@@ -68,6 +72,8 @@ const typeDefs = gql`
     author: String
     index: String
     color: String
+    isStreamed: Boolean
+    started: Boolean
   }
   type Query {
     getCounters: [Counter]
@@ -192,13 +198,16 @@ const resolvers = {
       return timer;
     },
     createSurvey: async (parent, args, context) => {
-      const { title, fields, author, index, color } = args.survey;
+      const { title, fields, author, index, color, isStreamed, started } =
+        args.survey;
       const survey = new SondageSchema({
         title,
         fields,
         author,
         index,
         color,
+        isStreamed,
+        started,
       });
       await survey.save();
       return survey;
@@ -221,7 +230,7 @@ const resolvers = {
       if (!survey) {
         throw new Error("Survey not found", id, input);
       }
-      console.log(survey);
+
       survey = await SondageSchema.findOneAndUpdate({ _id: id }, input, {
         new: true,
       });

@@ -20,15 +20,15 @@ const CounterDisplay = ({ data, update, counters, setCounters }) => {
   const router = useRouter();
   const [deleteCounter] = useMutation(DELETE_COUNTER, {
     onCompleted: () => {
-      console.log('deleted done')
+      console.log("deleted done");
       refreshData();
-    }
+    },
   });
   const [updateCounter] = useMutation(UPDATE_COUNTER, {
     onCompleted: () => {
-      console.log('updated done')
+      console.log("updated done");
       refreshData();
-    }
+    },
   });
   const [index, setIndex] = useState(0);
   const [options, setOptions] = useState(false);
@@ -65,12 +65,11 @@ const CounterDisplay = ({ data, update, counters, setCounters }) => {
   };
 
   const decrement = (data) => {
-    data.value > 0 ? (data.value -= 1) : (data.value = 0);
     updateCounter({
       variables: {
         updateCounterId: data.id,
         input: {
-          value: data.value,
+          value: (data.value -= 1),
         },
       },
     });

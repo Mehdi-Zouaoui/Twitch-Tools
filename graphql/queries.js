@@ -38,6 +38,8 @@ export const GET_SURVEYS = gql`
       author
       index
       color
+      isStreamed
+      started
     }
   }
 `;
@@ -91,10 +93,15 @@ export const CREATE_SURVEY = gql`
     createSurvey(survey: $survey) {
       id
       title
-      fields
+      fields {
+        name
+        percent
+      }
       author
       index
       color
+      isStreamed
+      started
     }
   }
 `;
@@ -131,6 +138,24 @@ export const UPDATE_TIMER = gql`
       type
       defaultValue
       values
+    }
+  }
+`;
+
+export const UPDATE_SURVEY = gql`
+  mutation UpdateSurvey($updateSurveyId: String!, $input: SurveyInput) {
+    updateSurvey(id: $updateSurveyId, input: $input) {
+      isStreamed
+      started
+      id
+      title
+      index
+      author
+      color
+      fields {
+        name
+        percent
+      }
     }
   }
 `;
