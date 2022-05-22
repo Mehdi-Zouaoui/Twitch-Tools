@@ -21,8 +21,13 @@ const tmi = require("tmi.js");
 
 const browserSource = ({ timersData, sondagesData }) => {
   const [countersData, setCountersData] = useState([]);
-  const surveyRef = useRef({});
+  const surveyRef = useRef();
+  const [percents, setPercents] = useState([]);
+  const [counter, setCounter] = useState(0);
+  const [connected, setConnected] = useState(false);
+  const [username, setUsername] = useState("");
   const [test, setTest] = useState();
+  const [isLoading, setIsLoading] = useState(true);
 
   const [fetching, setFetching] = useState(false);
   const client = new ApolloClient({
@@ -42,28 +47,31 @@ const browserSource = ({ timersData, sondagesData }) => {
     channels: ["twoolsbot"],
   });
 
-  const loadData = async () => {
-    const counters = await client.query({ query: GET_COUNTERS });
-    const survey = await client.query({ query: GET_SURVEYS });
-    console.log("survey", survey);
-    setCountersData(counters.data.getCounters);
-    setSurveyData(survey.data.getSurveys);
-    console.log("data loaded");
-  };
-
   useEffect(() => {
     surveyRef.current = {};
     console.log("useEffect triggered");
-    loadData();
-    tmiClient.connect();
+    const loadData = async () => {
+      const counters = await client.query({ query: GET_COUNTERS });
+      const survey = await client.query({ query: GET_SURVEYS });
+      console.log("survey", survey);
+      setCountersData(counters.data.getCounters);
+      surveyRef.current = survey.data.getSurveys[0];
+      setPercents(
+        survey.data.getSurveys[0].fields.map((item, index) => {
+          return 0;
+        })
+      );
 
-    tmiClient.on("message", (channel, tags, message, self) => {
-      console.log("yes", surveyData);
-      // setCounter((counter) => counter + 1);
-      if (surveyData.length > 0) {
-        console.log("surveyData");
-      }
-    });
+      console.log("data loaded");
+      setIsLoading(false);
+    };
+    const twitchConnect = async () => {
+      tmiClient.connect();
+      setConnected(true);
+    };
+
+    loadData();
+    twitchConnect();
 
     const pusher = new Pusher("74661ff50b3ca8023bb7", {
       cluster: "eu",
@@ -84,6 +92,21 @@ const browserSource = ({ timersData, sondagesData }) => {
     // return () => clearInterval(interval);
   }, [fetching]);
 
+  tmiClient.on("message", (channel, tags, message, user, self) => {
+    setCounter((counter) => counter + 1);
+    console.log("yo", tags);
+    surveyRef.current.fields.forEach((field, index) => {
+      if (message == index + 1) {
+        setPercents((oldPercents) =>
+          oldPercents.map((current, currentIndex) => {
+            return currentIndex == index ? current + 1 : current;
+          })
+        );
+        setUsername(tags.username);
+      }
+    });
+  });
+
   return (
     <div>
       <button
@@ -101,23 +124,28 @@ const browserSource = ({ timersData, sondagesData }) => {
           </div>
         ))}
 
-      {surveyData
-        // .filter((surveys) => counters.isStreamed === true)
-        .map((item, index) => (
-          <div key={index} style={{ background: test, color: "white" }}>
-            <StreamedSurvey surveyData={item} client={tmiClient} />
+      {isLoading ? (
+        <div>Loading</div>
+      ) : (
+        <div>
+          <div style={{ background: test, color: "white" }}>
+            <StreamedSurvey
+              surveyData={surveyRef.current}
+              percents={percents}
+              counter={counter}
+              currentUsername={username}
+            />
           </div>
-        ))}
+        </div>
+      )}
     </div>
   );
 };
 
-const StreamedSurvey = ({ surveyData }) => {
+const StreamedSurvey = ({ surveyData, percents, counter , currentUsername }) => {
   const [index, setIndex] = useState(0);
   const [test, setTest] = useState(false);
   const [currentSurvey, setCurrentSurvey] = useState([]);
-  const [percents, setPercents] = useState([]);
-  const [counter, setCounter] = useState(0);
   const testPos = useSpring({ x: 0, y: 0 });
   const bindPos = useDrag((params) => {
     testPos.x.set(params.offset[0]);
@@ -169,15 +197,16 @@ const StreamedSurvey = ({ surveyData }) => {
       <div>
         {currentSurvey.map((field, index) => (
           <div key={index} styles={{ display: "flex" }}>
-            {/* <div>{field.name}</div>
+            <div>{field.name}</div>
             <div>
               {counter > 0
-                ? ((field.percent / counter) * 100).toFixed(0) + "%"
+                ? ((percents[index] / counter) * 100).toFixed(0) + "%"
                 : ""}
-            </div> */}
+            </div>
           </div>
         ))}
       </div>
+      <div> {counter > 0 ? currentUsername : ""}</div>
     </animated.div>
   );
 };
