@@ -1,5 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import StreamedCounter from "./components/StreamedCounter";
+``;
+import StreamedTimer from "./components/StreamedTimer";
 import { useSpring, animated } from "react-spring";
 import { useDrag } from "@use-gesture/react";
 import { tmiClient } from "../../utils/twitchChat";
@@ -25,11 +27,13 @@ const twitchDisconnect = async () => {
   tmiClient.disconnect();
 };
 
-const browserSource = ({ timersData, sondagesData }) => {
+const browserSource = () => {
   const [countersData, setCountersData] = useState([]);
   const [surveysData, setSurveysData] = useState([]);
+  const [timersData, setTimersData] = useState([]);
   const surveyRef = useRef();
   const [connected, setConnected] = useState(false);
+  const star
   const [test, setTest] = useState();
   const [isLoading, setIsLoading] = useState(true);
   const [fetching, setFetching] = useState(false);
@@ -43,8 +47,10 @@ const browserSource = ({ timersData, sondagesData }) => {
     const loadData = async () => {
       const counters = await client.query({ query: GET_COUNTERS });
       const survey = await client.query({ query: GET_SURVEYS });
+      const timers = await client.query({ query: GET_TIMERS });
       setCountersData(counters.data.getCounters);
       setSurveysData(survey.data.getSurveys);
+      setTimersData(timers.data.getTimers);
       surveyRef.current = survey.data.getSurveys[0];
       setIsLoading(false);
       if (survey.data.getSurveys[0].started) {
@@ -78,6 +84,13 @@ const browserSource = ({ timersData, sondagesData }) => {
         .map((item, index) => (
           <div key={index} style={{ background: test, color: "white" }}>
             <StreamedCounter counterData={item} />
+          </div>
+        ))}
+      {timersData
+        // .filter((counters) => counters.isStreamed === true)
+        .map((item, index) => (
+          <div key={index} style={{ background: test, color: "white" }}>
+            <StreamedTimer data={item} />
           </div>
         ))}
 
@@ -121,7 +134,7 @@ const StreamedSurvey = ({ surveyData }) => {
         setCurrentSurvey((oldSurvey) => [...oldSurvey, item]);
       });
       tmiClient.on("message", (channel, tags, message, userstate, self) => {
-        console.log('userState' , userstate , tags)
+        console.log("userState", userstate, tags);
         surveyData.fields.forEach((item, index) => {
           if (message == index + 1) {
             setCounter((counter) => counter + 1);

@@ -16,6 +16,7 @@
     "@fortawesome/free-solid-svg-icons": "^5.15.4",
     "@fortawesome/react-fontawesome": "^0.1.15",
     "@prisma/client": "^3.13.0",
+    "@react-three/cannon": "^6.3.0",
     "@react-three/fiber": "^8.0.12",
     "@use-gesture/react": "^10.2.12",
     "apollo-server-micro": "^3.6.7",

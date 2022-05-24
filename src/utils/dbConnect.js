@@ -16,8 +16,10 @@ async function dbConnect() {
     const db = client.db("myFirstDatabase");
     const collection = db.collection("counters");
     const surveyCollection = db.collection("sondages");
+    const timerCollection = db.collection("timers")
     const changeStream = collection.watch();
     const surveyChangeStream = surveyCollection.watch();
+    const timersChangeStream = timerCollection.watch();
 
     changeStream.on("change", (next) => {
       if (next.operationType === "update") {
@@ -55,6 +57,26 @@ async function dbConnect() {
       //   pusher.trigger("browserSource", "surveyDeleted", next.documentKey._id);
       // }
     });
+
+    timersChangeStream.on("change", (next) => {
+      console.log("changes appared", next);
+      if (next.operationType === "update") {
+        pusher.trigger("browserSource", "timerUpdated", {
+          itemId: next.documentKey,
+          updatedFields: next.updateDescription.updatedFields,
+        });
+      }
+      // if (next.operationType === "insert") {
+      //   pusher.trigger("browserSource", "surveyAdded", {
+      //     itemId: next.documentKey,
+      //     fullDocument: next.fullDocument,
+      //   });
+      // }
+      // if (next.operationType === "delete") {
+      //   pusher.trigger("browserSource", "surveyDeleted", next.documentKey._id);
+      // }
+    });
+
   }
 }
 export default dbConnect;
