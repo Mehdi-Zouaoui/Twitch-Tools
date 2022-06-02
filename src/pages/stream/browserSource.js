@@ -33,7 +33,7 @@ const browserSource = () => {
   const [timersData, setTimersData] = useState([]);
   const surveyRef = useRef();
   const [connected, setConnected] = useState(false);
-  const star
+
   const [test, setTest] = useState();
   const [isLoading, setIsLoading] = useState(true);
   const [fetching, setFetching] = useState(false);
@@ -72,6 +72,10 @@ const browserSource = () => {
       setFetching(!fetching);
     });
     channel.bind("surveyUpdated", (data) => {
+      setFetching(!fetching);
+    });
+
+    channel.bind("timerUpdated", (data) => {
       setFetching(!fetching);
     });
   }, [fetching]);

@@ -56,6 +56,8 @@ export const GET_TIMERS = gql`
       type
       defaultValue
       values
+      isStreamed
+      started
     }
   }
 `;
@@ -68,6 +70,7 @@ export const CREATE_COUNTER = gql`
       isStreamed
       title
       value
+      
     }
   }
 `;
@@ -84,6 +87,8 @@ export const CREATE_TIMER = gql`
       type
       defaultValue
       values
+      isStreamed
+      started
     }
   }
 `;
@@ -138,6 +143,7 @@ export const UPDATE_TIMER = gql`
       type
       defaultValue
       values
+      isStreamed
     }
   }
 `;

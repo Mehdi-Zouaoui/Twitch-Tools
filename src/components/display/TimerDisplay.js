@@ -46,7 +46,7 @@ const TimerDisplay = ({
   });
   const [updateTimer] = useMutation(UPDATE_TIMER, {
     onCompleted: () => {
-      console.log("updated done");
+      console.log("updated done", currentTimer);
       refreshData();
     },
   });
@@ -55,7 +55,6 @@ const TimerDisplay = ({
     if (stream) {
       setTimers((oldArray) => [...oldArray, { ...currentTimer }]);
     } else {
-      console.log("test gettind timers", timers);
       setTimers(
         timers.filter((item) => {
           item._id !== null && item._id !== currentTimer._id;
@@ -69,31 +68,36 @@ const TimerDisplay = ({
     router.replace(router.asPath);
   };
 
-  const start = (data) => {
-    console.log("test on start", data);
-    setTimers(
-      timers.map((item) => {
-        if (item._id === data._id) {
-          console.log("try this", item._id, data._id);
-          return { ...item, started: true, value: 0, restart: false };
-        } else return item;
-      })
-    );
-    console.log("TIMERS", timers);
-    setStarted(true);
-    setRedo(true);
+  const start = (id) => {
+    updateTimer({
+      variables: {
+        updateTimerId: id,
+        input: {
+          started: true,
+        },
+      },
+    });
+    // setTimers(
+    //   timers.map((item) => {
+    //     if (item._id === data._id) {
+    //       console.log("try this", item._id, data._id);
+    //       return { ...item, started: true, value: 0, restart: false };
+    //     } else return item;
+    //   })
+    // );
+    // console.log("TIMERS", timers);
+    // setStarted(true);
+    // setRedo(true);
   };
-  const stop = () => {
-    clearInterval(interval.current);
-    setTimers(
-      timers.map((item) =>
-        item._id === currentTimer._id
-          ? { ...item, started: false, restart: false }
-          : { ...item }
-      )
-    );
-
-    setStarted(false);
+  const stop = (id) => {
+    updateTimer({
+      variables: {
+        updateTimerId: id,
+        input: {
+          started: false,
+        },
+      },
+    });
   };
 
   const restart = () => {
@@ -108,7 +112,6 @@ const TimerDisplay = ({
     );
   };
   const removeTimer = (id) => {
-    console.log("test remove timer", id);
     deleteTimer({
       variables: {
         deleteTimerId: id,
@@ -116,6 +119,27 @@ const TimerDisplay = ({
     });
   };
 
+  const addToBrowserSource = (id) => {
+    updateTimer({
+      variables: {
+        updateTimerId: id,
+        input: {
+          isStreamed: true,
+        },
+      },
+    });
+  };
+
+  const removeFromBrowserSource = (id) => {
+    updateTimer({
+      variables: {
+        updateTimerId: id,
+        input: {
+          isStreamed: false,
+        },
+      },
+    });
+  };
   return (
     <div className="timerContainer">
       {currentTimer.display === "dial" && (
@@ -130,12 +154,14 @@ const TimerDisplay = ({
             >
               {stream === false ? (
                 <div>
-                  <div o>
+                  <div onClick={() => addToBrowserSource(currentTimer.id)}>
                     <FontAwesomeIcon icon={faEye} />
                   </div>
                 </div>
               ) : (
-                <FontAwesomeIcon icon={faEyeSlash} />
+                <div onClick={() => removeFromBrowserSource(currentTimer.id)}>
+                  <FontAwesomeIcon icon={faEyeSlash} />
+                </div>
               )}
             </button>
 
@@ -166,7 +192,7 @@ const TimerDisplay = ({
 
             <div className="dialButtonContainer">
               {!started && time === 0 && (
-                <button onClick={() => start(currentTimer)}>
+                <button onClick={() => start(currentTimer.id)}>
                   <FontAwesomeIcon icon={faPlay} />
                 </button>
               )}
@@ -176,7 +202,7 @@ const TimerDisplay = ({
                 </button>
               )}
               {!started && time !== 0 && (
-                <button onClick={() => start()}>
+                <button onClick={() => start(currentTimer.id)}>
                   <FontAwesomeIcon icon={faPlay} />
                 </button>
               )}
@@ -210,19 +236,19 @@ const TimerDisplay = ({
           </div>
           <div className="stopWatchButtonContainer">
             {!started && time === 0 && (
-              <button onClick={() => start(currentTimer)}>
+              <button onClick={() => start(currentTimer.id)}>
                 {" "}
                 <FontAwesomeIcon icon={faPlay} />
               </button>
             )}
             {started && (
-              <button onClick={() => stop()}>
+              <button onClick={() => stop(currentTimer.id)}>
                 {" "}
                 <FontAwesomeIcon icon={faPause} />
               </button>
             )}
             {!started && time !== 0 && (
-              <button onClick={() => start()}>
+              <button onClick={() => start(currentTimer.id)}>
                 <FontAwesomeIcon icon={faPlay} />
               </button>
             )}

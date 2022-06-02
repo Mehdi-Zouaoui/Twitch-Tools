@@ -21,33 +21,34 @@ const StreamedTimer = ({ data }) => {
   const [minutes, setMinutes] = useState(0);
   const [secondes, setSecondes] = useState(0);
   const [millisecondes, setMilliseconds] = useState(0);
-
+    console.log('data' , data)
   if (data.started && data.type === false) {
-    console.log('Countdown')
-    setTime(originalTime);
-    clearInterval(interval.current);
-    interval.current = setInterval(() => {
-      let getMilliseconds = parseInt(Math.floor(time));
-      const getDays = parseInt(
-        Math.floor(getMilliseconds / (1000 * 3600 * 24))
-      );
-      getMilliseconds = getMilliseconds % (24 * 3600 * 1000);
-      const getHours = parseInt(Math.floor(getMilliseconds / (3600 * 1000)));
-      getMilliseconds = getMilliseconds % (3600 * 1000);
-      const getMinutes = parseInt(Math.floor(getMilliseconds / (60 * 1000)));
-      getMilliseconds = getMilliseconds % (60 * 1000);
-      const getSeconds = parseInt(Math.floor(getMilliseconds / 1000));
-      getMilliseconds = getMilliseconds % 1000;
+    // console.log('Countdown')
+    // setTime(originalTime);
+    // clearInterval(interval.current);
+    // interval.current = setInterval(() => {
+    //   let getMilliseconds = parseInt(Math.floor(time));
+    //   const getDays = parseInt(
+    //     Math.floor(getMilliseconds / (1000 * 3600 * 24))
+    //   );
+    //   getMilliseconds = getMilliseconds % (24 * 3600 * 1000);
+    //   const getHours = parseInt(Math.floor(getMilliseconds / (3600 * 1000)));
+    //   getMilliseconds = getMilliseconds % (3600 * 1000);
+    //   const getMinutes = parseInt(Math.floor(getMilliseconds / (60 * 1000)));
+    //   getMilliseconds = getMilliseconds % (60 * 1000);
+    //   const getSeconds = parseInt(Math.floor(getMilliseconds / 1000));
+    //   getMilliseconds = getMilliseconds % 1000;
 
-      setDays(getDays);
-      setHours(getHours);
-      setMinutes(getMinutes);
-      setSecondes(getSeconds);
-      setMilliseconds(getMilliseconds);
-      setTime(time - 10);
-    }, 10000);
+    //   setDays(getDays);
+    //   setHours(getHours);
+    //   setMinutes(getMinutes);
+    //   setSecondes(getSeconds);
+    //   setMilliseconds(getMilliseconds);
+    //   setTime(time - 10);
+    // }, 10000);
   }
   if (data.started && data.type === true) {
+    console.log('in timer')
     clearInterval(interval.current);
     interval.current = setInterval(() => {
       const getMilliseconds = Math.floor(time % 1000);
@@ -78,6 +79,7 @@ const StreamedTimer = ({ data }) => {
   return (
     <div className="stream">
       <div>{data.title}</div>
+      
       <div style={{ display: "flex", flexDirection: "column" }}>
         <p> Days : {days > 9 ? days : "0" + days} </p>
         <p> Hours : {hours > 9 ? hours : "0" + hours} </p>

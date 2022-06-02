@@ -25,7 +25,6 @@ const userTools = ({ countersData, timersData, sondagesData }) => {
   const { user, error, isLoading } = useUser();
   const [currentTool, setCurrentTool] = useState(0);
   const toolRef = useRef(null);
-  console.log("user", user);
 
   useEffect(() => {
     console.log("tool changed");

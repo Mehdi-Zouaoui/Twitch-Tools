@@ -9,7 +9,9 @@ const TimerSchema = new Schema({
   display : {type : String , default : "dial"},
   type : Boolean,
   defaultValue : String,
-  values : Number
+  values : Number,
+  isStreamed : Boolean,
+  started : Boolean,
 });
 
 module.exports =  mongoose.models.Timer || mongoose.model("Timer", TimerSchema);

@@ -41,6 +41,8 @@ const typeDefs = gql`
     type: Boolean
     defaultValue: Int
     values: Int
+    isStreamed: Boolean
+    started: Boolean
   }
 
   input CounterInput {
@@ -60,6 +62,8 @@ const typeDefs = gql`
     type: Boolean
     defaultValue: Int
     values: Int
+    isStreamed: Boolean
+    started: Boolean
   }
 
   input FieldInput {
@@ -157,6 +161,8 @@ const resolvers = {
         type,
         defaultValue,
         values,
+        isStreamed,
+        started,
       } = args.timer;
       const timer = new TimerSchema({
         title,
@@ -167,6 +173,8 @@ const resolvers = {
         type,
         defaultValue,
         values,
+        isStreamed,
+        started,
       });
       await timer.save();
       return timer;

@@ -116,6 +116,8 @@ const Timer = ({ timersData }) => {
           type: data.type,
           defaultValue: 0,
           values: data.values,
+          isStreamed: false,
+          started: false,
         },
       },
     });
