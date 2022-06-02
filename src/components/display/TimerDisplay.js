@@ -197,7 +197,7 @@ const TimerDisplay = ({
                 </button>
               )}
               {started && (
-                <button onClick={() => stop()}>
+                <button onClick={() => stop(currentTimer.id)}>
                   <FontAwesomeIcon icon={faPause} />
                 </button>
               )}
