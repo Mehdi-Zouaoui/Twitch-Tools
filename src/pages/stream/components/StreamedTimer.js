@@ -9,42 +9,41 @@ import { CountdownCircleTimer } from "react-countdown-circle-timer";
 // };
 
 const StreamedTimer = ({ data }) => {
+  
   const [index, setIndex] = useState(0);
   const interval = useRef();
-  const [originalTime, setOriginalTime] = useState(
-    data.values ? data.values : 0
-  );
-  const [time, setTime] = useState(0);
+  const [originalTime, setOriginalTime] = useState(0);
+  const [time, setTime] = useState(data.values ? data.values : 0);
   const [days, setDays] = useState(0);
   const [hours, setHours] = useState(0);
   const [minutes, setMinutes] = useState(0);
   const [secondes, setSecondes] = useState(0);
   const [millisecondes, setMilliseconds] = useState(0);
   if (data.started && data.type === false) {
-    console.log("in countdown");
-    // console.log('Countdown')
-    // setTime(originalTime);
-    // clearInterval(interval.current);
-    // interval.current = setInterval(() => {
-    //   let getMilliseconds = parseInt(Math.floor(time));
-    //   const getDays = parseInt(
-    //     Math.floor(getMilliseconds / (1000 * 3600 * 24))
-    //   );
-    //   getMilliseconds = getMilliseconds % (24 * 3600 * 1000);
-    //   const getHours = parseInt(Math.floor(getMilliseconds / (3600 * 1000)));
-    //   getMilliseconds = getMilliseconds % (3600 * 1000);
-    //   const getMinutes = parseInt(Math.floor(getMilliseconds / (60 * 1000)));
-    //   getMilliseconds = getMilliseconds % (60 * 1000);
-    //   const getSeconds = parseInt(Math.floor(getMilliseconds / 1000));
-    //   getMilliseconds = getMilliseconds % 1000;
-    //   setDays(getDays);
-    //   setHours(getHours);
-    //   setMinutes(getMinutes);
-    //   setSecondes(getSeconds);
-    //   setMilliseconds(getMilliseconds);
-    //   setTime(time - 10);
-    // }, 10000);
+    
+    clearInterval(interval.current);
+    interval.current = setInterval(() => {
+      let getMilliseconds = parseInt(Math.floor(time));
+      const getDays = parseInt(
+        Math.floor(getMilliseconds / (1000 * 3600 * 24))
+      );
+      getMilliseconds = getMilliseconds % (24 * 3600 * 1000);
+      const getHours = parseInt(Math.floor(getMilliseconds / (3600 * 1000)));
+      getMilliseconds = getMilliseconds % (3600 * 1000);
+      const getMinutes = parseInt(Math.floor(getMilliseconds / (60 * 1000)));
+      getMilliseconds = getMilliseconds % (60 * 1000);
+      const getSeconds = parseInt(Math.floor(getMilliseconds / 1000));
+      getMilliseconds = getMilliseconds % 1000;
+      setDays(getDays);
+      setHours(getHours);
+      setMinutes(getMinutes);
+      setSecondes(getSeconds);
+      setMilliseconds(getMilliseconds);
+      setTime(time - 10);
+      console.log("yes");
+    }, 1000);
   }
+
   if (data.started && data.type === true) {
     clearInterval(interval.current);
     interval.current = setInterval(() => {
@@ -59,6 +58,7 @@ const StreamedTimer = ({ data }) => {
       setTime(time + 10);
     }, 10);
   }
+
   if (data.started === false) {
     clearInterval(interval.current);
     if (data.restart === true) {
