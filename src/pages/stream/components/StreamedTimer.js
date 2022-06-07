@@ -9,7 +9,6 @@ import { CountdownCircleTimer } from "react-countdown-circle-timer";
 // };
 
 const StreamedTimer = ({ data }) => {
-  
   const [index, setIndex] = useState(0);
   const interval = useRef();
   const [originalTime, setOriginalTime] = useState(
@@ -21,8 +20,8 @@ const StreamedTimer = ({ data }) => {
   const [minutes, setMinutes] = useState(0);
   const [secondes, setSecondes] = useState(0);
   const [millisecondes, setMilliseconds] = useState(0);
-    console.log('data' , data)
   if (data.started && data.type === false) {
+    console.log("in countdown");
     // console.log('Countdown')
     // setTime(originalTime);
     // clearInterval(interval.current);
@@ -38,7 +37,6 @@ const StreamedTimer = ({ data }) => {
     //   getMilliseconds = getMilliseconds % (60 * 1000);
     //   const getSeconds = parseInt(Math.floor(getMilliseconds / 1000));
     //   getMilliseconds = getMilliseconds % 1000;
-
     //   setDays(getDays);
     //   setHours(getHours);
     //   setMinutes(getMinutes);
@@ -48,19 +46,16 @@ const StreamedTimer = ({ data }) => {
     // }, 10000);
   }
   if (data.started && data.type === true) {
-    console.log('in timer')
     clearInterval(interval.current);
     interval.current = setInterval(() => {
       const getMilliseconds = Math.floor(time % 1000);
       const getSeconds = Math.floor((time / 1000) % 60);
-
       const getMinutes = Math.floor((time / (1000 * 60)) % 60);
       const getHours = Math.floor((time / (1000 * 60 * 60)) % 24);
       setMilliseconds(getMilliseconds);
       setSecondes(getSeconds);
       setMinutes(getMinutes);
       setHours(getHours);
-      // setDays(getDays);
       setTime(time + 10);
     }, 10);
   }
@@ -79,7 +74,7 @@ const StreamedTimer = ({ data }) => {
   return (
     <div className="stream">
       <div>{data.title}</div>
-      
+      <div>{data.started ? "Started" : "non started"}</div>
       <div style={{ display: "flex", flexDirection: "column" }}>
         <p> Days : {days > 9 ? days : "0" + days} </p>
         <p> Hours : {hours > 9 ? hours : "0" + hours} </p>
@@ -88,7 +83,9 @@ const StreamedTimer = ({ data }) => {
         <p>
           {" "}
           Millisecondes :{" "}
-          {millisecondes /10  > 9 ? millisecondes / 10 : "0" + millisecondes / 10}{" "}
+          {millisecondes / 10 > 9
+            ? millisecondes / 10
+            : "0" + millisecondes / 10}{" "}
         </p>
       </div>
     </div>

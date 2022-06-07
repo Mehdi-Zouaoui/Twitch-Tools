@@ -91,7 +91,7 @@ const browserSource = () => {
           </div>
         ))}
       {timersData
-        // .filter((counters) => counters.isStreamed === true)
+        .filter((timers) => timers.isStreamed === true)
         .map((item, index) => (
           <div key={index} style={{ background: test, color: "white" }}>
             <StreamedTimer data={item} />
