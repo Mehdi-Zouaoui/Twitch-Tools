@@ -7,6 +7,7 @@ import CoinFlip from "../components/CoinFlip";
 import Timer from "../components/Timer";
 import Sondage from "../components/Sondage";
 import Object from "../components/Object";
+import LuckyWheel from "../components/LuckyWheel";
 import { ApolloClient, InMemoryCache, ApolloProvider } from "@apollo/client";
 import { GET_COUNTERS, GET_SURVEYS, GET_TIMERS } from "../../graphql/queries";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -36,9 +37,10 @@ const userTools = ({ countersData, timersData, sondagesData }) => {
         <div className="userTools">
           <nav className="toolsNavigation">
             <ul className="toolsList">
-              <li onClick={() => setCurrentTool(1)}>Counter</li>
+              <li onClick={() => setCurrentTool(1)}>Static</li>
               <li onClick={() => setCurrentTool(2)}>Composant 3D</li>
               <li onClick={() => setCurrentTool(3)}>Sondage</li>
+              <li onClick={() => setCurrentTool(4)}>Roue de la chance</li>
             </ul>
           </nav>
           <div className="displayedTool">
@@ -118,6 +120,12 @@ const userTools = ({ countersData, timersData, sondagesData }) => {
               <div>
                 Sondage
                 <Sondage sondagesData={sondagesData} />
+              </div>
+            )}
+            {currentTool === 4 && (
+              <div>
+                Roue de la chance
+                <LuckyWheel />
               </div>
             )}
           </div>

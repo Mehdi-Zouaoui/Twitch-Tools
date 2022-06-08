@@ -1,4 +1,4 @@
-import "../styles/globals.scss";
+import "../styles/globals.css";
 import "../styles/home.scss";
 import "../styles/card.scss";
 import "../styles/administration.scss";

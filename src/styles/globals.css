@@ -1,5 +1,6 @@
-$red: #252422;
-$dark: #231f20;
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
 html,
 body {
@@ -11,7 +12,7 @@ body {
   width: 100vw;
   display: flex;
   align-items: center;
-  background-color:$dark;
+  background-color: #231f20;
 }
 #__next {
   width: 100%;
@@ -29,7 +30,7 @@ a {
   box-sizing: border-box;
 }
 
-.layout{
+.layout {
   display: flex;
   margin: auto;
   display: flex;
@@ -58,7 +59,8 @@ textarea {
  */
 
 button,
-input { /* 1 */
+input {
+  /* 1 */
   overflow: visible;
 }
 
@@ -68,7 +70,8 @@ input { /* 1 */
  */
 
 button,
-select { /* 1 */
+select {
+  /* 1 */
   text-transform: none;
 }
 
