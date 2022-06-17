@@ -61,9 +61,9 @@ const Administration = ({ countersData, timersData, sondagesData }) => {
   if (isLoading) return <div>Loading...</div>;
   return (
     user && (
-      <div className="container">
-        <nav className="userOptions">
-          <div className="userAccount">
+      <div className="flex flex-col w-9/12">
+        <nav className="flex justify-end">
+          <div className="flex">
             <div className="userInfos">
               <div
                 className="userProfilPicture"
