@@ -2,7 +2,7 @@ import "../styles/globals.css";
 import "../styles/home.scss";
 import "../styles/card.scss";
 import "../styles/administration.scss";
-import "../styles/sidebar.scss";
+
 import "../styles/tool.scss";
 import "../styles/header.scss";
 import "../styles/counter.scss";

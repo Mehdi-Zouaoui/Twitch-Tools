@@ -8,6 +8,16 @@ import Timer from "../components/Timer";
 import Sondage from "../components/Sondage";
 import Object from "../components/Object";
 import LuckyWheel from "../components/LuckyWheel";
+import {
+  faEye,
+  faEyeSlash,
+  faPlus,
+  faMinus,
+  faTrash,
+  faEdit,
+  faUndo,
+} from "@fortawesome/free-solid-svg-icons";
+
 import { ApolloClient, InMemoryCache, ApolloProvider } from "@apollo/client";
 import { GET_COUNTERS, GET_SURVEYS, GET_TIMERS } from "../../graphql/queries";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -32,9 +42,9 @@ const userTools = ({ countersData, timersData, sondagesData }) => {
   }, [displayedTool]);
   // if (isLoading) return <div>Loading...</div>;
   return (
-    <div className="container">
-      <main>
-        <div className="userTools">
+    <div className="container h-full">
+      <main className="h-full">
+        <div className="userTools h-full ">
           <nav className="toolsNavigation">
             <ul className="toolsList">
               <li onClick={() => setCurrentTool(1)}>Static</li>
@@ -43,7 +53,51 @@ const userTools = ({ countersData, timersData, sondagesData }) => {
               <li onClick={() => setCurrentTool(4)}>Roue de la chance</li>
             </ul>
           </nav>
-          <div className="displayedTool">
+          <div className="displayedTool h-full">
+            <div className="flex  h-full">
+            <div className="flex h-5/6 flex-col overflow-auto justify-around w-1/4 rounded p-6 bg-slate-600">
+              <h3 className="font-semibold pb-3 text-white">Counters</h3>
+              {countersData.map((counter) => (
+                <div className="flex flex-col my-4 p-2  h-96 rounded bg-white">
+                  <div className="flex w-full justify-around">
+                    <div className="flex">
+                      <p className="w-40 font-semibold">{counter.title}</p>
+                      <div>
+                        <FontAwesomeIcon icon={faEye} />
+                      </div>
+                    </div>
+                    <div
+                      className="rounded-full w-5 h-5"
+                      style={{ backgroundColor: counter.color }}
+                    />
+                  </div>
+                  <div>{counter.value != null ? counter.value : 0}</div>
+                </div>
+              ))}
+            </div>
+
+            <div className="flex flex-col justify-around w-1/4 rounded p-6 bg-slate-600">
+              <h3 className="font-semibold pb-3 text-white">Timers</h3>
+              {countersData.map((counter) => (
+                <div className="flex flex-col my-4 p-2  h-36 rounded bg-white">
+                  <div className="flex w-full justify-around">
+                    <div className="flex">
+                      <p className="w-40 font-semibold">{counter.title}</p>
+                      <div>
+                        <FontAwesomeIcon icon={faEye} />
+                      </div>
+                    </div>
+                    <div
+                      className="rounded-full w-5 h-5"
+                      style={{ backgroundColor: counter.color }}
+                    />
+                  </div>
+                  <div>{counter.value != null ? counter.value : 0}</div>
+                </div>
+              ))}
+            </div>
+            </div>
+
             {/* <div>
                 Composant 3D
                 <Object />

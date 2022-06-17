@@ -7,6 +7,10 @@ import { GET_COUNTERS, GET_SURVEYS, GET_TIMERS } from "../../graphql/queries";
 import { faUser } from "@fortawesome/free-regular-svg-icons";
 import { faAngleDown } from "@fortawesome/free-solid-svg-icons";
 import { counter } from "@fortawesome/fontawesome-svg-core";
+import Image from "next/image";
+import Link from "next/link";
+
+import { faPlus } from "@fortawesome/free-solid-svg-icons";
 
 export const getStaticProps = async () => {
   const client = new ApolloClient({
@@ -30,10 +34,9 @@ export const getStaticProps = async () => {
   };
 };
 
-
 const Administration = ({ countersData, timersData, sondagesData }) => {
   const { user, error, isLoading } = useUser();
-  
+
   let interactivToolsLength = 0;
   let displayToolsLength = 0;
   let currentDate = new Date();
@@ -61,7 +64,7 @@ const Administration = ({ countersData, timersData, sondagesData }) => {
   if (isLoading) return <div>Loading...</div>;
   return (
     user && (
-      <div className="flex flex-col w-9/12">
+      <div className="flex flex-col w-4/5">
         <nav className="flex justify-end">
           <div className="flex">
             <div className="userInfos">
@@ -91,8 +94,14 @@ const Administration = ({ countersData, timersData, sondagesData }) => {
                   {date.month > 9 ? date.month : "0" + date.month}{" "}
                 </p>
               </div>
-              <div className="icon">
-                <FontAwesomeIcon icon={faUser} />
+              <div className="text-white">
+                <img
+                  className="fill-white"
+                  alt=""
+                  width="150"
+                  height="50"
+                  src={"/twoolsBot.svg"}
+                />
               </div>
             </div>
             {/* <div className="date">
@@ -102,18 +111,139 @@ const Administration = ({ countersData, timersData, sondagesData }) => {
             <div className="content"></div>
             <div className="toolsContainer">
               <h3>Vos Twools</h3>
-              <div className="tools">
-                <Card
-                  title="Interactiv tools "
-                  length={interactivToolsLength}
-                  color="#e8ac65"
-                />
-                <Card
-                  title="Display tools"
-                  length={displayToolsLength}
-                  color="#e8ac65"
-                />
-                <Card title="Games" length={0} color="#e8ac65" />
+              <div className="flex justify-between items-center h-80 flex-wrap">
+                <div className="relative w-1/5 ">
+                  <img
+                    className="absolute"
+                    width="150"
+                    height="100"
+                    src="/formulaire.svg"
+                    alt="formulaire"
+                    style={{ top: "-50px", right: "-20px" }}
+                  />
+
+                  <div className="w-full px-5 bg-gold flex flex-col pb-5 justify-end rounded-lg h-52">
+                    <div className="topCard">
+                      <h2>Test</h2>
+                      <button className="addTool">
+                        <Link href="/tool/sondage">
+                          <a>
+                            <FontAwesomeIcon icon={faPlus} />
+                          </a>
+                        </Link>
+                      </button>
+                      <div className="cardIcon" />
+                    </div>
+                    <div className="bottomCard">
+                      {length > 0 ? (
+                        <p> Vous en avez créé {length}</p>
+                      ) : (
+                        <p>Aucun créé pour le moment</p>
+                      )}
+                      <p>Dernier créer le : </p>
+                    </div>
+                  </div>
+                </div>
+                      
+                <div className="relative w-1/5 ">
+                  <img
+                    className="absolute"
+                    width="175"
+                    height="100"
+                    src="/twoolsbox.svg"
+                    alt="formulaire"
+                    style={{ top: "-50px", right: "-40px" }}
+                  />
+
+                  <div className="w-full px-5 bg-gold flex flex-col pb-5 justify-end rounded-lg h-52">
+                    <div className="topCard">
+                      <h2>Display tools</h2>
+                      <button className="addTool">
+                        <Link href="/tool/sondage">
+                          <a>
+                            <FontAwesomeIcon icon={faPlus} />
+                          </a>
+                        </Link>
+                      </button>
+                      <div className="cardIcon" />
+                    </div>
+                    <div className="bottomCard">
+                      {length > 0 ? (
+                        <p> Vous en avez créé {length}</p>
+                      ) : (
+                        <p>Aucun créé pour le moment</p>
+                      )}
+                      <p>Dernier créer le : </p>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="relative w-1/5">
+                  <img
+                    className="absolute"
+                    width="175"
+                    height="100"
+                    src="/twoolsbox.svg"
+                    alt="formulaire"
+                    style={{ top: "-50px", right: "-40px" }}
+                  />
+
+                  <div className="w-full px-5 bg-gold flex flex-col pb-5 justify-end rounded-lg h-52">
+                    <div className="topCard">
+                      <h2>Games</h2>
+                      <button className="addTool">
+                        <Link href="/tool/sondage">
+                          <a>
+                            <FontAwesomeIcon icon={faPlus} />
+                          </a>
+                        </Link>
+                      </button>
+                      <div className="cardIcon" />
+                    </div>
+                    <div className="bottomCard">
+                      {length > 0 ? (
+                        <p> Vous en avez créé {length}</p>
+                      ) : (
+                        <p>Aucun créé pour le moment</p>
+                      )}
+                      <p>Dernier créer le : </p>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="relative w-1/5 ">
+                  <img
+                    className="absolute"
+                    width="175"
+                    height="100"
+                    src="/twoolsbox.svg"
+                    alt="formulaire"
+                    style={{ top: "-50px", right: "-40px" }}
+                  />
+
+                  <div className="w-full px-5 bg-gold flex flex-col pb-5 justify-end rounded-lg h-52">
+                    <div className="topCard">
+                      <h2>Twitch Tools</h2>
+                      <button className="addTool">
+                        <Link href="/tool/sondage">
+                          <a>
+                            <FontAwesomeIcon icon={faPlus} />
+                          </a>
+                        </Link>
+                      </button>
+                      <div className="cardIcon" />
+                    </div>
+                    <div className="bottomCard">
+                      {length > 0 ? (
+                        <p> Vous en avez créé {length}</p>
+                      ) : (
+                        <p>Aucun créé pour le moment</p>
+                      )}
+                      <p>Dernier créer le : </p>
+                    </div>
+                  </div>
+                </div>
+
               </div>
             </div>
           </div>
