@@ -18,7 +18,7 @@ const Sidebar = () => {
   console.log("user", user);
   return (
     user && (
-      <div className="my-auto text-white h-[90vh] rounded-md h-7/8  bg-dark flex flex-col  items-start" style={{width:"13%"}}>
+      <div className="my-auto text-white h-[95vh]  rounded-bl-lg rounded-tl-lg h-7/8  bg-dark flex flex-col  items-start" style={{width:"13%"}}>
        
         <div className="flex justify-around items-center flex-col h-1/4 w-full">
           <div className="flex w-full mt-4 items-center justify-start">

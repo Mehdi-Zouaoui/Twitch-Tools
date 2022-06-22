@@ -12,7 +12,8 @@ body {
   width: 100vw;
   display: flex;
   align-items: center;
-  background-color: #231f20;
+  background-color: #010b20;
+  overflow-x: hidden;
 }
 #__next {
   width: 100%;
@@ -31,14 +32,13 @@ a {
 }
 
 .layout {
-  display: flex;
   margin: auto;
   display: flex;
   position: relative;
-  background-color: white;
+ 
   width: 95%;
   border-radius: 10px;
-  justify-content: space-around;
+  justify-content: center;
   height: 95vh;
 }
 
